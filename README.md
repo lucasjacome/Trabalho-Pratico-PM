@@ -1,9 +1,8 @@
 # Trabalho-Pratico-PM
+Membros do Grupo:
 
-# Membros do Grupo:
-
-# - Arthur Henrique
-# - Eddie Christian
-# - Lucas Jácome
-# - Matheus Miranda
-# - Victor Ferreira
+ - Arthur Henrique
+ - Eddie Christian
+ - Lucas Jácome
+ - Matheus Miranda
+ - Victor Ferreira
