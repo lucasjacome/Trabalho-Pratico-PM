@@ -6,6 +6,7 @@ import java.util.List;
 public class VooManager {
     private List<Voo> voos;
 
+
     public VooManager() {
         this.voos = new ArrayList<>();
     }

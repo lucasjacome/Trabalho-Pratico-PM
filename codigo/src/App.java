@@ -1,5 +1,7 @@
 import java.time.LocalDateTime;
 import java.util.List;
+import java.time.DayOfWeek;
+import java.util.Arrays;
 
 public class App {
     public static void main(String[] args) {
@@ -8,6 +10,8 @@ public class App {
         Aeroporto destino = new Aeroporto("Aeroporto do Rio de Janeiro", "GIG", "Rio de Janeiro", "RJ", "Brasil");
         Aeroporto destinoConexao = new Aeroporto("Aeroporto de Brasília", "BSB", "Brasília", "DF", "Brasil");
         Aeroporto destinoInternacional = new Aeroporto("Aeroporto de Nova York", "JFK", "Nova York", "NY", "EUA");
+        Aeronave aeronave = new Aeronave("Boeing 737", 150, 200, 33);
+        Aeronave aeronave2 = new Aeronave("Boeing 747", 300, 400, 66);
 
         // Criação de companhia aérea
         CompanhiaAerea companhia = new CompanhiaAerea("Companhia Aérea XYZ", "XYZ123", "Razão Social XYZ LTDA",
@@ -23,6 +27,7 @@ public class App {
                 LocalDateTime.of(2024, 10, 1, 15, 30),
                 "XY1234",
                 companhia,
+                aeronave,
                 500.0,
                 1000.0,
                 1500.0,
@@ -34,6 +39,7 @@ public class App {
                 LocalDateTime.of(2024, 10, 1, 18, 00),
                 "XY5678",
                 companhia,
+                aeronave,
                 600.0,
                 1100.0,
                 1600.0,
@@ -45,6 +51,7 @@ public class App {
                 LocalDateTime.of(2024, 10, 10, 18, 00),
                 "XY9012",
                 companhia,
+                aeronave,
                 550.0,
                 1050.0,
                 1550.0,
@@ -57,10 +64,19 @@ public class App {
                 LocalDateTime.of(2024, 12, 1, 15, 00),
                 "XY9999",
                 companhia,
+                aeronave,
                 1200.0,
                 2500.0,
                 3500.0,
                 "USD");
+
+        // Definindo a frequência para o voo AD4114 (diariamente às 10:30)
+        List<DayOfWeek> diasDaSemana = Arrays.asList(
+                DayOfWeek.MONDAY, DayOfWeek.TUESDAY, DayOfWeek.WEDNESDAY,
+                DayOfWeek.THURSDAY, DayOfWeek.FRIDAY, DayOfWeek.SATURDAY, DayOfWeek.SUNDAY);
+
+        Frequencia frequenciaVoo = new Frequencia(voo1, diasDaSemana);
+
 
         // Adicionar os voos ao gerenciador
         vooManager.adicionarVoo(voo1);
@@ -78,6 +94,23 @@ public class App {
             } else {
                 System.out.println("Este voo é nacional.");
             }
+        }
+
+        // Gerar e exibir os horários do voo com base na frequência
+        List<LocalDateTime> horarios = frequenciaVoo.gerarHorarios();
+        System.out.println("\n Horários para o voo " + voo1.getCodigoVoo() + ":");
+        for (LocalDateTime horario : horarios) {
+            System.out.println(horario + " -- GRU -> GIG -- Duração: 1:30");
+        }
+
+        // Instanciando o programador de viagens e programando os voos
+        ProgramarViagens programador = new ProgramarViagens();
+        List<Voo> voosProgramados = programador.programarVoosPorPeriodo(voo1,frequenciaVoo);
+
+        // Exibindo os voos programados
+        System.out.println("\nVoos programados para os próximos 30 dias:");
+        for (Voo voo : voosProgramados) {
+            System.out.println(voo);
         }
 
         // Pesquisar voos diretos

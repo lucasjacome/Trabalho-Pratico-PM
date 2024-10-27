@@ -10,10 +10,10 @@ public class Voo {
     private double tarifaBusiness;
     private double tarifaPremium;
     private String moeda;
+    private Aeronave aeronave;
 
-    public Voo(Aeroporto origem, Aeroporto destino, LocalDateTime dataHoraVoo, String codigoVoo,
-            CompanhiaAerea companhia,
-            double tarifaBasica, double tarifaBusiness, double tarifaPremium, String moeda) {
+    public Voo(Aeroporto origem, Aeroporto destino, LocalDateTime dataHoraVoo, String codigoVoo, CompanhiaAerea companhia,
+               Aeronave aeronave, double tarifaBasica, double tarifaBusiness, double tarifaPremium, String moeda) {
         this.origem = origem;
         this.destino = destino;
         this.dataHoraVoo = dataHoraVoo;
@@ -23,9 +23,14 @@ public class Voo {
         this.tarifaBusiness = tarifaBusiness;
         this.tarifaPremium = tarifaPremium;
         this.moeda = moeda;
+        this.aeronave = aeronave;
     }
 
     // Getters
+    public Aeronave getAeronave() {
+        return aeronave;
+    }
+
     public Aeroporto getOrigem() {
         return origem;
     }
@@ -78,7 +83,7 @@ public class Voo {
 
     @Override
     public String toString() {
-        return String.format("Voo {codigo: %s, origem: %s, destino: %s, tarifa: %.2f %s}",
-                codigoVoo, origem.getNome(), destino.getNome(), tarifaBasica, moeda);
+        return String.format("Voo {codigo: %s, origem: %s, destino: %s, aeronave: %s, tarifa: %.2f %s}",
+                codigoVoo, origem.getNome(), destino.getNome(), aeronave.getModelo(), tarifaBasica, moeda);
     }
 }

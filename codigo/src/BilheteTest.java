@@ -16,6 +16,7 @@ public class BilheteTest {
                 "XY1234",
                 new CompanhiaAerea("Companhia Aérea XYZ", "XYZ123", "Razão Social XYZ LTDA", "12345678000195", 50.0,
                         30.0),
+                new Aeronave("Boeing 747", 350, 400, 66),
                 500.0,
                 1000.0,
                 1500.0,
@@ -39,6 +40,7 @@ public class BilheteTest {
                 "XY9999",
                 new CompanhiaAerea("Companhia Aérea XYZ", "XYZ123", "Razão Social XYZ LTDA", "12345678000195", 50.0,
                         30.0),
+                new Aeronave("Boeing 747", 350, 400, 66),
                 1200.0,
                 2500.0,
                 3500.0,
@@ -52,6 +54,7 @@ public class BilheteTest {
         assertTrue(bilhete.emitir(), "Bilhete internacional com passaporte válido deve ser emitido com sucesso");
     }
 
+    @org.junit.Test
     @Test
     public void testEmitirBilheteInternacionalInvalido() {
         // Configurar voo internacional
@@ -62,6 +65,7 @@ public class BilheteTest {
                 "XY9999",
                 new CompanhiaAerea("Companhia Aérea XYZ", "XYZ123", "Razão Social XYZ LTDA", "12345678000195", 50.0,
                         30.0),
+                new Aeronave("Boeing 747", 350, 400, 66),
                 1200.0,
                 2500.0,
                 3500.0,
