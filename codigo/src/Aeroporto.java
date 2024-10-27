@@ -4,7 +4,6 @@ public class Aeroporto {
     private String cidade;
     private String estado;
     private String pais;
-    private String teste;
 
     public Aeroporto(String nome, String sigla, String cidade, String estado, String pais) {
         this.nome = nome;
@@ -12,7 +11,6 @@ public class Aeroporto {
         this.cidade = cidade;
         this.estado = estado;
         this.pais = pais;
-        this.teste = teste;
     }
 
     public String getNome() {
