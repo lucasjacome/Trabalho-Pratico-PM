@@ -31,15 +31,18 @@ public class Aeronave {
         return capacidadePassageiros;
     }
 
-    public LetraAssento getLetraAssento() {
-        return letraAssento;
-    }
-
+    // Gera assentos respeitando a capacidade de passageiros da aeronave
     public List<String> gerarAssentos(){
         List<String> assentos = new ArrayList<>();
-        for (int i = 1; i <= numeroFileiras; i++){
+        int assentosPorFileira = LetraAssento.values().length;
+        int totalAssentos = Math.min(capacidadePassageiros, numeroFileiras * assentosPorFileira);
+        for (int i = 1; i <= numeroFileiras && assentos.size() < totalAssentos; i++){
             for (LetraAssento letra : LetraAssento.values()){
-                assentos.add(i + String.valueOf(letra));
+                if (assentos.size() < totalAssentos) {
+                    assentos.add(i + String.valueOf(letra));
+                } else {
+                    break;
+                }
             }
         }
         return assentos;

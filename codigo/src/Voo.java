@@ -1,4 +1,5 @@
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class Voo {
     private Aeroporto origem;
@@ -10,6 +11,7 @@ public class Voo {
     private double tarifaBusiness;
     private double tarifaPremium;
     private String moeda;
+    private List<Assento> assentos;
     private Aeronave aeronave;
 
     public Voo(Aeroporto origem, Aeroporto destino, LocalDateTime dataHoraVoo, String codigoVoo, CompanhiaAerea companhia,
@@ -24,6 +26,7 @@ public class Voo {
         this.tarifaPremium = tarifaPremium;
         this.moeda = moeda;
         this.aeronave = aeronave;
+        this.assentos = Assento.inicializarAssentos(aeronave.gerarAssentos());
     }
 
     // Getters
@@ -65,6 +68,16 @@ public class Voo {
 
     public String getMoeda() {
         return moeda;
+    }
+
+    // Verifica a disponibilidade de assentos
+    public boolean verificarDisponibilidadeAssento(String numeroAssento) {
+        return Assento.verificarDisponibilidade(assentos, numeroAssento);
+    }
+
+    // Reserva os assentos
+    public boolean reservarAssento(String numeroAssento) {
+        return Assento.reservarAssento(assentos, numeroAssento);
     }
 
     // Verifica se o voo é internacional
