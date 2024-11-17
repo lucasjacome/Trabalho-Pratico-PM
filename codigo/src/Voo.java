@@ -13,6 +13,7 @@ public class Voo {
     private String moeda;
     private List<Assento> assentos;
     private Aeronave aeronave;
+    private boolean cancelado;
 
     public Voo(Aeroporto origem, Aeroporto destino, LocalDateTime dataHoraVoo, String codigoVoo, CompanhiaAerea companhia,
                Aeronave aeronave, double tarifaBasica, double tarifaBusiness, double tarifaPremium, String moeda) {
@@ -26,6 +27,7 @@ public class Voo {
         this.tarifaPremium = tarifaPremium;
         this.moeda = moeda;
         this.aeronave = aeronave;
+        this.cancelado = false;
         this.assentos = Assento.inicializarAssentos(aeronave.gerarAssentos());
     }
 
@@ -98,5 +100,17 @@ public class Voo {
     public String toString() {
         return String.format("Voo {codigo: %s, origem: %s, destino: %s, aeronave: %s, tarifa: %.2f %s}",
                 codigoVoo, origem.getNome(), destino.getNome(), aeronave.getModelo(), tarifaBasica, moeda);
+    }
+
+    public boolean isCancelado() {
+        return cancelado;
+    }
+
+    public void reverterCancelamento() {
+        this.cancelado = false;
+    }
+    
+    public void cancelar() {
+        this.cancelado = true;
     }
 }
