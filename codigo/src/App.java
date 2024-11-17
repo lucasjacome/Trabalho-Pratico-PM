@@ -107,6 +107,9 @@ public class App {
         ProgramarViagens programador = new ProgramarViagens();
         List<Voo> voosProgramados = programador.programarVoosPorPeriodo(voo1,frequenciaVoo);
 
+
+
+
         // Exibindo os voos programados
         System.out.println("\nVoos programados para os próximos 30 dias:");
         for (Voo voo : voosProgramados) {
@@ -136,22 +139,50 @@ public class App {
             }
         }
 
+
+
         // Emissão de bilhetes
 
         // Passageiro com documento válido para voo nacional (CPF)
-        Passageiro passageiroNacional = new Passageiro("João", "Silva", "12345678901");
+        Passageiro passageiroNacionalVip = new Passageiro("João", "Silva", "12345678901", "joao.silva@gmail.com");
+        Passageiro passageiroNacionalRegular = new Passageiro("João", "Pobre", "12345936901", "joao.pobre@gmail.com");
+
+        passageiroNacionalVip.setVipStatus(true);
 
         // Passageiro com passaporte válido (duas letras e seis dígitos)
-        Passageiro passageiroComPassaporteValido = new Passageiro("Maria", "Pereira", "AA123456");
+        Passageiro passageiroComPassaporteValido = new Passageiro("Maria", "Pereira", "AA123456", "mariapereira@outlook.com");
 
-        // Passageiro com passaporte inválido (não segue o padrão de duas letras e seis
-        // dígitos)
-        Passageiro passageiroComPassaporteInvalido = new Passageiro("Carlos", "Souza", "A1234567");
+        // Passageiro com passaporte inválido (não segue o padrão de duas letras e seis dígitos)
+        Passageiro passageiroComPassaporteInvalido = new Passageiro("Carlos", "Souza", "A1234567", "souzacarlos@icloud.com");
 
         // Tentativa de emitir bilhete para voo nacional
         System.out.println("\nEmitindo bilhete para voo nacional:");
-        Bilhete bilheteNacional = new Bilhete(passageiroNacional, voo1);
+        Bilhete bilheteNacional = new Bilhete(passageiroNacionalVip, voo1);
         bilheteNacional.emitir(); // Deve emitir com sucesso (documento CPF)
+
+        System.out.println("\nEmitindo bilhete para voo nacional:");
+        Bilhete bilheteNacional2 = new Bilhete(passageiroNacionalRegular, voo1);
+        bilheteNacional2.emitir(); // Deve emitir com sucesso (documento CPF)
+
+
+        // Testar cancelamento/alteração
+        System.out.println("\nAlteração/Cancelamento de voo:");
+        System.out.print("Pedido de cancelamento de Voo para Passageiro Regular -- ");
+        passageiroNacionalRegular.cancelarVoo(null);
+        System.out.print("Pedido de cancelamento de Voo para Passageiro Vip -- ");
+        passageiroNacionalVip.cancelarVoo(null);
+
+        // Testar custo de bagagem
+        System.out.println("\nCusto de bagagem:");
+        System.out.println("Regular, 2 bagagens: " + passageiroNacionalRegular.calcularValorBagagem(companhia, 2) + " BRL");
+        System.out.println("VIP, 2 bagagens: " + passageiroNacionalVip.calcularValorBagagem(companhia, 2) + " BRL");
+        System.out.println("VIP, 1 bagagem: " + passageiroNacionalVip.calcularValorBagagem(companhia, 1) + " BRL");
+
+        // Desativar benefícios VIP
+        companhia.setVipBeneficioAtivo(false);
+        System.out.println("\nBenefícios VIP desativados:");
+        System.out.println("VIP, 2 bagagens: " + passageiroNacionalVip.calcularValorBagagem(companhia, 2) + " BRL");
+
 
         // Tentativa de emitir bilhete para voo internacional com passaporte válido
         System.out.println("\nEmitindo bilhete para voo internacional com passaporte válido:");

@@ -6,6 +6,8 @@ public class CompanhiaAerea {
     private double valorPrimeiraBagagem;
     private double valorBagagensAdicionais;
 
+    private boolean vipBeneficioAtivo;
+
     public CompanhiaAerea(String nome, String codigo, String razaoSocial, String cnpj, double valorPrimeiraBagagem,
             double valorBagagensAdicionais) {
         this.nome = nome;
@@ -14,6 +16,7 @@ public class CompanhiaAerea {
         this.cnpj = cnpj;
         this.valorPrimeiraBagagem = valorPrimeiraBagagem;
         this.valorBagagensAdicionais = valorBagagensAdicionais;
+        this.vipBeneficioAtivo = true;
     }
 
     public String getNome() {
@@ -39,4 +42,13 @@ public class CompanhiaAerea {
     public double getValorBagagensAdicionais() {
         return valorBagagensAdicionais;
     }
+
+    public boolean isVipBeneficioAtivo(){
+        return vipBeneficioAtivo;
+    }
+
+    public void setVipBeneficioAtivo(boolean ativo) {
+        this.vipBeneficioAtivo = ativo;
+    }
+
 }
