@@ -50,7 +50,7 @@ public class Passageiro {
     }
 
     public double calcularValorBagagem(CompanhiaAerea companhia, int qntBagagem) {
-        if (isVip() || !companhia.isVipBeneficioAtivo()) {
+        if (!isVip() || !companhia.isVipBeneficioAtivo()) {
             return qntBagagem * companhia.getValorPrimeiraBagagem();
         }
 
