@@ -23,7 +23,7 @@ public class BilheteTest {
                 "BRL");
 
         // Configurar passageiro com CPF válido
-        Passageiro passageiroNacional = new Passageiro("João", "Silva", "12345678901");
+        Passageiro passageiroNacional = new Passageiro("João", "Silva", "12345678901", "silvajoao@gmail.com");
 
         // Emitir bilhete
         Bilhete bilhete = new Bilhete(passageiroNacional, vooNacional);
@@ -47,7 +47,7 @@ public class BilheteTest {
                 "USD");
 
         // Configurar passageiro com passaporte válido
-        Passageiro passageiroInternacional = new Passageiro("Maria", "Pereira", "AA123456");
+        Passageiro passageiroInternacional = new Passageiro("Maria", "Pereira", "AA123456", "mariapereira@gmail.com");
 
         // Emitir bilhete
         Bilhete bilhete = new Bilhete(passageiroInternacional, vooInternacional);
@@ -72,7 +72,7 @@ public class BilheteTest {
                 "USD");
 
         // Configurar passageiro com passaporte inválido
-        Passageiro passageiroInternacional = new Passageiro("Carlos", "Souza", "A1234567");
+        Passageiro passageiroInternacional = new Passageiro("Carlos", "Souza", "A1234567", "souzacarlos@gmail.com");
 
         // Emitir bilhete
         Bilhete bilhete = new Bilhete(passageiroInternacional, vooInternacional);
