@@ -2,9 +2,15 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.time.DayOfWeek;
 import java.util.Arrays;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Scanner;
 
 public class App {
     public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+
         // Criação de aeroportos
         Aeroporto origem = new Aeroporto("Aeroporto de São Paulo", "GRU", "São Paulo", "SP", "Brasil");
         Aeroporto destino = new Aeroporto("Aeroporto do Rio de Janeiro", "GIG", "Rio de Janeiro", "RJ", "Brasil");
@@ -105,9 +111,7 @@ public class App {
 
         // Instanciando o programador de viagens e programando os voos
         ProgramarViagens programador = new ProgramarViagens();
-        List<Voo> voosProgramados = programador.programarVoosPorPeriodo(voo1,frequenciaVoo);
-
-
+        List<Voo> voosProgramados = programador.programarVoosPorPeriodo(voo1, frequenciaVoo);
 
 
         // Exibindo os voos programados
@@ -138,7 +142,6 @@ public class App {
                 System.out.println(voo);
             }
         }
-
 
 
         // Emissão de bilhetes
@@ -193,5 +196,97 @@ public class App {
         System.out.println("\nTentativa de emitir bilhete com passaporte inválido:");
         Bilhete bilheteInvalido = new Bilhete(passageiroComPassaporteInvalido, vooInternacional);
         bilheteInvalido.emitir(); // Deve falhar (passaporte inválido)
+
+
+
+        // Menu
+        while (true) {
+            System.out.println("\n--- Sistema de Gerenciamento de Viagens ---");
+            System.out.println("1. Listar todos os voos");
+            System.out.println("2. Pesquisar voos diretos");
+            System.out.println("3. Emitir bilhete");
+            System.out.println("4. Calcular custo de bagagem");
+            System.out.println("5. Alterar status VIP de passageiro");
+            System.out.println("6. Sair");
+            System.out.print("Escolha uma opção: ");
+            int opcao = scanner.nextInt();
+            scanner.nextLine(); // Consumir quebra de linha
+
+            switch (opcao) {
+                case 1:
+                    System.out.println("\nTodos os voos disponíveis:");
+                    for (Voo voo : vooManager.listarTodosOsVoos()) {
+                        System.out.println(voo);
+                    }
+                    break;
+
+                case 2:
+                    System.out.print("\nDigite a data para a pesquisa (dd/MM/yyyy HH:mm): ");
+                    String dataStr = scanner.nextLine();
+                    LocalDateTime dateTime = LocalDateTime.parse(dataStr, formatter);
+
+                    System.out.println("\nPesquisando voos de " + origem.getNome() + " para " + destino.getNome());
+                    List<Voo> voosDiretos = vooManager.pesquisarVoos(origem, destino, dataPesquisa);
+                    if (voosDiretos.isEmpty()) {
+                        System.out.println("Nenhum voo encontrado.");
+                    } else {
+                        for (Voo voo : voosDiretos) {
+                            System.out.println(voo);
+                        }
+                    }
+                    break;
+
+                case 3:
+                    System.out.print("\nDigite o nome do passageiro: ");
+                    String nome = scanner.nextLine();
+                    System.out.print("Digite o documento (CPF ou passaporte): ");
+                    String documento = scanner.nextLine();
+
+                    Passageiro passageiro = new Passageiro(nome, "Sobrenome", documento, nome.toLowerCase() + "@gmail.com");
+
+                    System.out.println("\nSelecione um voo para emitir bilhete:");
+                    List<Voo> todosVoos = vooManager.listarTodosOsVoos();
+                    for (int i = 0; i < todosVoos.size(); i++) {
+                        System.out.println((i + 1) + ". " + todosVoos.get(i));
+                    }
+                    System.out.print("Escolha o número do voo: ");
+                    int vooEscolhido = scanner.nextInt();
+                    scanner.nextLine(); // Consumir quebra de linha
+
+                    Voo vooSelecionado = todosVoos.get(vooEscolhido - 1);
+                    Bilhete bilhete = new Bilhete(passageiro, vooSelecionado);
+                    bilhete.emitir();
+                    break;
+
+                case 4:
+                    System.out.print("\nDigite o número de bagagens: ");
+                    int qtdBagagens = scanner.nextInt();
+                    scanner.nextLine(); // Consumir quebra de linha
+                    System.out.println("Custo total: " + companhia.getValorPrimeiraBagagem() * qtdBagagens + " BRL");
+                    break;
+
+                case 5:
+                    System.out.print("\nDigite o nome do passageiro: ");
+                    String nomeVip = scanner.nextLine();
+                    System.out.print("Deseja ativar o status VIP? (true/false): ");
+                    boolean ativarVip = scanner.nextBoolean();
+                    scanner.nextLine(); // Consumir quebra de linha
+
+                    Passageiro passageiroVip = new Passageiro(nomeVip, "Sobrenome", "12345678901", nomeVip.toLowerCase() + "@gmail.com");
+                    passageiroVip.setVipStatus(ativarVip);
+                    System.out.println("Status VIP atualizado: " + (passageiroVip.isVip() ? "VIP" : "Regular"));
+                    break;
+
+                case 6:
+                    System.out.println("Encerrando o sistema...");
+                    scanner.close();
+                    return;
+
+                default:
+                    System.out.println("Opção inválida. Tente novamente.");
+            }
+        }
+
+
     }
 }
