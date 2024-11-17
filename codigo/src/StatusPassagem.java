@@ -1,0 +1,7 @@
+public enum StatusPassagem {
+    PASSAGEM_ADQUIRIDA,
+    PASSAGEM_CANCELADA,
+    CHECK_IN_REALIZADO,
+    EMBARQUE_REALIZADO,
+    NO_SHOW;
+}

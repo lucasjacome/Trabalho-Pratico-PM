@@ -4,15 +4,27 @@ import java.util.List;
 public class Passagem {
     private List<Voo> voos;
     private double taxaAgencia;
+    private StatusPassagem status; // Novo atributo para registrar o status da passagem
 
     public Passagem(double taxaAgencia) {
         this.voos = new ArrayList<>();
         this.taxaAgencia = taxaAgencia;
+        this.status = StatusPassagem.PASSAGEM_ADQUIRIDA; // Status inicial
     }
 
     // Adicionar voo à passagem
     public void adicionarVoo(Voo voo) {
         voos.add(voo);
+    }
+
+    // Alterar o status da passagem
+    public void setStatus(StatusPassagem novoStatus) {
+        this.status = novoStatus;
+    }
+
+    // Retornar o status atual da passagem
+    public StatusPassagem getStatus() {
+        return status;
     }
 
     // Calcular o preço total levando em conta voos internacionais
@@ -69,6 +81,7 @@ public class Passagem {
             passagem.append(voo).append("\n");
         }
 
+        passagem.append("Status: ").append(status).append("\n"); // Exibir o status da passagem
         passagem.append("Taxa da Agência: ").append(String.format("%.2f", taxaAgencia)).append("\n");
         passagem.append("Total a ser pago (sem bagagens): ").append(String.format("%.2f", calcularPrecoTotal()))
                 .append("\n");
