@@ -1,10 +1,11 @@
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Passagem {
     private List<Voo> voos;
     private double taxaAgencia;
-    private StatusPassagem status; // Novo atributo para registrar o status da passagem
+    private StatusPassagem status; // Atributo para registrar o status da passagem
 
     public Passagem(double taxaAgencia) {
         this.voos = new ArrayList<>();
@@ -25,6 +26,13 @@ public class Passagem {
     // Retornar o status atual da passagem
     public StatusPassagem getStatus() {
         return status;
+    }
+
+    public Voo getVoo() {
+        if (!voos.isEmpty()) {
+            return voos.get(0); // Retorna o primeiro voo da lista
+        }
+        throw new IllegalStateException("A passagem não possui voos associados.");
     }
 
     // Calcular o preço total levando em conta voos internacionais
@@ -50,11 +58,6 @@ public class Passagem {
         return total;
     }
 
-    // Retornar lista de voos da passagem
-    public List<Voo> getVoos() {
-        return voos;
-    }
-
     // Calcular o custo total da passagem incluindo bagagens adicionais
     public double calcularCustoTotalComBagagens(int quantidadeDeBagagensAdicionais) {
         double custoBagagem = 0.0;
@@ -69,6 +72,37 @@ public class Passagem {
         }
 
         return calcularPrecoTotal() + custoBagagem; // Soma o total do voo com o custo das bagagens
+    }
+
+    // Realizar check-in para a passagem
+    public boolean realizarCheckIn() {
+        if (voos.isEmpty()) {
+            System.out.println("A passagem não possui voos associados.");
+            return false;
+        }
+
+        Voo primeiroVoo = voos.get(0);
+        LocalDateTime agora = LocalDateTime.now();
+        LocalDateTime horarioVoo = primeiroVoo.getDataHoraVoo();
+        LocalDateTime inicioCheckIn = horarioVoo.minusHours(48);
+        LocalDateTime fimCheckIn = horarioVoo.minusMinutes(30);
+
+        if (agora.isAfter(inicioCheckIn) && agora.isBefore(fimCheckIn)) {
+            this.status = StatusPassagem.CHECK_IN_REALIZADO;
+            System.out.println("Check-in realizado com sucesso.");
+            return true;
+        } else {
+            System.out.println("Não é possível realizar o check-in fora do período permitido.");
+            return false;
+        }
+    }
+
+    // Registrar NO SHOW para a passagem
+    public void registrarNoShow() {
+        if (status != StatusPassagem.CHECK_IN_REALIZADO) {
+            this.status = StatusPassagem.NO_SHOW;
+            System.out.println("Passagem registrada com status NO SHOW.");
+        }
     }
 
     @Override
