@@ -224,6 +224,24 @@ public class App {
 
 
 
+
+        // Criando um cartão de embarque
+        LocalDateTime horarioVoo = LocalDateTime.of(2024, 11, 17, 15, 30); // Data e hora do voo
+        CartaoEmbarque cartao = new CartaoEmbarque("João", "Silva", "São Paulo", "Rio de Janeiro", horarioVoo, "12A");
+        
+        // Exibindo o cartão de embarque
+        System.out.println(cartao);
+
+        // Criando outro cartão de embarque
+        LocalDateTime horarioVoo2 = LocalDateTime.of(2024, 11, 18, 9, 45); // Data e hora do voo
+        CartaoEmbarque cartao2 = new CartaoEmbarque("Maria", "Oliveira", "São Paulo", "Salvador", horarioVoo2, "3B");
+        
+        // Exibindo o segundo cartão de embarque
+        System.out.println(cartao2);
+
+
+
+
         // Menu
         while (true) {
             System.out.println("\n--- Sistema de Gerenciamento de Viagens ---");
