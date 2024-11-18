@@ -8,38 +8,25 @@ public class ProgramarViagens {
 
     // Metodo para programar os voos para os próximos 30 dias
 
-    public List<Voo> programarVoosPorPeriodo(Voo voo, Frequencia frequenciaVoo) {
+    public List<Voo> programarVoosPorPeriodo(Voo vooOriginal, Frequencia frequencia) {
         List<Voo> voosProgramados = new ArrayList<>();
-        List<LocalDateTime> diasDaSemanaAtivos = frequenciaVoo.gerarHorarios();
-
-        // Definindo o período de 30 dias a partir da data atual
-        LocalDateTime dataAtual = LocalDateTime.now();
-        LocalDateTime dataFim = dataAtual.plusDays(PERIODO_DIAS);
-
-        // Iterar por cada dia no período e programar o voo de acordo com a frequência
-        while (dataAtual.isBefore(dataFim)) {
-            for (LocalDateTime diaAtivo : diasDaSemanaAtivos) {
-                // Ajusta a data do voo com o horário da frequência do voo original
-                LocalDateTime horarioDoVoo = dataAtual.with(diaAtivo.toLocalTime());
-                if (horarioDoVoo.isAfter(LocalDateTime.now())) { // Apenas programar voos futuros
-                    Voo vooProgramado = new Voo(
-                            voo.getOrigem(),
-                            voo.getDestino(),
-                            horarioDoVoo,
-                            voo.getCodigoVoo(),
-                            voo.getCompanhia(),
-                            voo.getAeronave(),
-                            voo.getTarifaBasica(),
-                            voo.getTarifaBusiness(),
-                            voo.getTarifaPremium(),
-                            voo.getMoeda()
-                    );
-                    voosProgramados.add(vooProgramado);
-                }
-            }
-            dataAtual = dataAtual.plus(1, ChronoUnit.DAYS);
+        List<LocalDateTime> horarios = frequencia.gerarHorarios();
+        for (LocalDateTime horario : horarios) {
+            Voo vooProgramado = new Voo(
+                    vooOriginal.getOrigem(),
+                    vooOriginal.getDestino(),
+                    horario,
+                    vooOriginal.getCodigoVoo(),
+                    vooOriginal.getCompanhia(),
+                    vooOriginal.getAeronave(),
+                    vooOriginal.getTarifaBasica(),
+                    vooOriginal.getTarifaBusiness(),
+                    vooOriginal.getTarifaPremium(),
+                    vooOriginal.getMoeda()
+            );
+            voosProgramados.add(vooProgramado);
         }
-
         return voosProgramados;
     }
+
 }
