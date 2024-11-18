@@ -1,11 +1,12 @@
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class VooManager {
     private List<Voo> voos;
-
 
     public VooManager() {
         this.voos = new ArrayList<>();
@@ -35,7 +36,7 @@ public class VooManager {
 
     // Pesquisa de voos de ida e volta
     public List<Voo> pesquisarVoosIdaVolta(Aeroporto origem, Aeroporto destino, LocalDateTime dataIda,
-            LocalDateTime dataVolta) {
+                                           LocalDateTime dataVolta) {
         List<Voo> idaVolta = new ArrayList<>();
 
         // Pesquisar voo de ida
@@ -59,7 +60,7 @@ public class VooManager {
 
     // Pesquisa de voos com conexão
     public List<List<Voo>> pesquisarVoosComConexao(Aeroporto origem, Aeroporto destino,
-            LocalDateTime dataHoraPesquisa) {
+                                                   LocalDateTime dataHoraPesquisa) {
         List<List<Voo>> conexoes = new ArrayList<>();
         LocalDate dataPesquisa = dataHoraPesquisa.toLocalDate(); // Considerar apenas a data
 
@@ -77,5 +78,14 @@ public class VooManager {
             }
         }
         return conexoes;
+    }
+
+    // Acessar histórico de voos de um passageiro em ordem cronológica
+    public List<Voo> acessarHistoricoVoos(Passageiro passageiro) {
+        return voos.stream()
+                .filter(voo -> voo.getPassageiros().stream()
+                        .anyMatch(p -> p.getPassageiro().equals(passageiro)))
+                .sorted(Comparator.comparing(Voo::getDataHoraVoo))
+                .collect(Collectors.toList());
     }
 }
