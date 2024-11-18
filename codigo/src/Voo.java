@@ -1,4 +1,5 @@
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Voo {
@@ -14,6 +15,7 @@ public class Voo {
     private List<Assento> assentos;
     private Aeronave aeronave;
     private boolean cancelado;
+    private List<PassageiroEmbarque> passageiros;
 
     public Voo(Aeroporto origem, Aeroporto destino, LocalDateTime dataHoraVoo, String codigoVoo, CompanhiaAerea companhia,
                Aeronave aeronave, double tarifaBasica, double tarifaBusiness, double tarifaPremium, String moeda) {
@@ -29,6 +31,7 @@ public class Voo {
         this.aeronave = aeronave;
         this.cancelado = false;
         this.assentos = Assento.inicializarAssentos(aeronave.gerarAssentos());
+        this.passageiros = new ArrayList<>();
     }
 
     // Getters
@@ -70,6 +73,32 @@ public class Voo {
 
     public String getMoeda() {
         return moeda;
+    }
+
+    public void adicionarPassageiro(Passageiro passageiro) {
+        passageiros.add(new PassageiroEmbarque(passageiro));
+    }
+
+    public void registrarEmbarque(String documentoPassageiro) {
+        for (PassageiroEmbarque pe : passageiros) {
+            if (pe.getPassageiro().getDocumento().equals(documentoPassageiro)) {
+                pe.setEmbarcado(true);
+                System.out.println("Passageiro " + pe.getPassageiro().getNome() + " embarcou com sucesso.");
+                return;
+            }
+        }
+        System.out.println("Passageiro com documento " + documentoPassageiro + " não encontrado.");
+    }
+
+    public void verificarNoShow() {
+        System.out.println("\nRelatório de NO SHOW para o voo " + codigoVoo + ":");
+        for (PassageiroEmbarque pe : passageiros) {
+            if (!pe.isEmbarcado()) {
+                System.out.println("Passageiro " + pe.getPassageiro().getNome() + " tem o status NO SHOW.");
+            }else{
+                System.out.println("Passageiro " + pe.getPassageiro().getNome() + " não tem o status NO SHOW.");
+            }
+        }
     }
 
     // Verifica a disponibilidade de assentos
