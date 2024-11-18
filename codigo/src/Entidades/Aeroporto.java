@@ -1,3 +1,5 @@
+package Entidades;
+
 public class Aeroporto {
     private String nome;
     private String sigla;

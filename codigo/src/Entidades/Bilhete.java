@@ -1,3 +1,5 @@
+package Entidades;
+
 public class Bilhete {
     private Passageiro passageiro;
     private Voo voo;
@@ -11,8 +13,8 @@ public class Bilhete {
         if (voo.isInternacional()) {
             // Para voos internacionais, o documento deve ser Passaporte
             if (isPassaporteValido(passageiro.getDocumento())) {
-                System.out.println("Bilhete emitido para voo internacional: " + voo);
-                System.out.println("Passageiro: " + passageiro);
+                System.out.println("Entidades.Bilhete emitido para voo internacional: " + voo);
+                System.out.println("Entidades.Passageiro: " + passageiro);
                 return true;
             } else {
                 System.out.println(
@@ -23,8 +25,8 @@ public class Bilhete {
             // Para voos nacionais, o documento deve ser RG ou CPF (simulando com base no
             // tamanho)
             if (isDocumentoNacionalValido(passageiro.getDocumento())) {
-                System.out.println("Bilhete emitido para voo nacional: " + voo);
-                System.out.println("Passageiro: " + passageiro);
+                System.out.println("Entidades.Bilhete emitido para voo nacional: " + voo);
+                System.out.println("Entidades.Passageiro: " + passageiro);
                 return true;
             } else {
                 System.out.println("Erro: Documento inválido para voo nacional. Deve ser RG ou CPF.");

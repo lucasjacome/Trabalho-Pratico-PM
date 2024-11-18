@@ -1,4 +1,4 @@
-import java.util.regex.Pattern;
+package Entidades;
 
 public class Passageiro {
     private String nome;

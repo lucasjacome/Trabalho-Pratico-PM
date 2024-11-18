@@ -1,3 +1,5 @@
+package Entidades;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -88,20 +90,20 @@ public class Voo {
         for (PassageiroEmbarque pe : passageiros) {
             if (pe.getPassageiro().getDocumento().equals(documentoPassageiro)) {
                 pe.setEmbarcado(true);
-                System.out.println("Passageiro " + pe.getPassageiro().getNome() + " embarcou com sucesso.");
+                System.out.println("Entidades.Passageiro " + pe.getPassageiro().getNome() + " embarcou com sucesso.");
                 return;
             }
         }
-        System.out.println("Passageiro com documento " + documentoPassageiro + " não encontrado.");
+        System.out.println("Entidades.Passageiro com documento " + documentoPassageiro + " não encontrado.");
     }
 
     public void verificarNoShow() {
         System.out.println("\nRelatório de NO SHOW para o voo " + codigoVoo + ":");
         for (PassageiroEmbarque pe : passageiros) {
             if (!pe.isEmbarcado()) {
-                System.out.println("Passageiro " + pe.getPassageiro().getNome() + " tem o status NO SHOW.");
+                System.out.println("Entidades.Passageiro " + pe.getPassageiro().getNome() + " tem o status NO SHOW.");
             } else {
-                System.out.println("Passageiro " + pe.getPassageiro().getNome() + " não tem o status NO SHOW.");
+                System.out.println("Entidades.Passageiro " + pe.getPassageiro().getNome() + " não tem o status NO SHOW.");
             }
         }
     }
@@ -132,7 +134,7 @@ public class Voo {
 
     @Override
     public String toString() {
-        return String.format("Voo {codigo: %s, origem: %s, destino: %s, aeronave: %s, tarifa: %.2f %s}",
+        return String.format("Entidades.Voo {codigo: %s, origem: %s, destino: %s, aeronave: %s, tarifa: %.2f %s}",
                 codigoVoo, origem.getNome(), destino.getNome(), aeronave.getModelo(), tarifaBasica, moeda);
     }
 

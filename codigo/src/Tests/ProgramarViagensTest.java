@@ -1,3 +1,7 @@
+package Tests;
+
+import Entidades.*;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -20,13 +24,13 @@ class ProgramarViagensTest {
         programarViagens = new ProgramarViagens();
 
         // Exemplo de origem e destino
-        Aeroporto origem = new Aeroporto("Aeroporto de São Paulo", "GRU", "São Paulo", "SP", "Brasil");
-        Aeroporto destino = new Aeroporto("Aeroporto do Rio de Janeiro", "GIG", "Rio de Janeiro", "RJ", "Brasil");
+        Aeroporto origem = new Aeroporto("Entidades.Aeroporto de São Paulo", "GRU", "São Paulo", "SP", "Brasil");
+        Aeroporto destino = new Aeroporto("Entidades.Aeroporto do Rio de Janeiro", "GIG", "Rio de Janeiro", "RJ", "Brasil");
 
-        // Aeronave exemplo
+        // Entidades.Aeronave exemplo
         Aeronave aeronave = new Aeronave("Boeing 747", 300, 400, 66);
 
-        // Voo original com data base
+        // Entidades.Voo original com data base
         vooOriginal = new Voo(
                 origem,
                 destino,
@@ -65,14 +69,14 @@ class ProgramarViagensTest {
         // Verifica se os voos têm horários únicos e progressivos
         for (int i = 0; i < voosProgramados.size(); i++) {
             Voo voo = voosProgramados.get(i);
-            assertEquals(vooOriginal.getCodigoVoo(), voo.getCodigoVoo(), "Os códigos de voo devem ser iguais.");
-            assertEquals(vooOriginal.getOrigem(), voo.getOrigem(), "As origens devem ser iguais.");
-            assertEquals(vooOriginal.getDestino(), voo.getDestino(), "Os destinos devem ser iguais.");
-            assertEquals(vooOriginal.getAeronave(), voo.getAeronave(), "As aeronaves devem ser iguais.");
+            Assertions.assertEquals(vooOriginal.getCodigoVoo(), voo.getCodigoVoo(), "Os códigos de voo devem ser iguais.");
+            Assertions.assertEquals(vooOriginal.getOrigem(), voo.getOrigem(), "As origens devem ser iguais.");
+            Assertions.assertEquals(vooOriginal.getDestino(), voo.getDestino(), "Os destinos devem ser iguais.");
+            Assertions.assertEquals(vooOriginal.getAeronave(), voo.getAeronave(), "As aeronaves devem ser iguais.");
 
             // Verifica se o horário do voo está correto
             LocalDateTime horarioEsperado = vooOriginal.getDataHoraVoo().plusDays(i);
-            assertEquals(horarioEsperado, voo.getDataHoraVoo(), "O horário do voo deve corresponder à sequência esperada.");
+            Assertions.assertEquals(horarioEsperado, voo.getDataHoraVoo(), "O horário do voo deve corresponder à sequência esperada.");
         }
     }
 }

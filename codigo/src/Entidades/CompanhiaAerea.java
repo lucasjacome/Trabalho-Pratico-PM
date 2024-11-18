@@ -1,3 +1,5 @@
+package Entidades;
+
 public class CompanhiaAerea {
     private String nome;
     private String codigo;

@@ -1,3 +1,5 @@
+package Entidades;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -8,7 +10,7 @@ public class Assento {
 
     public Assento(String numeroAssento) {
         this.numeroAssento = numeroAssento;
-        this.disponivel = true; // Assento está disponível por padrão, até ser ocupado
+        this.disponivel = true; // Entidades.Assento está disponível por padrão, até ser ocupado
     }
 
     public String getNumeroAssento() {
@@ -23,7 +25,7 @@ public class Assento {
         if (disponivel) {
             disponivel = false;
         } else {
-            throw new IllegalStateException("Assento já está reservado.");
+            throw new IllegalStateException("Entidades.Assento já está reservado.");
         }
     }
 

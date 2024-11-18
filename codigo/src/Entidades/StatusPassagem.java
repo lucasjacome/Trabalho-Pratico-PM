@@ -1,3 +1,5 @@
+package Entidades;
+
 public enum StatusPassagem {
     PASSAGEM_ADQUIRIDA,
     PASSAGEM_CANCELADA,

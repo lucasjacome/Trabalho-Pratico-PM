@@ -1,4 +1,9 @@
+package Tests;
+
 import static org.junit.jupiter.api.Assertions.*;
+
+import Entidades.*;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -13,10 +18,10 @@ public class VooManagerTest {
     public void setup() {
         vooManager = new VooManager();
 
-        // Voo de ida de São Paulo para Brasília
+        // Entidades.Voo de ida de São Paulo para Brasília
         Voo vooIda = new Voo(
-                new Aeroporto("Aeroporto de São Paulo", "GRU", "São Paulo", "SP", "Brasil"),
-                new Aeroporto("Aeroporto de Brasília", "BSB", "Brasília", "DF", "Brasil"),
+                new Aeroporto("Entidades.Aeroporto de São Paulo", "GRU", "São Paulo", "SP", "Brasil"),
+                new Aeroporto("Entidades.Aeroporto de Brasília", "BSB", "Brasília", "DF", "Brasil"),
                 LocalDateTime.of(2024, 10, 1, 15, 30),
                 "XY1234",
                 new CompanhiaAerea("Companhia Aérea XYZ", "XYZ123", "Razão Social XYZ LTDA", "12345678000195", 50.0,
@@ -27,10 +32,10 @@ public class VooManagerTest {
                 1500.0,
                 "BRL");
 
-        // Voo de volta de Brasília para São Paulo
+        // Entidades.Voo de volta de Brasília para São Paulo
         Voo vooVolta = new Voo(
-                new Aeroporto("Aeroporto de Brasília", "BSB", "Brasília", "DF", "Brasil"),
-                new Aeroporto("Aeroporto de São Paulo", "GRU", "São Paulo", "SP", "Brasil"),
+                new Aeroporto("Entidades.Aeroporto de Brasília", "BSB", "Brasília", "DF", "Brasil"),
+                new Aeroporto("Entidades.Aeroporto de São Paulo", "GRU", "São Paulo", "SP", "Brasil"),
                 LocalDateTime.of(2024, 10, 10, 18, 00),
                 "XY9012",
                 new CompanhiaAerea("Companhia Aérea XYZ", "XYZ123", "Razão Social XYZ LTDA", "12345678000195", 50.0,
@@ -54,8 +59,8 @@ public class VooManagerTest {
 
     @Test
     public void testPesquisarVoos() {
-        Aeroporto origem = new Aeroporto("Aeroporto de São Paulo", "GRU", "São Paulo", "SP", "Brasil");
-        Aeroporto destino = new Aeroporto("Aeroporto de Brasília", "BSB", "Brasília", "DF", "Brasil");
+        Aeroporto origem = new Aeroporto("Entidades.Aeroporto de São Paulo", "GRU", "São Paulo", "SP", "Brasil");
+        Aeroporto destino = new Aeroporto("Entidades.Aeroporto de Brasília", "BSB", "Brasília", "DF", "Brasil");
         LocalDateTime dataPesquisa = LocalDateTime.of(2024, 10, 1, 0, 0); // Usando apenas a data, ignorando a hora
 
         List<Voo> voos = vooManager.pesquisarVoos(origem, destino, dataPesquisa);
@@ -64,8 +69,8 @@ public class VooManagerTest {
 
     @Test
     public void testPesquisarVoosComConexao() {
-        Aeroporto origem = new Aeroporto("Aeroporto de São Paulo", "GRU", "São Paulo", "SP", "Brasil");
-        Aeroporto destino = new Aeroporto("Aeroporto de Brasília", "BSB", "Brasília", "DF", "Brasil");
+        Aeroporto origem = new Aeroporto("Entidades.Aeroporto de São Paulo", "GRU", "São Paulo", "SP", "Brasil");
+        Aeroporto destino = new Aeroporto("Entidades.Aeroporto de Brasília", "BSB", "Brasília", "DF", "Brasil");
         LocalDateTime dataPesquisa = LocalDateTime.of(2024, 10, 1, 0, 0); // Usando apenas a data, ignorando a hora
 
         List<List<Voo>> conexoes = vooManager.pesquisarVoosComConexao(origem, destino, dataPesquisa);
@@ -74,8 +79,8 @@ public class VooManagerTest {
 
     @Test
     public void testPesquisarVoosIdaVolta() {
-        Aeroporto origem = new Aeroporto("Aeroporto de São Paulo", "GRU", "São Paulo", "SP", "Brasil");
-        Aeroporto destino = new Aeroporto("Aeroporto de Brasília", "BSB", "Brasília", "DF", "Brasil");
+        Aeroporto origem = new Aeroporto("Entidades.Aeroporto de São Paulo", "GRU", "São Paulo", "SP", "Brasil");
+        Aeroporto destino = new Aeroporto("Entidades.Aeroporto de Brasília", "BSB", "Brasília", "DF", "Brasil");
         LocalDateTime dataIda = LocalDateTime.of(2024, 10, 1, 0, 0); // Usando apenas a data, ignorando a hora
         LocalDateTime dataVolta = LocalDateTime.of(2024, 10, 10, 0, 0); // Usando apenas a data, ignorando a hora
 
@@ -95,7 +100,7 @@ public class VooManagerTest {
         List<Voo> historico = vooManager.acessarHistoricoVoos(passageiro);
 
         assertEquals(2, historico.size(), "O histórico deve conter 2 voos para o passageiro João Silva");
-        assertTrue(historico.get(0).getDataHoraVoo().isBefore(historico.get(1).getDataHoraVoo()),
+        Assertions.assertTrue(historico.get(0).getDataHoraVoo().isBefore(historico.get(1).getDataHoraVoo()),
                 "Os voos no histórico devem estar em ordem cronológica");
     }
 

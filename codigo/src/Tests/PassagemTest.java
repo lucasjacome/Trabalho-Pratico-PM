@@ -1,4 +1,9 @@
+package Tests;
+
 import static org.junit.jupiter.api.Assertions.*;
+
+import Entidades.*;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -14,9 +19,9 @@ public class PassagemTest {
         passagem = new Passagem(100.0);
 
         voo = new Voo(
-                new Aeroporto("Aeroporto de São Paulo", "GRU", "São Paulo", "SP", "Brasil"),
-                new Aeroporto("Aeroporto de Brasília", "BSB", "Brasília", "DF", "Brasil"),
-                LocalDateTime.now().plusHours(47), // Voo em 47 horas
+                new Aeroporto("Entidades.Aeroporto de São Paulo", "GRU", "São Paulo", "SP", "Brasil"),
+                new Aeroporto("Entidades.Aeroporto de Brasília", "BSB", "Brasília", "DF", "Brasil"),
+                LocalDateTime.now().plusHours(47), // Entidades.Voo em 47 horas
                 "XY1234",
                 new CompanhiaAerea("Companhia Aérea XYZ", "XYZ123", "Razão Social XYZ LTDA", "12345678000195", 50.0,
                         30.0),
@@ -32,8 +37,8 @@ public class PassagemTest {
 
     @Test
     public void testAdicionarVoo() {
-        assertNotNull(passagem.getVoo(), "A passagem deve conter um voo após a adição.");
-        assertEquals(voo, passagem.getVoo(), "O voo adicionado deve ser o esperado.");
+        Assertions.assertNotNull(passagem.getVoo(), "A passagem deve conter um voo após a adição.");
+        Assertions.assertEquals(voo, passagem.getVoo(), "O voo adicionado deve ser o esperado.");
     }
 
     @Test
@@ -53,15 +58,15 @@ public class PassagemTest {
     public void testRealizarCheckInDentroDoPeriodoPermitido() {
         boolean checkIn = passagem.realizarCheckIn();
         assertTrue(checkIn, "O check-in deve ser permitido dentro do período correto.");
-        assertEquals(StatusPassagem.CHECK_IN_REALIZADO, passagem.getStatus(), "O status deve ser atualizado para CHECK_IN_REALIZADO.");
+        Assertions.assertEquals(StatusPassagem.CHECK_IN_REALIZADO, passagem.getStatus(), "O status deve ser atualizado para CHECK_IN_REALIZADO.");
     }
 
     @Test
     public void testRealizarCheckInForaDoPeriodoPermitido() {
         // Simula um voo fora do período permitido para check-in
         Voo vooForaPeriodo = new Voo(
-                new Aeroporto("Aeroporto de São Paulo", "GRU", "São Paulo", "SP", "Brasil"),
-                new Aeroporto("Aeroporto de Brasília", "BSB", "Brasília", "DF", "Brasil"),
+                new Aeroporto("Entidades.Aeroporto de São Paulo", "GRU", "São Paulo", "SP", "Brasil"),
+                new Aeroporto("Entidades.Aeroporto de Brasília", "BSB", "Brasília", "DF", "Brasil"),
                 LocalDateTime.now().plusHours(50), // Fora do período de check-in
                 "XY5678",
                 new CompanhiaAerea("Companhia Aérea ABC", "ABC123", "Razão Social ABC LTDA", "98765432100195", 50.0,
@@ -78,14 +83,14 @@ public class PassagemTest {
 
         boolean checkIn = passagemForaPeriodo.realizarCheckIn();
         assertFalse(checkIn, "O check-in não deve ser permitido fora do período correto.");
-        assertEquals(StatusPassagem.PASSAGEM_ADQUIRIDA, passagemForaPeriodo.getStatus(), "O status deve permanecer como PASSAGEM_ADQUIRIDA.");
+        Assertions.assertEquals(StatusPassagem.PASSAGEM_ADQUIRIDA, passagemForaPeriodo.getStatus(), "O status deve permanecer como PASSAGEM_ADQUIRIDA.");
     }
 
     @Test
     public void testRegistrarNoShow() {
         // Não realizar check-in
         passagem.registrarNoShow();
-        assertEquals(StatusPassagem.NO_SHOW, passagem.getStatus(), "O status deve ser atualizado para NO_SHOW.");
+        Assertions.assertEquals(StatusPassagem.NO_SHOW, passagem.getStatus(), "O status deve ser atualizado para NO_SHOW.");
     }
 
     @Test
@@ -95,11 +100,11 @@ public class PassagemTest {
 
         // Tenta registrar NO SHOW após o check-in
         passagem.registrarNoShow();
-        assertNotEquals(StatusPassagem.NO_SHOW, passagem.getStatus(), "O status não deve ser atualizado para NO_SHOW após check-in.");
+        Assertions.assertNotEquals(StatusPassagem.NO_SHOW, passagem.getStatus(), "O status não deve ser atualizado para NO_SHOW após check-in.");
     }
 
     @Test
     public void testGetVoo() {
-        assertEquals(voo, passagem.getVoo(), "O método getVoo deve retornar o primeiro voo da passagem.");
+        Assertions.assertEquals(voo, passagem.getVoo(), "O método getVoo deve retornar o primeiro voo da passagem.");
     }
 }

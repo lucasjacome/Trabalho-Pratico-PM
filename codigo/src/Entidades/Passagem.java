@@ -1,3 +1,5 @@
+package Entidades;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -101,14 +103,14 @@ public class Passagem {
     public void registrarNoShow() {
         if (status != StatusPassagem.CHECK_IN_REALIZADO) {
             this.status = StatusPassagem.NO_SHOW;
-            System.out.println("Passagem registrada com status NO SHOW.");
+            System.out.println("Entidades.Passagem registrada com status NO SHOW.");
         }
     }
 
     @Override
     public String toString() {
         StringBuilder passagem = new StringBuilder();
-        passagem.append("Passagem:\n");
+        passagem.append("Entidades.Passagem:\n");
 
         // Listar os voos da passagem
         for (Voo voo : voos) {

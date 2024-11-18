@@ -1,8 +1,9 @@
+package Entidades;
+
 import java.time.LocalDateTime;
 import java.util.List;
 import java.time.DayOfWeek;
 import java.util.Arrays;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 
@@ -12,10 +13,10 @@ public class App {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
 
         // Criação de aeroportos
-        Aeroporto origem = new Aeroporto("Aeroporto de São Paulo", "GRU", "São Paulo", "SP", "Brasil");
-        Aeroporto destino = new Aeroporto("Aeroporto do Rio de Janeiro", "GIG", "Rio de Janeiro", "RJ", "Brasil");
-        Aeroporto destinoConexao = new Aeroporto("Aeroporto de Brasília", "BSB", "Brasília", "DF", "Brasil");
-        Aeroporto destinoInternacional = new Aeroporto("Aeroporto de Nova York", "JFK", "Nova York", "NY", "EUA");
+        Aeroporto origem = new Aeroporto("Entidades.Aeroporto de São Paulo", "GRU", "São Paulo", "SP", "Brasil");
+        Aeroporto destino = new Aeroporto("Entidades.Aeroporto do Rio de Janeiro", "GIG", "Rio de Janeiro", "RJ", "Brasil");
+        Aeroporto destinoConexao = new Aeroporto("Entidades.Aeroporto de Brasília", "BSB", "Brasília", "DF", "Brasil");
+        Aeroporto destinoInternacional = new Aeroporto("Entidades.Aeroporto de Nova York", "JFK", "Nova York", "NY", "EUA");
         Aeronave aeronave = new Aeronave("Boeing 737", 150, 200, 33);
         Aeronave aeronave2 = new Aeronave("Boeing 747", 300, 400, 66);
 
@@ -63,7 +64,7 @@ public class App {
                 1550.0,
                 "BRL");
 
-        // Voo Internacional
+        // Entidades.Voo Internacional
         Voo vooInternacional = new Voo(
                 origem,
                 destinoInternacional,
@@ -139,7 +140,7 @@ public class App {
             System.out.println("Origem: " + voo.getOrigem().getNome());
             System.out.println("Destino: " + voo.getDestino().getNome());
             System.out.println("Data e Hora: " + voo.getDataHoraVoo());
-            System.out.println("Aeronave: " + voo.getAeronave().getModelo());
+            System.out.println("Entidades.Aeronave: " + voo.getAeronave().getModelo());
             System.out.println("Tarifa: " + voo.getTarifaBasica() + " " + voo.getMoeda());
             System.out.println("----");
         }
@@ -171,16 +172,16 @@ public class App {
 
         // Emissão de bilhetes
 
-        // Passageiro com documento válido para voo nacional (CPF)
+        // Entidades.Passageiro com documento válido para voo nacional (CPF)
         Passageiro passageiroNacionalVip = new Passageiro("João", "Silva", "12345678901", "joao.silva@gmail.com");
         Passageiro passageiroNacionalRegular = new Passageiro("João", "Pobre", "12345936901", "joao.pobre@gmail.com");
 
         passageiroNacionalVip.setVipStatus(true);
 
-        // Passageiro com passaporte válido (duas letras e seis dígitos)
+        // Entidades.Passageiro com passaporte válido (duas letras e seis dígitos)
         Passageiro passageiroComPassaporteValido = new Passageiro("Maria", "Pereira", "AA123456", "mariapereira@outlook.com");
 
-        // Passageiro com passaporte inválido (não segue o padrão de duas letras e seis dígitos)
+        // Entidades.Passageiro com passaporte inválido (não segue o padrão de duas letras e seis dígitos)
         Passageiro passageiroComPassaporteInvalido = new Passageiro("Carlos", "Souza", "A1234567", "souzacarlos@icloud.com");
 
         // Tentativa de emitir bilhete para voo nacional
@@ -195,9 +196,9 @@ public class App {
 
         // Testar cancelamento/alteração
         System.out.println("\nAlteração/Cancelamento de voo:");
-        System.out.print("Pedido de cancelamento de Voo para Passageiro Regular -- ");
+        System.out.print("Pedido de cancelamento de Entidades.Voo para Entidades.Passageiro Regular -- ");
         passageiroNacionalRegular.cancelarVoo(null);
-        System.out.print("Pedido de cancelamento de Voo para Passageiro Vip -- ");
+        System.out.print("Pedido de cancelamento de Entidades.Voo para Entidades.Passageiro Vip -- ");
         passageiroNacionalVip.cancelarVoo(null);
 
         // Testar custo de bagagem

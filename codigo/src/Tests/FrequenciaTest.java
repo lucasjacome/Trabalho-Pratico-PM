@@ -1,3 +1,6 @@
+package Tests;
+
+import Entidades.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -16,8 +19,8 @@ public class FrequenciaTest {
     @BeforeEach
     public void setUp() {
         voo =
-                new Voo(new Aeroporto("Aeroporto de São Paulo", "GRU", "São Paulo", "SP", "Brasil"),
-                        new Aeroporto("Aeroporto do Rio de Janeiro", "GIG", "Rio de Janeiro", "RJ", "Brasil"),
+                new Voo(new Aeroporto("Entidades.Aeroporto de São Paulo", "GRU", "São Paulo", "SP", "Brasil"),
+                        new Aeroporto("Entidades.Aeroporto do Rio de Janeiro", "GIG", "Rio de Janeiro", "RJ", "Brasil"),
                         LocalDateTime.now(), "AV123",
                         new CompanhiaAerea("Companhia Aérea XYZ", "XYZ123", "Razão Social XYZ LTDA",
                         "12345678000195", 50.0, 30.0),
@@ -58,7 +61,7 @@ public class FrequenciaTest {
 
     @Test
     public void testGerarHorariosComDiasVazios() {
-        // Configura uma Frequencia com dias vazios
+        // Configura uma Entidades.Frequencia com dias vazios
         List<DayOfWeek> diasDaSemana = Arrays.asList();
         frequencia = new Frequencia(voo, diasDaSemana);
 

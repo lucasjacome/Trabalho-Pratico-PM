@@ -1,3 +1,5 @@
+package Entidades;
+
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -32,8 +34,8 @@ public class CartaoEmbarque {
                 "Nome: " + nome + " " + sobrenome + "\n" +
                 "Origem: " + origem + "\n" +
                 "Destino: " + destino + "\n" +
-                "Assento: " + assento + "\n" +
+                "Entidades.Assento: " + assento + "\n" +
                 "Horário de Embarque: " + formatarDataHora(horarioEmbarque) + "\n" +
-                "Horário do Voo: " + formatarDataHora(horarioVoo) + "\n";
+                "Horário do Entidades.Voo: " + formatarDataHora(horarioVoo) + "\n";
     }
 }

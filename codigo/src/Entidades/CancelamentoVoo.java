@@ -1,3 +1,5 @@
+package Entidades;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,11 +21,11 @@ public class CancelamentoVoo {
         for (Voo voo : voos) {
             if (voo.getCodigoVoo().equals(numeroVoo) && !voo.isCancelado()) {
                 voo.cancelar();
-                System.out.println("Voo " + numeroVoo + " foi cancelado com sucesso.");
+                System.out.println("Entidades.Voo " + numeroVoo + " foi cancelado com sucesso.");
                 return true;
             }
         }
-        System.out.println("Voo " + numeroVoo + " não encontrado ou já está cancelado.");
+        System.out.println("Entidades.Voo " + numeroVoo + " não encontrado ou já está cancelado.");
         return false;
     }
 
@@ -36,7 +38,7 @@ public class CancelamentoVoo {
                 return true;
             }
         }
-        System.out.println("Voo " + numeroVoo + " não encontrado ou não está cancelado.");
+        System.out.println("Entidades.Voo " + numeroVoo + " não encontrado ou não está cancelado.");
         return false;
     }
 

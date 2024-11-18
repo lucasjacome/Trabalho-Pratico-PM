@@ -1,5 +1,4 @@
-import java.util.ArrayList;
-import java.util.List;
+package Entidades;
 
 public class PassageiroEmbarque {
     private Passageiro passageiro;
