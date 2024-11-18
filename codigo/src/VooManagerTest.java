@@ -83,4 +83,20 @@ public class VooManagerTest {
         assertEquals(2, voosIdaVolta.size(),
                 "Deve haver 2 voos (1 de ida e 1 de volta) entre São Paulo e Brasília nas datas específicas");
     }
+
+    @Test
+    public void testAcessarHistoricoVoos() {
+        Passageiro passageiro = new Passageiro("João", "Silva", "12345678901", "joao@gmail.com");
+
+        // Adicionando o passageiro a ambos os voos
+        vooManager.listarTodosOsVoos().get(0).adicionarPassageiro(passageiro);
+        vooManager.listarTodosOsVoos().get(1).adicionarPassageiro(passageiro);
+
+        List<Voo> historico = vooManager.acessarHistoricoVoos(passageiro);
+
+        assertEquals(2, historico.size(), "O histórico deve conter 2 voos para o passageiro João Silva");
+        assertTrue(historico.get(0).getDataHoraVoo().isBefore(historico.get(1).getDataHoraVoo()),
+                "Os voos no histórico devem estar em ordem cronológica");
+    }
+
 }
