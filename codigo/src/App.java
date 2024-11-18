@@ -78,20 +78,21 @@ public class App {
 
         //vooTeste para testar o status "NO SHOW"
         Voo vooTeste = new Voo(
-            origem,
-            destino,
-            LocalDateTime.of(2024, 11, 17, 10, 0),
-            "XY1234",
-            companhia,
-            aeronave,
-            500.0,
-            1000.0,
-            1500.0,
-            "BRL");
-            vooTeste.adicionarPassageiro(new Passageiro("Ana", "Silva", "12345678901", "ana@gmail.com"));
-            vooTeste.adicionarPassageiro(new Passageiro("Carlos", "Santos", "98765432100", "carlos@gmail.com"));
-            vooTeste.registrarEmbarque("12345678901");
-            vooTeste.verificarNoShow();
+                origem,
+                destino,
+                LocalDateTime.of(2024, 11, 17, 10, 0),
+                "XY1234",
+                companhia,
+                aeronave,
+                500.0,
+                1000.0,
+                1500.0,
+                "BRL");
+                vooTeste.adicionarPassageiro(new Passageiro("Ana", "Silva", "12345678901", "ana@gmail.com"));
+                vooTeste.adicionarPassageiro(new Passageiro("Carlos", "Santos", "98765432100", "carlos@gmail.com"));
+                vooTeste.registrarEmbarque("12345678901");
+                vooTeste.verificarNoShow();
+
 
         // Definindo a frequência para o voo AD4114 (diariamente às 10:30)
         List<DayOfWeek> diasDaSemana = Arrays.asList(
@@ -99,6 +100,7 @@ public class App {
                 DayOfWeek.THURSDAY, DayOfWeek.FRIDAY, DayOfWeek.SATURDAY, DayOfWeek.SUNDAY);
 
         Frequencia frequenciaVoo = new Frequencia(voo1, diasDaSemana);
+
 
         // Adicionar os voos ao gerenciador
         vooManager.adicionarVoo(voo1);
@@ -133,8 +135,15 @@ public class App {
         // Exibindo os voos programados
         System.out.println("\nVoos programados para os próximos 30 dias:");
         for (Voo voo : voosProgramados) {
-            System.out.println(voo);
+            System.out.println("Código do voo: " + voo.getCodigoVoo());
+            System.out.println("Origem: " + voo.getOrigem().getNome());
+            System.out.println("Destino: " + voo.getDestino().getNome());
+            System.out.println("Data e Hora: " + voo.getDataHoraVoo());
+            System.out.println("Aeronave: " + voo.getAeronave().getModelo());
+            System.out.println("Tarifa: " + voo.getTarifaBasica() + " " + voo.getMoeda());
+            System.out.println("----");
         }
+
 
         // Pesquisar voos diretos
         LocalDateTime dataPesquisa = LocalDateTime.of(2024, 10, 1, 0, 0);
@@ -158,6 +167,7 @@ public class App {
                 System.out.println(voo);
             }
         }
+
 
         // Emissão de bilhetes
 

@@ -21,8 +21,7 @@ public class FrequenciaTest {
                         LocalDateTime.now(), "AV123",
                         new CompanhiaAerea("Companhia Aérea XYZ", "XYZ123", "Razão Social XYZ LTDA",
                         "12345678000195", 50.0, 30.0),
-                        new Aeronave("Boeing 737", 100, 180, 30),
-                        200, 400, 600, "BRL");
+                        new Aeronave("Boeing 737", 100, 180, 30), 200, 400, 600, "BRL");
     }
 
     @Test
