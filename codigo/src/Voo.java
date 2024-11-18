@@ -17,8 +17,9 @@ public class Voo {
     private boolean cancelado;
     private List<PassageiroEmbarque> passageiros;
 
-    public Voo(Aeroporto origem, Aeroporto destino, LocalDateTime dataHoraVoo, String codigoVoo, CompanhiaAerea companhia,
-               Aeronave aeronave, double tarifaBasica, double tarifaBusiness, double tarifaPremium, String moeda) {
+    public Voo(Aeroporto origem, Aeroporto destino, LocalDateTime dataHoraVoo, String codigoVoo,
+            CompanhiaAerea companhia,
+            Aeronave aeronave, double tarifaBasica, double tarifaBusiness, double tarifaPremium, String moeda) {
         this.origem = origem;
         this.destino = destino;
         this.dataHoraVoo = dataHoraVoo;
@@ -37,6 +38,10 @@ public class Voo {
     // Getters
     public Aeronave getAeronave() {
         return aeronave;
+    }
+
+    public List<PassageiroEmbarque> getPassageiros() {
+        return passageiros;
     }
 
     public Aeroporto getOrigem() {
@@ -95,7 +100,7 @@ public class Voo {
         for (PassageiroEmbarque pe : passageiros) {
             if (!pe.isEmbarcado()) {
                 System.out.println("Passageiro " + pe.getPassageiro().getNome() + " tem o status NO SHOW.");
-            }else{
+            } else {
                 System.out.println("Passageiro " + pe.getPassageiro().getNome() + " não tem o status NO SHOW.");
             }
         }
@@ -138,7 +143,7 @@ public class Voo {
     public void reverterCancelamento() {
         this.cancelado = false;
     }
-    
+
     public void cancelar() {
         this.cancelado = true;
     }
