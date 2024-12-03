@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class VooManager {
-    private List<Voo> voos;
+    private static List<Voo> voos;
 
     public VooManager() {
         this.voos = new ArrayList<>();
@@ -18,12 +18,12 @@ public class VooManager {
         voos.add(voo);
     }
 
-    public List<Voo> listarTodosOsVoos() {
+    public static List<Voo> listarTodosOsVoos() {
         return voos;
     }
 
     // Pesquisa de voos diretos (comparação de datas sem horas)
-    public List<Voo> pesquisarVoos(Aeroporto origem, Aeroporto destino, LocalDateTime dataHoraPesquisa) {
+    public static List<Voo> pesquisarVoos(Aeroporto origem, Aeroporto destino, LocalDateTime dataHoraPesquisa) {
         List<Voo> resultado = new ArrayList<>();
         LocalDate dataPesquisa = dataHoraPesquisa.toLocalDate(); // Considerar apenas a data
 

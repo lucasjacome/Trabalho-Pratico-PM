@@ -1,7 +1,7 @@
 package Tests;
 
 import Entidades.Aeronave;
-import Entidades.LetraAssento;
+import Enums.LetraAssento;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

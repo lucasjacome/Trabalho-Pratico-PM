@@ -1,5 +1,7 @@
 package Entidades;
 
+import Enums.StatusPassageiro;
+
 public class Passageiro {
     private String nome;
     private String sobrenome;

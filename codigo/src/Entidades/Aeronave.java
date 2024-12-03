@@ -1,5 +1,7 @@
 package Entidades;
 
+import Enums.LetraAssento;
+
 import java.util.ArrayList;
 import java.util.List;
 
