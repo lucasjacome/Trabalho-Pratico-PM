@@ -1,7 +1,6 @@
 package Entidades;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -15,74 +14,51 @@ public class VooManager {
     }
 
     public void adicionarVoo(Voo voo) {
+        if (voo == null) {
+            throw new IllegalArgumentException("O voo não pode ser nulo.");
+        }
         voos.add(voo);
     }
 
     public List<Voo> listarTodosOsVoos() {
-        return voos;
+        return new ArrayList<>(voos);
     }
 
-    // Pesquisa de voos diretos (comparação de datas sem horas)
-    public List<Voo> pesquisarVoos(Aeroporto origem, Aeroporto destino, LocalDateTime dataHoraPesquisa) {
-        List<Voo> resultado = new ArrayList<>();
-        LocalDate dataPesquisa = dataHoraPesquisa.toLocalDate(); // Considerar apenas a data
-
-        for (Voo voo : voos) {
-            if (voo.getOrigem().equals(origem) && voo.getDestino().equals(destino) &&
-                    voo.getDataHoraVoo().toLocalDate().equals(dataPesquisa)) {
-                resultado.add(voo);
-            }
-        }
-        return resultado;
+    public List<Voo> pesquisarVoos(Aeroporto origem, Aeroporto destino, LocalDate dataPesquisa) {
+        return voos.stream()
+                .filter(voo -> voo.getOrigem().equals(origem) && voo.getDestino().equals(destino)
+                        && voo.getDataHoraVoo().toLocalDate().equals(dataPesquisa))
+                .collect(Collectors.toList());
     }
 
-    // Pesquisa de voos de ida e volta
-    public List<Voo> pesquisarVoosIdaVolta(Aeroporto origem, Aeroporto destino, LocalDateTime dataIda,
-                                           LocalDateTime dataVolta) {
+    public List<Voo> pesquisarVoosIdaVolta(Aeroporto origem, Aeroporto destino, LocalDate dataIda,
+            LocalDate dataVolta) {
         List<Voo> idaVolta = new ArrayList<>();
-
-        // Pesquisar voo de ida
-        for (Voo voo : voos) {
-            if (voo.getOrigem().equals(origem) && voo.getDestino().equals(destino) &&
-                    voo.getDataHoraVoo().toLocalDate().equals(dataIda.toLocalDate())) {
-                idaVolta.add(voo); // Adicionar voo de ida
-            }
-        }
-
-        // Pesquisar voo de volta
-        for (Voo voo : voos) {
-            if (voo.getOrigem().equals(destino) && voo.getDestino().equals(origem) &&
-                    voo.getDataHoraVoo().toLocalDate().equals(dataVolta.toLocalDate())) {
-                idaVolta.add(voo); // Adicionar voo de volta
-            }
-        }
-
+        idaVolta.addAll(pesquisarVoos(origem, destino, dataIda));
+        idaVolta.addAll(pesquisarVoos(destino, origem, dataVolta));
         return idaVolta;
     }
 
-    // Pesquisa de voos com conexão
-    public List<List<Voo>> pesquisarVoosComConexao(Aeroporto origem, Aeroporto destino,
-                                                   LocalDateTime dataHoraPesquisa) {
+    public List<List<Voo>> pesquisarVoosComConexao(Aeroporto origem, Aeroporto destino, LocalDate dataPesquisa) {
         List<List<Voo>> conexoes = new ArrayList<>();
-        LocalDate dataPesquisa = dataHoraPesquisa.toLocalDate(); // Considerar apenas a data
-
-        for (Voo voo1 : voos) {
-            if (voo1.getOrigem().equals(origem) && voo1.getDataHoraVoo().toLocalDate().equals(dataPesquisa)) {
-                for (Voo voo2 : voos) {
-                    if (voo1.getDestino().equals(voo2.getOrigem()) && voo2.getDestino().equals(destino) &&
-                            voo2.getDataHoraVoo().toLocalDate().equals(dataPesquisa)) {
-                        List<Voo> conexao = new ArrayList<>();
-                        conexao.add(voo1);
-                        conexao.add(voo2);
-                        conexoes.add(conexao);
-                    }
-                }
-            }
-        }
+        voos.stream()
+                .filter(voo -> voo.getOrigem().equals(origem)
+                        && voo.getDataHoraVoo().toLocalDate().equals(dataPesquisa))
+                .forEach(voo1 -> voos.stream()
+                        .filter(voo2 -> voo1.getDestino().equals(voo2.getOrigem())
+                                && voo2.getDestino().equals(destino)
+                                && !voo1.getDestino().equals(destino)
+                                && voo2.getDataHoraVoo().toLocalDate().equals(dataPesquisa)
+                                && voo2.getDataHoraVoo().isAfter(voo1.getDataHoraVoo()))
+                        .forEach(voo2 -> {
+                            List<Voo> conexao = new ArrayList<>();
+                            conexao.add(voo1);
+                            conexao.add(voo2);
+                            conexoes.add(conexao);
+                        }));
         return conexoes;
     }
 
-    // Acessar histórico de voos de um passageiro em ordem cronológica
     public List<Voo> acessarHistoricoVoos(Passageiro passageiro) {
         return voos.stream()
                 .filter(voo -> voo.getPassageiros().stream()
