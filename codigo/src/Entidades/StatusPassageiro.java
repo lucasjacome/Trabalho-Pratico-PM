@@ -1,5 +1,16 @@
 package Entidades;
 
 public enum StatusPassageiro {
-    REGULAR, VIP
+    REGULAR("Regular"),
+    VIP("Vip");
+
+    private final String descricao;
+
+    StatusPassageiro(String descricao) {
+        this.descricao = descricao;
+    }
+
+    public String getDescricao() {
+        return descricao;
+    }
 }
