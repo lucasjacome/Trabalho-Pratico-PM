@@ -20,8 +20,16 @@ public class Voo {
     private List<PassageiroEmbarque> passageiros;
 
     public Voo(Aeroporto origem, Aeroporto destino, LocalDateTime dataHoraVoo, String codigoVoo,
-            CompanhiaAerea companhia,
-            Aeronave aeronave, double tarifaBasica, double tarifaBusiness, double tarifaPremium, String moeda) {
+            CompanhiaAerea companhia, Aeronave aeronave, double tarifaBasica, double tarifaBusiness,
+            double tarifaPremium, String moeda) {
+        if (origem == null || destino == null || dataHoraVoo == null || codigoVoo == null || companhia == null
+                || aeronave == null || moeda == null) {
+            throw new IllegalArgumentException("Nenhum campo pode ser nulo.");
+        }
+        if (tarifaBasica <= 0 || tarifaBusiness <= 0 || tarifaPremium <= 0) {
+            throw new IllegalArgumentException("As tarifas devem ser maiores que zero.");
+        }
+
         this.origem = origem;
         this.destino = destino;
         this.dataHoraVoo = dataHoraVoo;
@@ -37,7 +45,6 @@ public class Voo {
         this.passageiros = new ArrayList<>();
     }
 
-    // Getters
     public Aeronave getAeronave() {
         return aeronave;
     }
@@ -83,6 +90,9 @@ public class Voo {
     }
 
     public void adicionarPassageiro(Passageiro passageiro) {
+        if (passageiro == null) {
+            throw new IllegalArgumentException("O passageiro não pode ser nulo.");
+        }
         passageiros.add(new PassageiroEmbarque(passageiro));
     }
 
@@ -90,40 +100,32 @@ public class Voo {
         for (PassageiroEmbarque pe : passageiros) {
             if (pe.getPassageiro().getDocumento().equals(documentoPassageiro)) {
                 pe.setEmbarcado(true);
-                System.out.println("Entidades.Passageiro " + pe.getPassageiro().getNome() + " embarcou com sucesso.");
                 return;
             }
         }
-        System.out.println("Entidades.Passageiro com documento " + documentoPassageiro + " não encontrado.");
+        throw new IllegalArgumentException("Passageiro com o documento especificado não encontrado.");
     }
 
     public void verificarNoShow() {
-        System.out.println("\nRelatório de NO SHOW para o voo " + codigoVoo + ":");
         for (PassageiroEmbarque pe : passageiros) {
             if (!pe.isEmbarcado()) {
-                System.out.println("Entidades.Passageiro " + pe.getPassageiro().getNome() + " tem o status NO SHOW.");
-            } else {
-                System.out.println("Entidades.Passageiro " + pe.getPassageiro().getNome() + " não tem o status NO SHOW.");
+                System.out.println("Passageiro " + pe.getPassageiro().getNome() + " não embarcou (NO SHOW).");
             }
         }
     }
 
-    // Verifica a disponibilidade de assentos
     public boolean verificarDisponibilidadeAssento(String numeroAssento) {
         return Assento.verificarDisponibilidade(assentos, numeroAssento);
     }
 
-    // Reserva os assentos
     public boolean reservarAssento(String numeroAssento) {
         return Assento.reservarAssento(assentos, numeroAssento);
     }
 
-    // Verifica se o voo é internacional
     public boolean isInternacional() {
         return moeda.equals("USD");
     }
 
-    // Métodos para obter valores de bagagem
     public double getValorPrimeiraBagagem() {
         return companhia.getValorPrimeiraBagagem();
     }
@@ -132,21 +134,36 @@ public class Voo {
         return companhia.getValorBagagensAdicionais();
     }
 
-    @Override
-    public String toString() {
-        return String.format("Entidades.Voo {codigo: %s, origem: %s, destino: %s, aeronave: %s, tarifa: %.2f %s}",
-                codigoVoo, origem.getNome(), destino.getNome(), aeronave.getModelo(), tarifaBasica, moeda);
-    }
-
     public boolean isCancelado() {
         return cancelado;
+    }
+
+    public void cancelar() {
+        this.cancelado = true;
     }
 
     public void reverterCancelamento() {
         this.cancelado = false;
     }
 
-    public void cancelar() {
-        this.cancelado = true;
+    @Override
+    public String toString() {
+        return String.format("Voo {codigo: %s, origem: %s, destino: %s, aeronave: %s, tarifa: %.2f %s}",
+                codigoVoo, origem.getSigla(), destino.getSigla(), aeronave.getModelo(), tarifaBasica, moeda);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null || getClass() != obj.getClass())
+            return false;
+        Voo voo = (Voo) obj;
+        return codigoVoo.equals(voo.codigoVoo);
+    }
+
+    @Override
+    public int hashCode() {
+        return codigoVoo.hashCode();
     }
 }
