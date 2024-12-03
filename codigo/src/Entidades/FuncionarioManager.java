@@ -2,6 +2,7 @@ package Entidades;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class FuncionarioManager {
     private List<Funcionario> funcionarios;
@@ -11,33 +12,40 @@ public class FuncionarioManager {
     }
 
     public boolean adicionarFuncionario(Funcionario funcionario) {
-        for (Funcionario f : funcionarios) {
-            if (f.getCpf().equals(funcionario.getCpf())) {
-                System.out.println("Erro: Funcionário com o mesmo CPF já cadastrado.");
-                return false;
-            }
+        if (funcionario == null) {
+            throw new IllegalArgumentException("Funcionario não pode ser nulo.");
+        }
+        Optional<Funcionario> existente = funcionarios.stream()
+                .filter(f -> f.getCpf().equals(funcionario.getCpf()))
+                .findFirst();
+        if (existente.isPresent()) {
+            return false;
         }
         funcionarios.add(funcionario);
-        System.out.println("Funcionário cadastrado com sucesso.");
         return true;
     }
 
     public Funcionario autenticarFuncionario(String usuario, String senha) {
-        for (Funcionario funcionario : funcionarios) {
-            if (funcionario.autenticar(usuario, senha)) {
-                return funcionario;
-            }
+        if (usuario == null || senha == null || usuario.trim().isEmpty() || senha.trim().isEmpty()) {
+            throw new IllegalArgumentException("Usuario e senha não podem ser nulos ou vazios.");
         }
-        return null;
+        return funcionarios.stream()
+                .filter(f -> f.autenticar(usuario, senha))
+                .findFirst()
+                .orElse(null);
     }
 
-    public void listarFuncionarios() {
-        if (funcionarios.isEmpty()) {
-            System.out.println("Nenhum funcionário cadastrado.");
-        } else {
-            for (Funcionario f : funcionarios) {
-                System.out.println(f.getNome() + " - CPF: " + f.getCpf() + " - E-mail: " + f.getEmail());
-            }
+    public List<Funcionario> listarFuncionarios() {
+        return new ArrayList<>(funcionarios);
+    }
+
+    public Funcionario buscarPorCpf(String cpf) {
+        if (cpf == null || cpf.trim().isEmpty()) {
+            throw new IllegalArgumentException("CPF não pode ser nulo ou vazio.");
         }
+        return funcionarios.stream()
+                .filter(f -> f.getCpf().equals(cpf))
+                .findFirst()
+                .orElse(null);
     }
 }
