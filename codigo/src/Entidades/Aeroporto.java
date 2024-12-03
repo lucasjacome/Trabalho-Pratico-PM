@@ -1,5 +1,7 @@
 package Entidades;
 
+import java.util.Objects;
+
 public class Aeroporto {
     private String nome;
     private String sigla;
@@ -8,11 +10,14 @@ public class Aeroporto {
     private String pais;
 
     public Aeroporto(String nome, String sigla, String cidade, String estado, String pais) {
-        this.nome = nome;
-        this.sigla = sigla;
-        this.cidade = cidade;
-        this.estado = estado;
-        this.pais = pais;
+        if (sigla == null || sigla.length() != 3) {
+            throw new IllegalArgumentException("A sigla deve conter exatamente 3 caracteres.");
+        }
+        this.nome = nome != null && !nome.trim().isEmpty() ? nome : "Não definido";
+        this.sigla = sigla.toUpperCase();
+        this.cidade = cidade != null && !cidade.trim().isEmpty() ? cidade : "Não definida";
+        this.estado = estado != null && !estado.trim().isEmpty() ? estado : "Não definido";
+        this.pais = pais != null && !pais.trim().isEmpty() ? pais : "Não definido";
     }
 
     public String getNome() {
@@ -42,11 +47,16 @@ public class Aeroporto {
         if (obj == null || getClass() != obj.getClass())
             return false;
         Aeroporto that = (Aeroporto) obj;
-        return this.sigla.equals(that.sigla); // Comparar pela sigla do aeroporto
+        return sigla.equals(that.sigla);
     }
 
     @Override
     public int hashCode() {
-        return sigla.hashCode();
+        return Objects.hash(sigla);
+    }
+
+    @Override
+    public String toString() {
+        return String.format("%s (%s), %s, %s, %s", nome, sigla, cidade, estado, pais);
     }
 }
