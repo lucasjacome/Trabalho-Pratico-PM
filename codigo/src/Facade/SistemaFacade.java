@@ -13,17 +13,16 @@ public class SistemaFacade {
     private AeroportoManager aeroportoManager;
     private CompanhiaAereaManager companhiaAereaManager;
     private VooManager vooManager;
-    private PassageiroManager passageiroManager;
     private ILog log;
 
     public SistemaFacade() {
         this.aeroportoManager = new AeroportoManager();
         this.companhiaAereaManager = new CompanhiaAereaManager();
         this.vooManager = new VooManager();
-        this.passageiroManager = new PassageiroManager();
         this.log = new LogDAOImpl();
     }
 
+    // Método para realizar o cadastro básico
     // Método para realizar o cadastro básico
     public void cadastroBasico() {
         // Cadastro de aeroportos
@@ -33,11 +32,17 @@ public class SistemaFacade {
                 "Brasil", -22.9094, -43.1737);
         Aeroporto aeroporto3 = new Aeroporto("Aeroporto Internacional de Belo Horizonte", "CNF", "Belo Horizonte", "MG",
                 "Brasil", -19.6349, -43.9654);
+        Aeroporto aeroporto4 = new Aeroporto("Aeroporto Internacional de Brasília", "BSB", "Brasília", "DF",
+                "Brasil", -15.7941, -47.8825);
+        Aeroporto aeroporto5 = new Aeroporto("Aeroporto Internacional de Salvador", "SSA", "Salvador", "BA",
+                "Brasil", -12.9714, -38.5014);
 
         aeroportoManager.adicionarAeroporto(aeroporto1);
         aeroportoManager.adicionarAeroporto(aeroporto2);
         aeroportoManager.adicionarAeroporto(aeroporto3);
-        log.salvarLog("Cadastro de aeroportos realizado: " + aeroporto1 + ", " + aeroporto2 + ", " + aeroporto3);
+        aeroportoManager.adicionarAeroporto(aeroporto4);
+        aeroportoManager.adicionarAeroporto(aeroporto5);
+        log.salvarLog("Cadastro de aeroportos realizado.");
 
         // Cadastro das companhias aéreas
         CompanhiaAerea companhia1 = new CompanhiaAerea("XYZ Airlines", "XYZ", "Razão XYZ", "12345678000123", 50.0,
@@ -46,12 +51,12 @@ public class SistemaFacade {
                 40.0);
         companhiaAereaManager.adicionarCompanhia(companhia1);
         companhiaAereaManager.adicionarCompanhia(companhia2);
-        log.salvarLog("Cadastro de companhias aéreas realizado: " + companhia1 + ", " + companhia2);
+        log.salvarLog("Cadastro de companhias aéreas realizado.");
 
         // Cadastro das aeronaves
         Aeronave aeronave1 = new Aeronave("Boeing 737", 20000, 180, 30, 850.0);
 
-        // Cadastro dos voos entre GRU e GIG
+        // Cadastro de voos diretos entre GRU e GIG
         LocalDateTime dataHoraVooInicial = LocalDateTime.of(2024, 12, 1, 10, 0);
         for (int i = 0; i < 3; i++) {
             String codigoVooBase = "XYZ-GRU-GIG-" + (i + 1);
@@ -65,30 +70,47 @@ public class SistemaFacade {
             }
         }
 
-        // Cadastro de voos intermediários entre GRU e CNF (Conexão)
-        for (int i = 0; i < 2; i++) {
-            String codigoVooBase = "XYZ-GRU-CNF-" + (i + 1);
-            for (int dia = 0; dia < 10; dia++) {
-                String codigoVoo = codigoVooBase + String.format("%02d", dia + 1);
-                LocalDateTime dataHoraVoo = dataHoraVooInicial.plusDays(dia).withHour(8 + i);
-                Voo voo = new Voo(aeroporto1, aeroporto3, dataHoraVoo, codigoVoo, companhia1, aeronave1, 300.0, 600.0,
-                        900.0, "BRL");
-                vooManager.adicionarVoo(voo);
-                log.salvarLog("Cadastro de voo realizado: " + voo);
-            }
+        // Cadastro de voos com conexão
+        // GRU -> CNF -> GIG
+        for (int dia = 0; dia < 10; dia++) {
+            LocalDateTime dataHoraVoo = dataHoraVooInicial.plusDays(dia).withHour(8);
+            Voo voo1 = new Voo(aeroporto1, aeroporto3, dataHoraVoo, "GRU-CNF-" + dia, companhia1, aeronave1, 300.0,
+                    600.0,
+                    900.0, "BRL");
+            Voo voo2 = new Voo(aeroporto3, aeroporto2, dataHoraVoo.plusHours(3), "CNF-GIG-" + dia, companhia1,
+                    aeronave1,
+                    300.0, 600.0, 900.0, "BRL");
+            vooManager.adicionarVoo(voo1);
+            vooManager.adicionarVoo(voo2);
+            log.salvarLog("Cadastro de voo com conexão realizado: " + voo1 + " -> " + voo2);
         }
 
-        // Cadastro de voos intermediários entre CNF e GIG (Conexão)
-        for (int i = 0; i < 2; i++) {
-            String codigoVooBase = "XYZ-CNF-GIG-" + (i + 1);
-            for (int dia = 0; dia < 10; dia++) {
-                String codigoVoo = codigoVooBase + String.format("%02d", dia + 1);
-                LocalDateTime dataHoraVoo = dataHoraVooInicial.plusDays(dia).withHour(12 + i);
-                Voo voo = new Voo(aeroporto3, aeroporto2, dataHoraVoo, codigoVoo, companhia1, aeronave1, 300.0, 600.0,
-                        900.0, "BRL");
-                vooManager.adicionarVoo(voo);
-                log.salvarLog("Cadastro de voo realizado: " + voo);
-            }
+        // GRU -> BSB -> GIG
+        for (int dia = 0; dia < 10; dia++) {
+            LocalDateTime dataHoraVoo = dataHoraVooInicial.plusDays(dia).withHour(9);
+            Voo voo1 = new Voo(aeroporto1, aeroporto4, dataHoraVoo, "GRU-BSB-" + dia, companhia2, aeronave1, 400.0,
+                    700.0,
+                    1000.0, "BRL");
+            Voo voo2 = new Voo(aeroporto4, aeroporto2, dataHoraVoo.plusHours(4), "BSB-GIG-" + dia, companhia2,
+                    aeronave1,
+                    400.0, 700.0, 1000.0, "BRL");
+            vooManager.adicionarVoo(voo1);
+            vooManager.adicionarVoo(voo2);
+            log.salvarLog("Cadastro de voo com conexão realizado: " + voo1 + " -> " + voo2);
+        }
+
+        // GRU -> SSA -> GIG
+        for (int dia = 0; dia < 10; dia++) {
+            LocalDateTime dataHoraVoo = dataHoraVooInicial.plusDays(dia).withHour(7);
+            Voo voo1 = new Voo(aeroporto1, aeroporto5, dataHoraVoo, "GRU-SSA-" + dia, companhia1, aeronave1, 450.0,
+                    800.0,
+                    1200.0, "BRL");
+            Voo voo2 = new Voo(aeroporto5, aeroporto2, dataHoraVoo.plusHours(5), "SSA-GIG-" + dia, companhia1,
+                    aeronave1,
+                    450.0, 800.0, 1200.0, "BRL");
+            vooManager.adicionarVoo(voo1);
+            vooManager.adicionarVoo(voo2);
+            log.salvarLog("Cadastro de voo com conexão realizado: " + voo1 + " -> " + voo2);
         }
 
         log.salvarLog("Cadastro básico completo.");
@@ -171,7 +193,7 @@ public class SistemaFacade {
     public void cenario2() {
         Aeroporto origem = aeroportoManager.buscarAeroportoPorSigla("GRU");
         Aeroporto destino = aeroportoManager.buscarAeroportoPorSigla("GIG");
-        LocalDateTime dataPesquisa = LocalDateTime.of(2024, 12, 2, 10, 0);
+        LocalDateTime dataPesquisa = LocalDateTime.of(2024, 12, 2, 7, 0);
 
         // Pesquisa por voos com conexão
         List<List<Voo>> voosComConexao = vooManager.pesquisarVoosComConexao(origem, destino, dataPesquisa);
