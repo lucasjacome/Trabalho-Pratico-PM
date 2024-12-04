@@ -64,6 +64,81 @@ public class App {
         }
     }
 
+// Inicialização do JFrame (Menu interativo)
+//        JFrame frame = new JFrame("Sistema de Gerenciamento de Viagens");
+//        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//        frame.setSize(600, 400);
+//        frame.setLayout(new BorderLayout());
+//
+//        // Painel para as opções do menu
+//        JPanel menuPanel = new JPanel();
+//        menuPanel.setLayout(new GridLayout(6, 1, 10, 10));
+//
+//        JButton listarVoosButton = new JButton("Listar todos os voos");
+//        JButton pesquisarVoosButton = new JButton("Pesquisar voos diretos");
+//        JButton emitirBilheteButton = new JButton("Emitir bilhete");
+//        JButton calcularBagagemButton = new JButton("Calcular custo de bagagem");
+//        JButton alterarVipButton = new JButton("Alterar status VIP de passageiro");
+//        JButton sairButton = new JButton("Sair");
+//
+//        menuPanel.add(listarVoosButton);
+//        menuPanel.add(pesquisarVoosButton);
+//        menuPanel.add(emitirBilheteButton);
+//        menuPanel.add(calcularBagagemButton);
+//        menuPanel.add(alterarVipButton);
+//        menuPanel.add(sairButton);
+//
+//        // Adicionando o painel ao frame
+//        frame.add(menuPanel, BorderLayout.CENTER);
+//
+//        // Adicionando ação aos botões
+//        listarVoosButton.addActionListener(e -> {
+//            List<Voo> voos = VooManager.listarTodosOsVoos();
+//            StringBuilder voosTexto = new StringBuilder("Voos disponíveis:\n");
+//            for (Voo voo : voos) {
+//                voosTexto.append(voo).append("\n");
+//            }
+//
+//            // Exibe os voos em uma caixa de diálogo
+//            JOptionPane.showMessageDialog(null, voosTexto.toString(), "Lista de Voos", JOptionPane.INFORMATION_MESSAGE);
+//        });
+//        pesquisarVoosButton.addActionListener(e -> pesquisarVoos());
+////        emitirBilheteButton.addActionListener(e -> emitirBilhete());
+////        calcularBagagemButton.addActionListener(e -> calcularBagagem());
+////        alterarVipButton.addActionListener(e -> alterarVip());
+////        sairButton.addActionListener(e -> System.exit(0));
+//
+//        // Exibindo a interface
+//        frame.setVisible(true);
+//
+//    }
+//
+//    private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+//
+//    private static void pesquisarVoos() {
+//        // Entrada de dados
+//        JTextField dataField = new JTextField();
+//        Object[] inputFields = {
+//                "Data para pesquisa (dd/MM/yyyy HH:mm):", dataField
+//        };
+//        int option = JOptionPane.showConfirmDialog(null, inputFields, "Pesquisar Voos", JOptionPane.OK_CANCEL_OPTION);
+//
+//        if (option == JOptionPane.OK_OPTION) {
+//            try {
+//                LocalDateTime dataPesquisa = LocalDateTime.parse(dataField.getText(), formatter);
+//                // Pesquisar lógica aqui
+//                // Exemplo fictício
+//                List<Voo> voosDiretos = VooManager.pesquisarVoos(null, null, dataPesquisa);
+//                StringBuilder voosTexto = new StringBuilder("Voos diretos encontrados:\n");
+//                for (Voo voo : voosDiretos) {
+//                    voosTexto.append(voo).append("\n");
+//                }
+//                JOptionPane.showMessageDialog(null, voosTexto.toString(), "Resultado da Pesquisa", JOptionPane.INFORMATION_MESSAGE);
+//            } catch (Exception e) {
+//                JOptionPane.showMessageDialog(null, "Formato de data inválido!", "Erro", JOptionPane.ERROR_MESSAGE);
+//            }
+//        }
+
     private static void exibirMenu() {
         System.out.println("\n--- Sistema de Gestão de Voos ---");
         System.out.println("1. Cadastrar Aeroporto");
@@ -307,3 +382,5 @@ public class App {
         }
     }
 }
+
+
