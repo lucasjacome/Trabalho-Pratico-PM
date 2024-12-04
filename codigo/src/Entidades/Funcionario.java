@@ -36,8 +36,40 @@ public class Funcionario {
         return email;
     }
 
+    public String getUsuario() {
+        return usuario;
+    }
+
     public boolean autenticar(String usuario, String senha) {
         return this.usuario.equals(usuario) && this.senha.equals(senha);
+    }
+
+    public void setNome(String nome) {
+        if (nome == null || nome.trim().isEmpty()) {
+            throw new IllegalArgumentException("O nome não pode ser nulo ou vazio.");
+        }
+        this.nome = nome;
+    }
+
+    public void setEmail(String email) {
+        if (email == null || email.trim().isEmpty()) {
+            throw new IllegalArgumentException("O e-mail não pode ser nulo ou vazio.");
+        }
+        this.email = email;
+    }
+
+    public void setUsuario(String usuario) {
+        if (usuario == null || usuario.trim().isEmpty()) {
+            throw new IllegalArgumentException("O usuário não pode ser nulo ou vazio.");
+        }
+        this.usuario = usuario;
+    }
+
+    public void setSenha(String senha) {
+        if (senha == null || senha.trim().isEmpty()) {
+            throw new IllegalArgumentException("A senha não pode ser nula ou vazia.");
+        }
+        this.senha = senha;
     }
 
     @Override
