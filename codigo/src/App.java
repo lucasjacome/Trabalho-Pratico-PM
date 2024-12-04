@@ -906,8 +906,13 @@ public class App {
         panel.setLayout(new GridLayout(8, 2, 10, 10));
         panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
+
+        String[] codigosVoo = new String[vooManager.listarTodosOsVoos().size()];
+        for (int i = 0; i < vooManager.listarTodosOsVoos().size(); i++) {
+            codigosVoo[i] = vooManager.listarTodosOsVoos().get(i).getCodigoVoo();
+        }
         JLabel codigoVooLabel = new JLabel("Código do Voo:");
-        JTextField codigoVooField = new JTextField();
+        JComboBox<String> comboBoxCodVoo = new JComboBox<>(codigosVoo);
 
         JLabel documentoLabel = new JLabel("Documento do Passageiro:");
         JTextField documentoField = new JTextField();
@@ -916,7 +921,7 @@ public class App {
         JButton cancelarButton = new JButton("Cancelar");
 
         panel.add(codigoVooLabel);
-        panel.add(codigoVooField);
+        panel.add(comboBoxCodVoo);
         panel.add(documentoLabel);
         panel.add(documentoField);
         panel.add(emitirButton);
@@ -925,7 +930,7 @@ public class App {
         dialog.add(panel);
 
         emitirButton.addActionListener(e -> {
-            String codigoVoo = codigoVooField.getText();
+            String codigoVoo = comboBoxCodVoo.getSelectedItem().toString();
             Voo voo = vooManager.listarTodosOsVoos().stream()
                     .filter(v -> v.getCodigoVoo().equals(codigoVoo))
                     .findFirst()
