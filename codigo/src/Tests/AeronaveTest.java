@@ -26,11 +26,13 @@ class AeronaveTest {
 
         exception = assertThrows(IllegalArgumentException.class,
                 () -> new Aeronave("Boeing 737", -100, 180, 30, 850.0));
-        assertEquals("Capacidades e número de fileiras devem ser maiores que zero.", exception.getMessage());
+        assertEquals("Capacidades, número de fileiras e velocidade média devem ser maiores que zero.",
+                exception.getMessage());
 
         exception = assertThrows(IllegalArgumentException.class,
                 () -> new Aeronave("Boeing 737", 20000, 180, 30, -50.0));
-        assertEquals("A velocidade média deve ser maior que zero.", exception.getMessage());
+        assertEquals("Capacidades, número de fileiras e velocidade média devem ser maiores que zero.",
+                exception.getMessage());
     }
 
     @Test
@@ -59,7 +61,7 @@ class AeronaveTest {
     void testToString() {
         Aeronave aeronave = new Aeronave("Boeing 737", 20000, 180, 30, 850.0);
         assertEquals(
-                "Modelo: Boeing 737, Capacidade de Passageiros: 180, Capacidade de Carga: 20000kg, Fileiras: 30, Velocidade Média: 850.0 km/h",
+                "Modelo: Boeing 737, Capacidade de Passageiros: 180, Capacidade de Carga: 20000kg, Fileiras: 30, Velocidade Média: 850,00 km/h",
                 aeronave.toString());
     }
 }
