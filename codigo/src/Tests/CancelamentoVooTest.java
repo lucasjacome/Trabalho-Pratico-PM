@@ -95,10 +95,13 @@ class CancelamentoVooTest {
     }
 
     private Voo criarVoo(String codigoVoo, String origemNome) {
-        Aeroporto origem = new Aeroporto(origemNome, "GRU", "São Paulo", "SP", "Brasil");
-        Aeroporto destino = new Aeroporto("Aeroporto do Rio", "GIG", "Rio de Janeiro", "RJ", "Brasil");
-        CompanhiaAerea companhia = new CompanhiaAerea("Companhia Aérea XYZ", "XYZ", "Razão Social XYZ", "12345678000123", 50.0, 30.0);
+        Aeroporto origem = new Aeroporto(origemNome, "GRU", "São Paulo", "SP", "Brasil", -23.5505, -46.6333);
+        Aeroporto destino = new Aeroporto("Aeroporto do Rio", "GIG", "Rio de Janeiro", "RJ", "Brasil", -22.9094,
+                -43.1737);
+        CompanhiaAerea companhia = new CompanhiaAerea("Companhia Aérea XYZ", "XYZ", "Razão Social XYZ",
+                "12345678000123", 50.0, 30.0);
         Aeronave aeronave = new Aeronave("Boeing 737", 20000, 180, 30);
-        return new Voo(origem, destino, LocalDateTime.now().plusDays(1), codigoVoo, companhia, aeronave, 500.0, 1000.0, 1500.0, "BRL");
+        return new Voo(origem, destino, LocalDateTime.now().plusDays(1), codigoVoo, companhia, aeronave, 500.0, 1000.0,
+                1500.0, "BRL");
     }
 }

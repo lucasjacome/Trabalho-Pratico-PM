@@ -1,5 +1,6 @@
 package Entidades;
 
+import java.util.Locale;
 import java.util.Objects;
 
 public class Aeroporto {
@@ -8,8 +9,11 @@ public class Aeroporto {
     private String cidade;
     private String estado;
     private String pais;
+    private double latitude;
+    private double longitude;
 
-    public Aeroporto(String nome, String sigla, String cidade, String estado, String pais) {
+    public Aeroporto(String nome, String sigla, String cidade, String estado, String pais, double latitude,
+            double longitude) {
         if (sigla == null || sigla.length() != 3) {
             throw new IllegalArgumentException("A sigla deve conter exatamente 3 caracteres.");
         }
@@ -18,6 +22,8 @@ public class Aeroporto {
         this.cidade = cidade != null && !cidade.trim().isEmpty() ? cidade : "Não definida";
         this.estado = estado != null && !estado.trim().isEmpty() ? estado : "Não definido";
         this.pais = pais != null && !pais.trim().isEmpty() ? pais : "Não definido";
+        this.latitude = latitude;
+        this.longitude = longitude;
     }
 
     public String getNome() {
@@ -40,6 +46,14 @@ public class Aeroporto {
         return pais;
     }
 
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public double getLongitude() {
+        return longitude;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj)
@@ -57,6 +71,7 @@ public class Aeroporto {
 
     @Override
     public String toString() {
-        return String.format("%s (%s), %s, %s, %s", nome, sigla, cidade, estado, pais);
+        return String.format(Locale.US, "%s (%s), %s, %s, %s - Latitude: %.6f, Longitude: %.6f", nome, sigla, cidade, estado, pais,
+                latitude, longitude);
     }
 }

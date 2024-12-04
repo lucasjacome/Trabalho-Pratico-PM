@@ -53,8 +53,8 @@ class VooTest {
     }
 
     private Voo criarVoo() {
-        Aeroporto origem = new Aeroporto("Aeroporto SP", "GRU", "São Paulo", "SP", "Brasil");
-        Aeroporto destino = new Aeroporto("Aeroporto RJ", "GIG", "Rio de Janeiro", "RJ", "Brasil");
+        Aeroporto origem = new Aeroporto("Aeroporto SP", "GRU", "São Paulo", "SP", "Brasil", -23.5505, -46.6333);
+        Aeroporto destino = new Aeroporto("Aeroporto RJ", "GIG", "Rio de Janeiro", "RJ", "Brasil", -22.9094, -43.1737);
         CompanhiaAerea companhia = new CompanhiaAerea("XYZ Airlines", "XYZ", "Razão XYZ", "12345678000123", 50.0, 30.0);
         Aeronave aeronave = new Aeronave("Boeing 737", 20000, 180, 30);
         return new Voo(origem, destino, LocalDateTime.of(2024, 12, 25, 14, 0), "XYZ123", companhia, aeronave, 500.0,
