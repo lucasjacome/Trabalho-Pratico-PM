@@ -10,27 +10,34 @@ class AeronaveTest {
 
     @Test
     void testAeronaveConstrutorValido() {
-        Aeronave aeronave = new Aeronave("Boeing 737", 20000, 180, 30);
+        Aeronave aeronave = new Aeronave("Boeing 737", 20000, 180, 30, 850.0);
         assertEquals("Boeing 737", aeronave.getModelo());
         assertEquals(20000, aeronave.getCapacidadeCarga());
         assertEquals(180, aeronave.getCapacidadePassageiros());
         assertEquals(30, aeronave.getNumeroFileiras());
+        assertEquals(850.0, aeronave.getVelocidadeMedia(), 0.01);
     }
 
     @Test
     void testAeronaveConstrutorInvalido() {
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
-                () -> new Aeronave("", 20000, 180, 30));
+                () -> new Aeronave("", 20000, 180, 30, 850.0));
         assertEquals("O modelo da aeronave não pode ser vazio.", exception.getMessage());
 
         exception = assertThrows(IllegalArgumentException.class,
-                () -> new Aeronave("Boeing 737", -100, 180, 30));
-        assertEquals("Capacidades e número de fileiras devem ser maiores que zero.", exception.getMessage());
+                () -> new Aeronave("Boeing 737", -100, 180, 30, 850.0));
+        assertEquals("Capacidades, número de fileiras e velocidade média devem ser maiores que zero.",
+                exception.getMessage());
+
+        exception = assertThrows(IllegalArgumentException.class,
+                () -> new Aeronave("Boeing 737", 20000, 180, 30, -50.0));
+        assertEquals("Capacidades, número de fileiras e velocidade média devem ser maiores que zero.",
+                exception.getMessage());
     }
 
     @Test
     void testGerarAssentos() {
-        Aeronave aeronave = new Aeronave("Boeing 737", 20000, 30, 5);
+        Aeronave aeronave = new Aeronave("Boeing 737", 20000, 30, 5, 850.0);
         List<String> assentos = aeronave.gerarAssentos();
         assertEquals(30, assentos.size());
         assertTrue(assentos.contains("1A"));
@@ -40,9 +47,9 @@ class AeronaveTest {
 
     @Test
     void testEqualsAndHashCode() {
-        Aeronave aeronave1 = new Aeronave("Boeing 737", 20000, 180, 30);
-        Aeronave aeronave2 = new Aeronave("Boeing 737", 30000, 200, 40);
-        Aeronave aeronave3 = new Aeronave("Airbus A320", 20000, 180, 30);
+        Aeronave aeronave1 = new Aeronave("Boeing 737", 20000, 180, 30, 850.0);
+        Aeronave aeronave2 = new Aeronave("Boeing 737", 30000, 200, 40, 900.0);
+        Aeronave aeronave3 = new Aeronave("Airbus A320", 20000, 180, 30, 850.0);
 
         assertEquals(aeronave1, aeronave2);
         assertNotEquals(aeronave1, aeronave3);
@@ -52,8 +59,9 @@ class AeronaveTest {
 
     @Test
     void testToString() {
-        Aeronave aeronave = new Aeronave("Boeing 737", 20000, 180, 30);
-        assertEquals("Modelo: Boeing 737, Capacidade de Passageiros: 180, Capacidade de Carga: 20000kg, Fileiras: 30",
+        Aeronave aeronave = new Aeronave("Boeing 737", 20000, 180, 30, 850.0);
+        assertEquals(
+                "Modelo: Boeing 737, Capacidade de Passageiros: 180, Capacidade de Carga: 20000kg, Fileiras: 30, Velocidade Média: 850,00 km/h",
                 aeronave.toString());
     }
 }

@@ -97,7 +97,7 @@ public class App {
         passageiroManager.adicionarPassageiro(passageiro);
 
         Voo voo = new Voo(aeroporto1, aeroporto2, LocalDateTime.of(2024, 12, 1, 10, 0), "XYZ123", companhia,
-                new Aeronave("Boeing 737", 20000, 180, 30),
+                new Aeronave("Boeing 737", 20000, 180, 30, 850.0),
                 500.0, 1000.0, 1500.0, "BRL");
         vooManager.adicionarVoo(voo);
     }
@@ -117,7 +117,7 @@ public class App {
         double latitude = scanner.nextDouble();
         System.out.print("Digite a longitude do aeroporto: ");
         double longitude = scanner.nextDouble();
-        scanner.nextLine(); // Consumir a linha de quebra de linha
+        scanner.nextLine();
 
         Aeroporto aeroporto = new Aeroporto(nome, sigla, cidade, estado, pais, latitude, longitude);
         if (aeroportoManager.adicionarAeroporto(aeroporto)) {
@@ -140,7 +140,7 @@ public class App {
         double valorPrimeiraBagagem = scanner.nextDouble();
         System.out.print("Digite o valor das bagagens adicionais: ");
         double valorBagagensAdicionais = scanner.nextDouble();
-        scanner.nextLine(); // Consumir o final da linha
+        scanner.nextLine();
 
         CompanhiaAerea companhiaAerea = new CompanhiaAerea(nome, sigla, razaoSocial, cnpj, valorPrimeiraBagagem,
                 valorBagagensAdicionais);
@@ -198,7 +198,7 @@ public class App {
         scanner.nextLine();
 
         Voo voo = new Voo(origem, destino, dataHoraVoo, codigoVoo, companhiaAerea,
-                new Aeronave("Boeing 737", 20000, 180, 30),
+                new Aeronave("Boeing 737", 20000, 180, 30, 850.0),
                 tarifaBasica, tarifaBusiness, tarifaPremium, "BRL");
         vooManager.adicionarVoo(voo);
         System.out.println("Voo cadastrado com sucesso!");

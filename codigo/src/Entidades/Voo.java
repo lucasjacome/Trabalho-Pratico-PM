@@ -1,6 +1,7 @@
 package Entidades;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -146,10 +147,24 @@ public class Voo {
         this.cancelado = false;
     }
 
-    @Override
-    public String toString() {
-        return String.format("Voo {codigo: %s, origem: %s, destino: %s, aeronave: %s, tarifa: %.2f %s}",
-                codigoVoo, origem.getSigla(), destino.getSigla(), aeronave.getModelo(), tarifaBasica, moeda);
+    public double calcularDistanciaKm() {
+        double latOrigem = origem.getLatitude();
+        double lonOrigem = origem.getLongitude();
+        double latDestino = destino.getLatitude();
+        double lonDestino = destino.getLongitude();
+
+        return 110.57 * Math.sqrt(Math.pow(latDestino - latOrigem, 2) + Math.pow(lonDestino - lonOrigem, 2));
+    }
+
+    public double calcularTempoDeViagem() {
+        double distanciaKm = calcularDistanciaKm();
+        double velocidadeMedia = aeronave.getVelocidadeMedia();
+        return distanciaKm / velocidadeMedia;
+    }
+
+    public LocalDateTime calcularHorarioChegada() {
+        double tempoViagemHoras = calcularTempoDeViagem();
+        return dataHoraVoo.plusMinutes((long) (tempoViagemHoras * 60));
     }
 
     @Override
@@ -166,4 +181,16 @@ public class Voo {
     public int hashCode() {
         return codigoVoo.hashCode();
     }
+
+    @Override
+    public String toString() {
+        return String.format("Voo [%s -> %s, Código: %s, Data/Hora: %s, Companhia: %s, Aeronave: %s]",
+                origem.getSigla(),
+                destino.getSigla(),
+                codigoVoo,
+                dataHoraVoo.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")),
+                companhia.getNome(),
+                aeronave.getModelo());
+    }
+
 }

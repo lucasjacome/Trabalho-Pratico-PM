@@ -82,6 +82,22 @@ class BilheteTest {
         assertEquals(bilhete1.hashCode(), bilhete2.hashCode());
     }
 
+    @Test
+    void testCalcularTempoDeViagem() {
+        Voo voo = criarVooNacional();
+        double tempoViagem = voo.calcularTempoDeViagem();
+        assertTrue(tempoViagem > 0, "O tempo de viagem deve ser maior que zero.");
+    }
+
+    @Test
+    void testCalcularHorarioChegada() {
+        Voo voo = criarVooNacional();
+        LocalDateTime horarioChegada = voo.calcularHorarioChegada();
+        assertNotNull(horarioChegada, "O horário de chegada não pode ser nulo.");
+        assertTrue(horarioChegada.isAfter(voo.getDataHoraVoo()),
+                "O horário de chegada deve ser após o horário de partida.");
+    }
+
     private Voo criarVooNacional() {
         Aeroporto origem = new Aeroporto("Aeroporto de São Paulo", "GRU", "São Paulo", "SP", "Brasil", -23.5505,
                 -46.6333);
@@ -89,7 +105,7 @@ class BilheteTest {
                 -43.1737);
         CompanhiaAerea companhia = new CompanhiaAerea("Companhia Aérea XYZ", "XYZ", "Razão Social XYZ",
                 "12345678000123", 50.0, 30.0);
-        Aeronave aeronave = new Aeronave("Boeing 737", 20000, 180, 30);
+        Aeronave aeronave = new Aeronave("Boeing 737", 20000, 180, 30, 850.0);
         return new Voo(origem, destino, LocalDateTime.now().plusDays(1), "XY123", companhia, aeronave, 500.0, 1000.0,
                 1500.0, "BRL");
     }
@@ -100,7 +116,7 @@ class BilheteTest {
         Aeroporto destino = new Aeroporto("Aeroporto JFK", "JFK", "Nova York", "NY", "EUA", 40.6413, -73.7781);
         CompanhiaAerea companhia = new CompanhiaAerea("Companhia Aérea XYZ", "XYZ", "Razão Social XYZ",
                 "12345678000123", 50.0, 30.0);
-        Aeronave aeronave = new Aeronave("Boeing 747", 30000, 400, 50);
+        Aeronave aeronave = new Aeronave("Boeing 747", 30000, 400, 50, 900.0);
         return new Voo(origem, destino, LocalDateTime.now().plusDays(1), "XY456", companhia, aeronave, 1200.0, 2500.0,
                 3500.0, "USD");
     }

@@ -52,11 +52,35 @@ class VooTest {
         assertFalse(voo.isCancelado());
     }
 
+    @Test
+    void testCalcularDistanciaKm() {
+        Voo voo = criarVoo();
+        double distancia = voo.calcularDistanciaKm();
+        assertEquals(389.04, distancia, 0.01);
+    }
+
+    @Test
+    void testCalcularTempoDeViagem() {
+        Voo voo = criarVoo();
+        double tempoViagem = voo.calcularTempoDeViagem();
+        assertEquals(0.46, tempoViagem, 0.01, "O tempo de viagem deve ser aproximadamente 0.46 horas.");
+    }
+
+    @Test
+    void testCalcularHorarioChegada() {
+        Voo voo = criarVoo();
+        LocalDateTime horarioChegada = voo.calcularHorarioChegada();
+        assertNotNull(horarioChegada, "O horário de chegada não pode ser nulo.");
+        assertEquals(LocalDateTime.of(2024, 12, 25, 14, 27), horarioChegada,
+                "O horário de chegada deve ser corretamente calculado.");
+    }
+
     private Voo criarVoo() {
         Aeroporto origem = new Aeroporto("Aeroporto SP", "GRU", "São Paulo", "SP", "Brasil", -23.5505, -46.6333);
         Aeroporto destino = new Aeroporto("Aeroporto RJ", "GIG", "Rio de Janeiro", "RJ", "Brasil", -22.9094, -43.1737);
         CompanhiaAerea companhia = new CompanhiaAerea("XYZ Airlines", "XYZ", "Razão XYZ", "12345678000123", 50.0, 30.0);
-        Aeronave aeronave = new Aeronave("Boeing 737", 20000, 180, 30);
+        Aeronave aeronave = new Aeronave("Boeing 737", 20000, 180, 30, 850.0);
+
         return new Voo(origem, destino, LocalDateTime.of(2024, 12, 25, 14, 0), "XYZ123", companhia, aeronave, 500.0,
                 1000.0, 1500.0, "BRL");
     }
