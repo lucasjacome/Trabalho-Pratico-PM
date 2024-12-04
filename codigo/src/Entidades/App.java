@@ -1,6 +1,5 @@
 package Entidades;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -16,13 +15,13 @@ public class App {
         PassageiroManager passageiroManager = new PassageiroManager();
         VooManager vooManager = new VooManager();
 
-        // Criando alguns dados iniciais
+       
         iniciarDadosIniciais(aeroportoManager, companhiaAereaManager, passageiroManager, vooManager);
 
         while (true) {
             exibirMenu();
             int opcao = scanner.nextInt();
-            scanner.nextLine(); // Consumir a linha de quebra de linha
+            scanner.nextLine(); 
 
             switch (opcao) {
                 case 1:
@@ -137,7 +136,7 @@ public class App {
         double valorPrimeiraBagagem = scanner.nextDouble();
         System.out.print("Digite o valor das bagagens adicionais: ");
         double valorBagagensAdicionais = scanner.nextDouble();
-        scanner.nextLine(); // Consumir o final da linha
+        scanner.nextLine();
 
         CompanhiaAerea companhiaAerea = new CompanhiaAerea(nome, sigla, razaoSocial, cnpj, valorPrimeiraBagagem,
                 valorBagagensAdicionais);
@@ -192,7 +191,7 @@ public class App {
         double tarifaBusiness = scanner.nextDouble();
         System.out.print("Digite o valor da tarifa premium: ");
         double tarifaPremium = scanner.nextDouble();
-        scanner.nextLine(); // Consumir a linha restante
+        scanner.nextLine(); 
 
         Voo voo = new Voo(origem, destino, dataHoraVoo, codigoVoo, companhiaAerea,
                 new Aeronave("Boeing 737", 20000, 180, 30),
@@ -212,7 +211,6 @@ public class App {
             try {
                 return LocalDateTime.parse(dataHora, format);
             } catch (DateTimeParseException e) {
-                // Ignorar e tentar o próximo formato
             }
         }
         throw new IllegalArgumentException(
