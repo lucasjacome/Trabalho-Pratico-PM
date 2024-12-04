@@ -9,8 +9,10 @@ import dao.LogDAOImpl;
 import javax.swing.*;
 import java.awt.*;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
 
@@ -41,24 +43,40 @@ public class App {
         menuPanel.add(titleLabel);
 
         JButton cadastrarAeroportoButton = new JButton("1. Cadastrar Aeroporto");
-        JButton cadastrarCompanhiaAereaButton = new JButton("2. Cadastrar Companhia Aérea");
-        JButton cadastrarPassageiroButton = new JButton("3. Cadastrar Passageiro");
-        JButton cadastrarVoosButton = new JButton("4. Cadastrar Voo");
-        JButton listarAeroportosButton = new JButton("5. Listar todos os Aeroportos");
-        JButton listarCompanhiaAereaButton = new JButton("6. Listar todas as Companhias Aéreas");
-        JButton listarPassageiroButton = new JButton("7. Listar todos os Passageiros");
-        JButton listarVoosButton = new JButton("8. Listar todos os voos");
-        JButton pesquisarVoosButton = new JButton("9. Pesquisar voos diretos");
-        JButton emitirBilheteButton = new JButton("10. Emitir bilhete");
-        JButton sairButton = new JButton("Sair ✖\uFE0F");
+        JButton alterarAeroportoButton = new JButton("2. Alterar Aeroporto");
+        JButton excluirAeroportoButton = new JButton("3. Excluir Aeroporto");
+        JButton listarAeroportosButton = new JButton("4. Listar Aeroportos");
+        JButton cadastrarCompanhiaAereaButton = new JButton("5. Cadastrar Companhia Aérea");
+        JButton alterarCompanhiaAereaButton = new JButton("6. Alterar Companhia Aérea");
+        JButton excluirCompanhiaAereaButton = new JButton("7. Excluir Companhia Aérea");
+        JButton listarCompanhiaAereaButton = new JButton("8. Listar Companhias Aéreas");
+        JButton cadastrarPassageiroButton = new JButton("9. Cadastrar Passageiro");
+        JButton alterarPassageiroButton = new JButton("10. Alterar Passageiro");
+        JButton excluirPassageiroButton = new JButton("11. Excluir Passageiro");
+        JButton listarPassageiroButton = new JButton("12. Listar Passageiros");
+        JButton cadastrarVoosButton = new JButton("13. Cadastrar Voo");
+        JButton alterarVooButton = new JButton("14. Alterar Voo");
+        JButton excluirVooButton = new JButton("15. Excluir Voo");
+        JButton listarVoosButton = new JButton("16. Listar Voos");
+        JButton pesquisarVoosButton = new JButton("17. Pesquisar Voos");
+        JButton emitirBilheteButton = new JButton("18. Emitir bilhete");
+        JButton sairButton = new JButton("19. Sair ✖\uFE0F");
 
         menuPanel.add(cadastrarAeroportoButton);
-        menuPanel.add(cadastrarCompanhiaAereaButton);
-        menuPanel.add(cadastrarPassageiroButton);
-        menuPanel.add(cadastrarVoosButton);
+        menuPanel.add(alterarAeroportoButton);
+        menuPanel.add(excluirAeroportoButton);
         menuPanel.add(listarAeroportosButton);
+        menuPanel.add(cadastrarCompanhiaAereaButton);
+        menuPanel.add(alterarCompanhiaAereaButton);
+        menuPanel.add(excluirCompanhiaAereaButton);
         menuPanel.add(listarCompanhiaAereaButton);
+        menuPanel.add(cadastrarPassageiroButton);
+        menuPanel.add(alterarPassageiroButton);
+        menuPanel.add(excluirPassageiroButton);
         menuPanel.add(listarPassageiroButton);
+        menuPanel.add(cadastrarVoosButton);
+        menuPanel.add(alterarVooButton);
+        menuPanel.add(excluirVooButton);
         menuPanel.add(listarVoosButton);
         menuPanel.add(pesquisarVoosButton);
         menuPanel.add(emitirBilheteButton);
@@ -66,12 +84,20 @@ public class App {
 
 
         cadastrarAeroportoButton.addActionListener(e -> cadastrarAeroporto(aeroportoManager));
-        cadastrarCompanhiaAereaButton.addActionListener(e -> cadastrarCompanhiaAerea(companhiaAereaManager));
-        cadastrarPassageiroButton.addActionListener(e -> cadastrarPassageiro(passageiroManager));
-        cadastrarVoosButton.addActionListener(e -> cadastrarVoo(vooManager, aeroportoManager, companhiaAereaManager));
+        alterarAeroportoButton.addActionListener(e -> alterarAeroporto(aeroportoManager));
+        excluirAeroportoButton.addActionListener(e -> excluirAeroporto(aeroportoManager));
         listarAeroportosButton.addActionListener(e -> listarAeroportos(aeroportoManager));
+        cadastrarCompanhiaAereaButton.addActionListener(e -> cadastrarCompanhiaAerea(companhiaAereaManager));
+        alterarCompanhiaAereaButton.addActionListener(e -> alterarCompanhiaAerea(companhiaAereaManager));
+        excluirCompanhiaAereaButton.addActionListener(e -> excluirCompanhiaAerea(companhiaAereaManager));
         listarCompanhiaAereaButton.addActionListener(e -> listarCompanhiasAereas(companhiaAereaManager));
+        cadastrarPassageiroButton.addActionListener(e -> cadastrarPassageiro(passageiroManager));
+        alterarPassageiroButton.addActionListener(e -> alterarPassageiro(passageiroManager));
+        excluirPassageiroButton.addActionListener(e -> excluirPassageiro(passageiroManager));
         listarPassageiroButton.addActionListener(e -> listarPassageiros(passageiroManager));
+        cadastrarVoosButton.addActionListener(e -> cadastrarVoo(vooManager, aeroportoManager, companhiaAereaManager));
+        alterarVooButton.addActionListener(e -> alterarVoo(vooManager, aeroportoManager));
+        excluirVooButton.addActionListener(e -> excluirVoo(vooManager));
         listarVoosButton.addActionListener(e -> listarVoos(vooManager));
         pesquisarVoosButton.addActionListener(e -> pesquisarVoos(vooManager, aeroportoManager));
         emitirBilheteButton.addActionListener(e -> emitirBilhete(vooManager, passageiroManager));
@@ -79,108 +105,11 @@ public class App {
 
         frame.setVisible(true);
         frame.add(menuPanel);
-
-
-        while (true) {
-            exibirMenu();
-            int opcao = scanner.nextInt();
-            scanner.nextLine();
-
-            switch (opcao) {
-                case 1:
-                    cadastrarAeroporto(aeroportoManager);
-                    break;
-                case 2:
-                    cadastrarCompanhiaAerea(companhiaAereaManager);
-                    break;
-                case 3:
-                    cadastrarPassageiro(passageiroManager);
-                    break;
-                case 4:
-                    cadastrarVoo(vooManager, aeroportoManager, companhiaAereaManager);
-                    break;
-                case 5:
-                    listarAeroportos(aeroportoManager);
-                    break;
-                case 6:
-                    listarCompanhiasAereas(companhiaAereaManager);
-                    break;
-                case 7:
-                    listarPassageiros(passageiroManager);
-                    break;
-                case 8:
-                    listarVoos(vooManager);
-                    break;
-                case 9:
-                    pesquisarVoos(vooManager, aeroportoManager);
-                    break;
-                case 10:
-                    emitirBilhete(vooManager, passageiroManager);
-                    break;
-                case 11:
-                    alterarAeroporto(scanner, aeroportoManager);
-                    break;
-                case 12:
-                    excluirAeroporto(scanner, aeroportoManager);
-                    break;
-                case 13:
-                    alterarCompanhiaAerea(scanner, companhiaAereaManager);
-                    break;
-                case 14:
-                    excluirCompanhiaAerea(scanner, companhiaAereaManager);
-                    break;
-                case 15:
-                    alterarPassageiro(scanner, passageiroManager);
-                    break;
-                case 16:
-                    excluirPassageiro(scanner, passageiroManager);
-                    break;
-                case 17:
-                    alterarVoo(scanner, vooManager, aeroportoManager, companhiaAereaManager);
-                    break;
-                case 18:
-                    excluirVoo(scanner, vooManager);
-                    break;
-                case 19:
-                    System.out.println("Saindo do sistema...");
-                    scanner.close();
-                    return;
-                default:
-                    System.out.println("Opção inválida, tente novamente.");
-            }
-
-        }
-    }
-
-
-
-    private static void exibirMenu() {
-        System.out.println("\n--- Sistema de Gestão de Voos ---");
-        System.out.println("1. Cadastrar Aeroporto");
-        System.out.println("2. Cadastrar Companhia Aérea");
-        System.out.println("3. Cadastrar Passageiro");
-        System.out.println("4. Cadastrar Voo");
-        System.out.println("5. Listar Aeroportos");
-        System.out.println("6. Listar Companhias Aéreas");
-        System.out.println("7. Listar Passageiros");
-        System.out.println("8. Listar Voos");
-        System.out.println("9. Pesquisar Voos");
-        System.out.println("10. Emitir Bilhete");
-        System.out.println("11. Alterar Aeroporto");
-        System.out.println("12. Excluir Aeroporto");
-        System.out.println("13. Alterar Companhia Aérea");
-        System.out.println("14. Excluir Companhia Aérea");
-        System.out.println("15. Alterar Passageiro");
-        System.out.println("16. Excluir Passageiro");
-        System.out.println("17. Alterar Voo");
-        System.out.println("18. Excluir Voo");
-        System.out.println("19. Sair");
-        System.out.print("Escolha uma opção: ");
     }
 
     private static void iniciarDadosIniciais(AeroportoManager aeroportoManager,
-            CompanhiaAereaManager companhiaAereaManager,
-            PassageiroManager passageiroManager, VooManager vooManager) {
+                                             CompanhiaAereaManager companhiaAereaManager,
+                                             PassageiroManager passageiroManager, VooManager vooManager) {
         Aeroporto aeroporto1 = new Aeroporto("Aeroporto Internacional de São Paulo", "GRU", "São Paulo", "SP", "Brasil",
                 -23.5505, -46.6333);
         Aeroporto aeroporto2 = new Aeroporto("Aeroporto Internacional do Rio de Janeiro", "GIG", "Rio de Janeiro", "RJ",
@@ -202,6 +131,7 @@ public class App {
 
         registrarLog("Dados iniciais carregados com sucesso.");
     }
+
 
     private static void cadastrarAeroporto(AeroportoManager aeroportoManager) {
 
@@ -258,20 +188,26 @@ public class App {
         dialog.add(panel);
 
         salvarButton.addActionListener(e -> {
-            String nome = nomeField.getText();
-            String sigla = siglaField.getText();
-            String cidade = cidadeField.getText();
-            String estado = estadoField.getText();
-            String pais = paisField.getText();
-            double latitude = Double.parseDouble(paisField.getText());
-            double longitude = Double.parseDouble(paisField.getText());
+            try {
+                String nome = nomeField.getText();
+                String sigla = siglaField.getText();
+                String cidade = cidadeField.getText();
+                String estado = estadoField.getText();
+                String pais = paisField.getText();
+                double latitude = Double.parseDouble(latitudeField.getText());
+                double longitude = Double.parseDouble(longitudeField.getText());
 
-            Aeroporto aeroporto = new Aeroporto(nome, sigla, cidade, estado, pais, latitude, longitude);
-            if (aeroportoManager.adicionarAeroporto(aeroporto)) {
-                JOptionPane.showMessageDialog(dialog, "Aeroporto cadastrado com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
-                dialog.dispose();
-            } else {
-                JOptionPane.showMessageDialog(dialog, "Aeroporto com essa sigla já cadastrado.", "Erro", JOptionPane.ERROR_MESSAGE);
+                Aeroporto aeroporto = new Aeroporto(nome, sigla, cidade, estado, pais, latitude, longitude);
+                if (aeroportoManager.adicionarAeroporto(aeroporto)) {
+                    JOptionPane.showMessageDialog(dialog, "Aeroporto cadastrado com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+                    dialog.dispose();
+                } else {
+                    JOptionPane.showMessageDialog(dialog, "Aeroporto com essa sigla já cadastrado.", "Erro", JOptionPane.ERROR_MESSAGE);
+                }
+            } catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(dialog, "Erro ao converter latitude ou longitude. Insira valores numéricos válidos.", "Erro", JOptionPane.ERROR_MESSAGE);
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(dialog, "Erro ao cadastrar aeroporto: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
             }
         });
 
@@ -279,59 +215,83 @@ public class App {
         dialog.setVisible(true);
     }
 
-    private static void alterarAeroporto(Scanner scanner, AeroportoManager aeroportoManager) {
-        System.out.print("Digite a sigla do aeroporto que deseja alterar: ");
-        String sigla = scanner.nextLine();
+    private static void alterarAeroporto(AeroportoManager aeroportoManager) {
+        List<Aeroporto> aeroportos = aeroportoManager.listarAeroportos();
 
-        try {
-            Aeroporto aeroporto = aeroportoManager.buscarAeroportoPorSigla(sigla);
-            System.out.println("Aeroporto encontrado: " + aeroporto);
+        String[] siglaAero = aeroportos.stream()
+                .map(Aeroporto::getSigla)
+                .toArray(String[]::new);
 
-            System.out.print("Digite o novo nome do aeroporto: ");
-            String novoNome = scanner.nextLine();
-            System.out.print("Digite a nova cidade: ");
-            String novaCidade = scanner.nextLine();
-            System.out.print("Digite o novo estado: ");
-            String novoEstado = scanner.nextLine();
-            System.out.print("Digite o novo país: ");
-            String novoPais = scanner.nextLine();
+        JLabel siglaLabel = new JLabel("Selecione a Sigla do Aeroporto que deseja alterar:");
+        JComboBox<String> comboBoxSigla = new JComboBox<>(siglaAero);
 
-            boolean alterado = aeroportoManager.alterarAeroporto(sigla, novoNome, novaCidade, novoEstado, novoPais);
+        JPanel panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+        panel.add(siglaLabel);
+        panel.add(comboBoxSigla);
 
-            if (alterado) {
-                registrarLog("Aeroporto [" + sigla + "] alterado para: Nome=[" + novoNome + "], Cidade=[" + novaCidade
-                        + "], Estado=[" + novoEstado + "], País=[" + novoPais + "]");
-                System.out.println("Aeroporto alterado com sucesso!");
-            } else {
-                System.out.println("Não foi possível alterar o aeroporto.");
+        int result = JOptionPane.showConfirmDialog(null, panel, "Alterar Aeroporto", JOptionPane.OK_CANCEL_OPTION);
+
+        if (result == JOptionPane.OK_OPTION) {
+            String siglaSelecionada = (String) comboBoxSigla.getSelectedItem();
+
+            try {
+                Aeroporto aeroporto = aeroportoManager.buscarAeroportoPorSigla(siglaSelecionada);
+                JOptionPane.showMessageDialog(null, "Aeroporto encontrado: " + aeroporto);
+
+                String novoNome = JOptionPane.showInputDialog("Digite o novo nome do aeroporto:");
+                String novaCidade = JOptionPane.showInputDialog("Digite a nova cidade:");
+                String novoEstado = JOptionPane.showInputDialog("Digite o novo estado:");
+                String novoPais = JOptionPane.showInputDialog("Digite o novo país:");
+
+                boolean alterado = aeroportoManager.alterarAeroporto(siglaSelecionada, novoNome, novaCidade, novoEstado, novoPais);
+
+                if (alterado) {
+                    registrarLog("Aeroporto [" + siglaSelecionada + "] alterado para: Nome=[" + novoNome + "], Cidade=[" + novaCidade
+                            + "], Estado=[" + novoEstado + "], País=[" + novoPais + "]");
+                    JOptionPane.showMessageDialog(null, "Aeroporto alterado com sucesso!");
+                } else {
+                    JOptionPane.showMessageDialog(null, "Não foi possível alterar o aeroporto.");
+                }
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, "Erro ao alterar aeroporto: " + e.getMessage());
             }
-        } catch (Exception e) {
-            System.out.println("Erro ao alterar aeroporto: " + e.getMessage());
         }
     }
 
-    private static void excluirAeroporto(Scanner scanner, AeroportoManager aeroportoManager) {
-        System.out.print("Digite a sigla do aeroporto que deseja excluir: ");
-        String sigla = scanner.nextLine();
+    private static void excluirAeroporto(AeroportoManager aeroportoManager) {
+        List<Aeroporto> aeroportos = aeroportoManager.listarAeroportos();
+        String[] siglaAero = aeroportos.stream()
+                .map(Aeroporto::getSigla)
+                .toArray(String[]::new);
 
-        try {
-            boolean removido = aeroportoManager.removerAeroporto(sigla);
 
-            if (removido) {
-                registrarLog("Aeroporto [" + sigla + "] foi removido do sistema.");
-                System.out.println("Aeroporto removido com sucesso!");
-            } else {
-                System.out.println("Aeroporto não encontrado ou não pôde ser removido.");
+        JLabel siglaLabel = new JLabel("Selecione a Sigla do Aeroporto que deseja excluir:");
+        JComboBox<String> comboBoxSigla = new JComboBox<>(siglaAero);
+
+        JPanel panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+        panel.add(siglaLabel);
+        panel.add(comboBoxSigla);
+
+        int result = JOptionPane.showConfirmDialog(null, panel, "Alterar Aeroporto", JOptionPane.OK_CANCEL_OPTION);
+
+        if (result == JOptionPane.OK_OPTION) {
+            String siglaSelecionada = (String) comboBoxSigla.getSelectedItem();
+
+            try {
+                boolean removido = aeroportoManager.removerAeroporto(siglaSelecionada);
+
+                if (removido) {
+                    registrarLog("Aeroporto [" + siglaSelecionada + "] foi removido do sistema.");
+                    JOptionPane.showMessageDialog(null, "Aeroporto removido com sucesso!");
+                } else {
+                    JOptionPane.showMessageDialog(null, "Aeroporto não encontrado ou não pôde ser removido.");
+                }
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, "Erro ao excluir aeroporto: " + e.getMessage());
             }
-        } catch (Exception e) {
-            System.out.println("Erro ao excluir aeroporto: " + e.getMessage());
         }
-    }
-
-    private static void registrarLog(String mensagem) {
-        String timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-        String logMensagem = String.format("[%s] %s", timestamp, mensagem);
-        logDAO.salvarLog(logMensagem);
     }
 
     private static void cadastrarCompanhiaAerea(CompanhiaAereaManager companhiaAereaManager) {
@@ -412,24 +372,21 @@ public class App {
         dialog.setVisible(true);
     }
 
-    private static void alterarCompanhiaAerea(Scanner scanner, CompanhiaAereaManager companhiaAereaManager) {
-        System.out.print("Digite o CNPJ da companhia aérea a ser alterada: ");
-        String cnpj = scanner.nextLine();
+    private static void alterarCompanhiaAerea(CompanhiaAereaManager companhiaAereaManager) {
+        String cnpj = JOptionPane.showInputDialog("Digite o CNPJ da companhia aérea a ser alterada:");
+        if (cnpj == null || cnpj.isBlank()) return;
 
         try {
             CompanhiaAerea antigaCompanhia = companhiaAereaManager.buscarCompanhiaPorCnpj(cnpj);
 
-            System.out.print("Digite o novo nome da companhia aérea: ");
-            String novoNome = scanner.nextLine();
-            System.out.print("Digite a nova razão social: ");
-            String novaRazaoSocial = scanner.nextLine();
-            System.out.print("Digite a nova sigla: ");
-            String novaSigla = scanner.nextLine();
-            System.out.print("Digite o novo valor da primeira bagagem: ");
-            double novoValorPrimeiraBagagem = scanner.nextDouble();
-            System.out.print("Digite o novo valor das bagagens adicionais: ");
-            double novoValorBagagensAdicionais = scanner.nextDouble();
-            scanner.nextLine();
+            String novoNome = JOptionPane.showInputDialog("Digite o novo nome da companhia aérea:");
+            String novaRazaoSocial = JOptionPane.showInputDialog("Digite a nova razão social:");
+            String novaSigla = JOptionPane.showInputDialog("Digite a nova sigla:");
+            String valorPrimeiraBagagemStr = JOptionPane.showInputDialog("Digite o novo valor da primeira bagagem:");
+            String valorBagagensAdicionaisStr = JOptionPane.showInputDialog("Digite o novo valor das bagagens adicionais:");
+
+            double novoValorPrimeiraBagagem = Double.parseDouble(valorPrimeiraBagagemStr);
+            double novoValorBagagensAdicionais = Double.parseDouble(valorBagagensAdicionaisStr);
 
             boolean alterado = companhiaAereaManager.alterarCompanhia(cnpj, novoNome, novaRazaoSocial, novaSigla,
                     novoValorPrimeiraBagagem, novoValorBagagensAdicionais);
@@ -439,18 +396,18 @@ public class App {
                         "Companhia aérea alterada: Antes -> %s; Depois -> [Nome: %s, Razão Social: %s, Sigla: %s, Valor Primeira Bagagem: %.2f, Valor Bagagens Adicionais: %.2f]",
                         antigaCompanhia.toString(), novoNome, novaRazaoSocial, novaSigla, novoValorPrimeiraBagagem,
                         novoValorBagagensAdicionais));
-                System.out.println("Companhia aérea alterada com sucesso.");
+                JOptionPane.showMessageDialog(null, "Companhia aérea alterada com sucesso.");
             } else {
-                System.out.println("Falha ao alterar a companhia aérea.");
+                JOptionPane.showMessageDialog(null, "Falha ao alterar a companhia aérea.");
             }
         } catch (IllegalArgumentException e) {
-            System.out.println(e.getMessage());
+            JOptionPane.showMessageDialog(null, e.getMessage());
         }
     }
 
-    private static void excluirCompanhiaAerea(Scanner scanner, CompanhiaAereaManager companhiaAereaManager) {
-        System.out.print("Digite o CNPJ da companhia aérea a ser excluída: ");
-        String cnpj = scanner.nextLine();
+    private static void excluirCompanhiaAerea(CompanhiaAereaManager companhiaAereaManager) {
+        String cnpj = JOptionPane.showInputDialog("Digite o CNPJ da companhia aérea a ser excluída:");
+        if (cnpj == null || cnpj.isBlank()) return;
 
         try {
             CompanhiaAerea companhiaAExcluir = companhiaAereaManager.buscarCompanhiaPorCnpj(cnpj);
@@ -459,12 +416,12 @@ public class App {
 
             if (excluido) {
                 registrarLog(String.format("Companhia aérea excluída: %s", companhiaAExcluir.toString()));
-                System.out.println("Companhia aérea excluída com sucesso.");
+                JOptionPane.showMessageDialog(null, "Companhia aérea excluída com sucesso.");
             } else {
-                System.out.println("Falha ao excluir a companhia aérea.");
+                JOptionPane.showMessageDialog(null, "Falha ao excluir a companhia aérea.");
             }
         } catch (IllegalArgumentException e) {
-            System.out.println(e.getMessage());
+            JOptionPane.showMessageDialog(null, e.getMessage());
         }
     }
 
@@ -525,20 +482,16 @@ public class App {
         dialog.setVisible(true);
     }
 
-    private static void alterarPassageiro(Scanner scanner, PassageiroManager passageiroManager) {
-        System.out.print("Digite o documento do passageiro que deseja alterar: ");
-        String documento = scanner.nextLine();
+    private static void alterarPassageiro(PassageiroManager passageiroManager) {
+        String documento = JOptionPane.showInputDialog("Digite o documento do passageiro que deseja alterar:");
+        if (documento == null || documento.isBlank()) return;
 
         try {
             Passageiro passageiro = passageiroManager.buscarPassageiroPorDocumento(documento);
-            System.out.println("Passageiro encontrado: " + passageiro);
 
-            System.out.print("Digite o novo nome do passageiro: ");
-            String novoNome = scanner.nextLine();
-            System.out.print("Digite o novo sobrenome: ");
-            String novoSobrenome = scanner.nextLine();
-            System.out.print("Digite o novo email do passageiro: ");
-            String novoEmail = scanner.nextLine();
+            String novoNome = JOptionPane.showInputDialog("Digite o novo nome do passageiro:");
+            String novoSobrenome = JOptionPane.showInputDialog("Digite o novo sobrenome:");
+            String novoEmail = JOptionPane.showInputDialog("Digite o novo email do passageiro:");
 
             boolean alterado = passageiroManager.alterarPassageiro(documento, novoNome, novoSobrenome, novoEmail);
 
@@ -546,18 +499,18 @@ public class App {
                 registrarLog(String.format(
                         "Passageiro alterado: Antes -> %s; Depois -> Nome: %s, Sobrenome: %s, Email: %s",
                         passageiro.toString(), novoNome, novoSobrenome, novoEmail));
-                System.out.println("Passageiro alterado com sucesso!");
+                JOptionPane.showMessageDialog(null, "Passageiro alterado com sucesso!");
             } else {
-                System.out.println("Falha ao alterar o passageiro.");
+                JOptionPane.showMessageDialog(null, "Falha ao alterar o passageiro.");
             }
         } catch (Exception e) {
-            System.out.println("Erro ao alterar passageiro: " + e.getMessage());
+            JOptionPane.showMessageDialog(null, "Erro ao alterar passageiro: " + e.getMessage());
         }
     }
 
-    private static void excluirPassageiro(Scanner scanner, PassageiroManager passageiroManager) {
-        System.out.print("Digite o documento do passageiro que deseja excluir: ");
-        String documento = scanner.nextLine();
+    private static void excluirPassageiro(PassageiroManager passageiroManager) {
+        String documento = JOptionPane.showInputDialog("Digite o documento do passageiro que deseja excluir:");
+        if (documento == null || documento.isBlank()) return;
 
         try {
             Passageiro passageiro = passageiroManager.buscarPassageiroPorDocumento(documento);
@@ -565,12 +518,12 @@ public class App {
 
             if (removido) {
                 registrarLog(String.format("Passageiro excluído: %s", passageiro.toString()));
-                System.out.println("Passageiro excluído com sucesso!");
+                JOptionPane.showMessageDialog(null, "Passageiro excluído com sucesso!");
             } else {
-                System.out.println("Falha ao excluir o passageiro.");
+                JOptionPane.showMessageDialog(null, "Falha ao excluir o passageiro.");
             }
         } catch (Exception e) {
-            System.out.println("Erro ao excluir passageiro: " + e.getMessage());
+            JOptionPane.showMessageDialog(null, "Erro ao excluir passageiro: " + e.getMessage());
         }
     }
 
@@ -584,17 +537,16 @@ public class App {
         panel.setLayout(new GridLayout(10, 2, 10, 10));
         panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
-        String[] nomesAeroportosOrigem = new String[aeroportoManager.listarAeroportos().size()];
-        for (int i = 0; i < aeroportoManager.listarAeroportos().size(); i++) {
-            nomesAeroportosOrigem[i] = aeroportoManager.listarAeroportos().get(i).getSigla();
-        }
+        String[] nomesAeroportosOrigem = aeroportoManager.listarAeroportos().stream()
+                .map(Aeroporto::getSigla)
+                .toArray(String[]::new);
         JLabel origemLabel = new JLabel("Sigla Origem:");
         JComboBox<String> comboBoxOrigem = new JComboBox<>(nomesAeroportosOrigem);
 
-        String[] nomesAeroportosDestino = new String[aeroportoManager.listarAeroportos().size()];
-        for (int i = 0; i < aeroportoManager.listarAeroportos().size(); i++) {
-            nomesAeroportosDestino[i] = aeroportoManager.listarAeroportos().get(i).getSigla();
-        }
+        String [] nomesAeroportosDestino = aeroportoManager.listarAeroportos().stream()
+                .map(Aeroporto::getSigla)
+                .toArray(String[]::new);
+
         JLabel destinoLabel = new JLabel("Sigla Destino:");
         JComboBox<String> comboBoxDestino = new JComboBox<>(nomesAeroportosDestino);
 
@@ -673,92 +625,147 @@ public class App {
         dialog.setVisible(true);
     }
 
-    private static void alterarVoo(Scanner scanner, VooManager vooManager, AeroportoManager aeroportoManager,
-            CompanhiaAereaManager companhiaAereaManager) {
-        System.out.print("Digite o código do voo a ser alterado: ");
-        String codigoVoo = scanner.nextLine();
-
+    private static void alterarVoo(VooManager vooManager, AeroportoManager aeroportoManager) {
         try {
-            Voo voo = vooManager.buscarVooPorCodigo(codigoVoo);
-            System.out.println("Voo encontrado: " + voo);
 
-            System.out.print("Digite a nova sigla do aeroporto de origem: ");
-            String novaSiglaOrigem = scanner.nextLine();
-            Aeroporto novaOrigem = aeroportoManager.buscarAeroportoPorSigla(novaSiglaOrigem);
+            List<Voo> voos = vooManager.listarTodosOsVoos();
+            String[] codVoo = voos.stream()
+                    .map(Voo::getCodigoVoo)
+                    .toArray(String[]::new);
 
-            System.out.print("Digite a nova sigla do aeroporto de destino: ");
-            String novaSiglaDestino = scanner.nextLine();
-            Aeroporto novoDestino = aeroportoManager.buscarAeroportoPorSigla(novaSiglaDestino);
 
-            System.out.print("Digite o novo horário do voo (yyyy-MM-dd HH:mm): ");
-            String novoHorario = scanner.nextLine();
-            LocalDateTime novaDataHora = parseDateTime(novoHorario);
+            JLabel codLabel = new JLabel("Selecione  o código do voo a ser alterado: ");
+            JComboBox<String> comboBoxCod = new JComboBox<>(codVoo);
 
-            System.out.print("Digite o novo valor da tarifa básica: ");
-            double novaTarifaBasica = scanner.nextDouble();
-            System.out.print("Digite o novo valor da tarifa business: ");
-            double novaTarifaBusiness = scanner.nextDouble();
-            System.out.print("Digite o novo valor da tarifa premium: ");
-            double novaTarifaPremium = scanner.nextDouble();
-            scanner.nextLine();
+            JPanel panel = new JPanel();
+            panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+            panel.add(codLabel);
+            panel.add(comboBoxCod);
 
-            boolean alterado = vooManager.alterarVoo(codigoVoo, novaDataHora, novaOrigem, novoDestino, novaTarifaBasica,
-                    novaTarifaBusiness, novaTarifaPremium);
+            int result = JOptionPane.showConfirmDialog(null, panel, "Alterar Voo", JOptionPane.OK_CANCEL_OPTION);
 
-            if (alterado) {
-                registrarLog(String.format(
-                        "Voo alterado: Antes -> %s; Depois -> Origem: %s, Destino: %s, Horário: %s, Tarifa Básica: %.2f, Tarifa Business: %.2f, Tarifa Premium: %.2f",
-                        voo.toString(),
-                        novaOrigem.getSigla(),
-                        novoDestino.getSigla(),
-                        novaDataHora,
-                        novaTarifaBasica,
-                        novaTarifaBusiness,
-                        novaTarifaPremium));
-                System.out.println("Voo alterado com sucesso.");
-            } else {
-                System.out.println("Falha ao alterar o voo.");
+
+            if (result == JOptionPane.OK_OPTION) {
+
+                String codigoSelecionado = (String) comboBoxCod.getSelectedItem();
+                Voo voo = vooManager.buscarVooPorCodigo(codigoSelecionado);
+                List<Aeroporto> aeroportos = aeroportoManager.listarAeroportos();
+                String[] siglaAeroO = aeroportos.stream()
+                        .map(Aeroporto::getSigla)
+                        .toArray(String[]::new);
+
+                JLabel siglaLabelO = new JLabel("Selecione a Sigla do Aeroporto que ele fará origem:");
+                JComboBox<String> comboBoxSiglaO = new JComboBox<>(siglaAeroO);
+
+                JPanel panel2 = new JPanel();
+                panel2.setLayout(new BoxLayout(panel2, BoxLayout.Y_AXIS));
+                panel2.add(siglaLabelO);
+                panel2.add(comboBoxSiglaO);
+
+                int result2 = JOptionPane.showConfirmDialog(null, panel2, "Alterar Aeroporto", JOptionPane.OK_CANCEL_OPTION);
+
+                if (result2 == JOptionPane.OK_OPTION) {
+                    String siglaSelecionadaO = (String) comboBoxSiglaO.getSelectedItem();
+                    Aeroporto novaOrigem = aeroportoManager.buscarAeroportoPorSigla(siglaSelecionadaO);
+
+                    String[] siglaAeroD = aeroportos.stream()
+                            .map(Aeroporto::getSigla)
+                            .toArray(String[]::new);
+
+                    JLabel siglaLabelD = new JLabel("Selecione a Sigla do Aeroporto que ele fará destino:");
+                    JComboBox<String> comboBoxSiglaD = new JComboBox<>(siglaAeroD);
+
+                    JPanel panel3 = new JPanel();
+                    panel3.setLayout(new BoxLayout(panel3, BoxLayout.Y_AXIS));
+                    panel3.add(siglaLabelD);
+                    panel3.add(comboBoxSiglaD);
+
+                    int result3 = JOptionPane.showConfirmDialog(null, panel3, "Alterar Aeroporto", JOptionPane.OK_CANCEL_OPTION);
+
+                    if (result3 == JOptionPane.OK_OPTION) {
+                        String siglaSelecionadaD = (String) comboBoxSiglaD.getSelectedItem();
+                        Aeroporto novoDestino = aeroportoManager.buscarAeroportoPorSigla(siglaSelecionadaD);
+
+                        String novoHorario = JOptionPane.showInputDialog("Digite o novo horário do voo (yyyy-MM-dd HH:mm):");
+                        LocalDateTime novaDataHora = parseDateTime(novoHorario);
+
+                        String tarifaBasicaStr = JOptionPane.showInputDialog("Digite o novo valor da tarifa básica:");
+                        double novaTarifaBasica = Double.parseDouble(tarifaBasicaStr);
+
+                        String tarifaBusinessStr = JOptionPane.showInputDialog("Digite o novo valor da tarifa business:");
+                        double novaTarifaBusiness = Double.parseDouble(tarifaBusinessStr);
+
+                        String tarifaPremiumStr = JOptionPane.showInputDialog("Digite o novo valor da tarifa premium:");
+                        double novaTarifaPremium = Double.parseDouble(tarifaPremiumStr);
+
+                        boolean alterado = vooManager.alterarVoo(
+                                codigoSelecionado,
+                                novaDataHora,
+                                novaOrigem,
+                                novoDestino,
+                                novaTarifaBasica,
+                                novaTarifaBusiness,
+                                novaTarifaPremium
+                        );
+
+                        if (alterado) {
+                            registrarLog(String.format(
+                                    "Voo alterado: Antes -> %s; Depois -> Origem: %s, Destino: %s, Horário: %s, Tarifa Básica: %.2f, Tarifa Business: %.2f, Tarifa Premium: %.2f",
+                                    voo.toString(),
+                                    novaOrigem.getSigla(),
+                                    novoDestino.getSigla(),
+                                    novaDataHora,
+                                    novaTarifaBasica,
+                                    novaTarifaBusiness,
+                                    novaTarifaPremium
+                            ));
+                            JOptionPane.showMessageDialog(null, "Voo alterado com sucesso!");
+                        } else {
+                            JOptionPane.showMessageDialog(null, "Falha ao alterar o voo.");
+                        }
+                    }
+                }
             }
-        } catch (IllegalArgumentException e) {
-            System.out.println(e.getMessage());
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Erro ao alterar voo: " + e.getMessage());
         }
+
     }
 
-    private static void excluirVoo(Scanner scanner, VooManager vooManager) {
-        System.out.print("Digite o código do voo que deseja excluir: ");
-        String codigoVoo = scanner.nextLine();
-
+    private static void excluirVoo(VooManager vooManager) {
         try {
-            Voo vooAExcluir = vooManager.buscarVooPorCodigo(codigoVoo);
-
-            boolean excluido = vooManager.excluirVoo(codigoVoo);
-
-            if (excluido) {
-                registrarLog(String.format("Voo excluído: %s", vooAExcluir.toString()));
-                System.out.println("Voo excluído com sucesso.");
-            } else {
-                System.out.println("Falha ao excluir o voo.");
+            List<Voo> voos = vooManager.listarTodosOsVoos();
+            String[] codigosVoo = new String[voos.size()];
+            for (int i = 0; i < voos.size(); i++) {
+                codigosVoo[i] = voos.get(i).getCodigoVoo();
             }
-        } catch (IllegalArgumentException e) {
-            System.out.println(e.getMessage());
-        }
-    }
 
-    private static LocalDateTime parseDateTime(String dataHora) {
-        DateTimeFormatter[] dateFormats = new DateTimeFormatter[] {
-                DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"),
-                DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"),
-                DateTimeFormatter.ofPattern("MM/dd/yyyy HH:mm")
-        };
+            JLabel vooLabel = new JLabel("Selecione o código do voo a ser excluído:");
+            JComboBox<String> comboBoxVoos = new JComboBox<>(codigosVoo);
 
-        for (DateTimeFormatter format : dateFormats) {
-            try {
-                return LocalDateTime.parse(dataHora, format);
-            } catch (DateTimeParseException e) {
+            JPanel panel = new JPanel();
+            panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+            panel.add(vooLabel);
+            panel.add(comboBoxVoos);
+
+            int result = JOptionPane.showConfirmDialog(null, panel, "Excluir Voo", JOptionPane.OK_CANCEL_OPTION);
+
+            if (result == JOptionPane.OK_OPTION) {
+                String codigoSelecionado = (String) comboBoxVoos.getSelectedItem();
+                Voo vooAExcluir = vooManager.buscarVooPorCodigo(codigoSelecionado);
+
+                boolean excluido = vooManager.excluirVoo(codigoSelecionado);
+
+                if (excluido) {
+                    registrarLog(String.format("Voo excluído: %s", vooAExcluir.toString()));
+                    JOptionPane.showMessageDialog(null, "Voo excluído com sucesso!");
+                } else {
+                    JOptionPane.showMessageDialog(null, "Falha ao excluir o voo.");
+                }
             }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Erro ao excluir voo: " + e.getMessage());
         }
-        throw new IllegalArgumentException(
-                "Formato de data inválido. Use os formatos: yyyy-MM-dd HH:mm, dd/MM/yyyy HH:mm, MM/dd/yyyy HH:mm.");
     }
 
     private static void listarAeroportos(AeroportoManager aeroportoManager) {
@@ -836,10 +843,9 @@ public class App {
         panel.setLayout(new GridLayout(8, 2, 10, 10));
         panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
-        String[] nomesAeroportosOrigem = new String[aeroportoManager.listarAeroportos().size()];
-        for (int i = 0; i < aeroportoManager.listarAeroportos().size(); i++) {
-            nomesAeroportosOrigem[i] = aeroportoManager.listarAeroportos().get(i).getSigla();
-        }
+        String[] nomesAeroportosOrigem = aeroportoManager.listarAeroportos().stream()
+                .map(Aeroporto::getSigla)
+                .toArray(String[]::new);
         JLabel origemLabel = new JLabel("Sigla Origem:");
         JComboBox<String> comboBoxOrigem = new JComboBox<>(nomesAeroportosOrigem);
 
@@ -850,9 +856,9 @@ public class App {
         JLabel destinoLabel = new JLabel("Sigla Destino:");
         JComboBox<String> comboBoxDestino = new JComboBox<>(nomesAeroportosDestino);
 
-        JLabel horarioLabel = new JLabel("Horário (YYYY-MM-DD HH:MM):");
+        JLabel horarioLabel = new JLabel("Horário (YYYY-MM-DD):");
         JSpinner spinnerHorario = new JSpinner(new SpinnerDateModel());
-        JSpinner.DateEditor editor = new JSpinner.DateEditor(spinnerHorario, "dd/MM/yyyy HH:MM");
+        JSpinner.DateEditor editor = new JSpinner.DateEditor(spinnerHorario, "dd/MM/yyyy");
         spinnerHorario.setEditor(editor);
 
         JButton pesquisarButton = new JButton("Pesquisar");
@@ -877,7 +883,10 @@ public class App {
                 String destinoSigla = comboBoxDestino.getSelectedItem().toString();
                 Aeroporto destino = aeroportoManager.buscarAeroportoPorSigla(destinoSigla);
 
-                LocalDateTime dataHoraPesquisa = (LocalDateTime) spinnerHorario.getValue();
+                Date date = (Date) spinnerHorario.getValue();
+                LocalDateTime dataHoraPesquisa = date.toInstant()
+                        .atZone(ZoneId.systemDefault())
+                        .toLocalDateTime();
 
                 List<Voo> voos = vooManager.pesquisarVoos(origem, destino, dataHoraPesquisa);
                 if (voos.isEmpty()) {
@@ -889,6 +898,7 @@ public class App {
                 }
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(dialog, "Erro ao pesquisar voos: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Erro ao processar data e horário: " + ex.getMessage());
             }
         });
 
@@ -963,5 +973,28 @@ public class App {
 
         cancelarButton.addActionListener(e -> dialog.dispose());
         dialog.setVisible(true);
+    }
+
+    private static void registrarLog(String mensagem) {
+        String timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        String logMensagem = String.format("[%s] %s", timestamp, mensagem);
+        logDAO.salvarLog(logMensagem);
+    }
+
+    private static LocalDateTime parseDateTime(String dataHora) {
+        DateTimeFormatter[] dateFormats = new DateTimeFormatter[]{
+                DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"),
+                DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"),
+                DateTimeFormatter.ofPattern("MM/dd/yyyy HH:mm")
+        };
+
+        for (DateTimeFormatter format : dateFormats) {
+            try {
+                return LocalDateTime.parse(dataHora, format);
+            } catch (DateTimeParseException e) {
+            }
+        }
+        throw new IllegalArgumentException(
+                "Formato de data inválido. Use os formatos: yyyy-MM-dd HH:mm, dd/MM/yyyy HH:mm, MM/dd/yyyy HH:mm.");
     }
 }
