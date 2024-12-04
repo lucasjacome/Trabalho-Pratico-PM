@@ -83,8 +83,10 @@ class BilheteTest {
     }
 
     private Voo criarVooNacional() {
-        Aeroporto origem = new Aeroporto("Aeroporto de São Paulo", "GRU", "São Paulo", "SP", "Brasil");
-        Aeroporto destino = new Aeroporto("Aeroporto do Rio", "GIG", "Rio de Janeiro", "RJ", "Brasil");
+        Aeroporto origem = new Aeroporto("Aeroporto de São Paulo", "GRU", "São Paulo", "SP", "Brasil", -23.5505,
+                -46.6333);
+        Aeroporto destino = new Aeroporto("Aeroporto do Rio", "GIG", "Rio de Janeiro", "RJ", "Brasil", -22.9094,
+                -43.1737);
         CompanhiaAerea companhia = new CompanhiaAerea("Companhia Aérea XYZ", "XYZ", "Razão Social XYZ",
                 "12345678000123", 50.0, 30.0);
         Aeronave aeronave = new Aeronave("Boeing 737", 20000, 180, 30);
@@ -93,8 +95,9 @@ class BilheteTest {
     }
 
     private Voo criarVooInternacional() {
-        Aeroporto origem = new Aeroporto("Aeroporto de São Paulo", "GRU", "São Paulo", "SP", "Brasil");
-        Aeroporto destino = new Aeroporto("Aeroporto JFK", "JFK", "Nova York", "NY", "EUA");
+        Aeroporto origem = new Aeroporto("Aeroporto de São Paulo", "GRU", "São Paulo", "SP", "Brasil", -23.5505,
+                -46.6333);
+        Aeroporto destino = new Aeroporto("Aeroporto JFK", "JFK", "Nova York", "NY", "EUA", 40.6413, -73.7781);
         CompanhiaAerea companhia = new CompanhiaAerea("Companhia Aérea XYZ", "XYZ", "Razão Social XYZ",
                 "12345678000123", 50.0, 30.0);
         Aeronave aeronave = new Aeronave("Boeing 747", 30000, 400, 50);
