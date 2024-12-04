@@ -52,6 +52,13 @@ class VooTest {
         assertFalse(voo.isCancelado());
     }
 
+    @Test
+    void testCalcularDistanciaKm() {
+        Voo voo = criarVoo();
+        double distancia = voo.calcularDistanciaKm();
+        assertEquals(389.04, distancia, 0.01); 
+    }
+
     private Voo criarVoo() {
         Aeroporto origem = new Aeroporto("Aeroporto SP", "GRU", "São Paulo", "SP", "Brasil", -23.5505, -46.6333);
         Aeroporto destino = new Aeroporto("Aeroporto RJ", "GIG", "Rio de Janeiro", "RJ", "Brasil", -22.9094, -43.1737);
