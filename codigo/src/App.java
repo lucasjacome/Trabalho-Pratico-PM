@@ -1,6 +1,7 @@
 import Entidades.*;
 import Managers.AeroportoManager;
 import Managers.CompanhiaAereaManager;
+import Managers.FuncionarioManager;
 import Managers.PassageiroManager;
 import Managers.VooManager;
 import dao.ILog;
@@ -14,7 +15,7 @@ import java.util.Scanner;
 
 public class App {
 
-    private static final ILog logDAO = new LogDAOImpl(); // Instância do DAO de logs
+    private static final ILog logDAO = new LogDAOImpl();
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
@@ -22,9 +23,11 @@ public class App {
         CompanhiaAereaManager companhiaAereaManager = new CompanhiaAereaManager();
         PassageiroManager passageiroManager = new PassageiroManager();
         VooManager vooManager = new VooManager();
+        FuncionarioManager funcionarioManager = new FuncionarioManager();
 
         registrarLog("Sistema iniciado.");
-        iniciarDadosIniciais(aeroportoManager, companhiaAereaManager, passageiroManager, vooManager);
+        iniciarDadosIniciais(aeroportoManager, companhiaAereaManager, passageiroManager, vooManager,
+                funcionarioManager);
 
         while (true) {
             exibirMenu();
@@ -45,48 +48,60 @@ public class App {
                     cadastrarVoo(scanner, vooManager, aeroportoManager, companhiaAereaManager);
                     break;
                 case 5:
-                    listarAeroportos(aeroportoManager);
+                    cadastrarFuncionario(scanner, funcionarioManager);
                     break;
                 case 6:
-                    listarCompanhiasAereas(companhiaAereaManager);
+                    listarAeroportos(aeroportoManager);
                     break;
                 case 7:
-                    listarPassageiros(passageiroManager);
+                    listarCompanhiasAereas(companhiaAereaManager);
                     break;
                 case 8:
-                    listarVoos(vooManager);
+                    listarPassageiros(passageiroManager);
                     break;
                 case 9:
-                    pesquisarVoos(scanner, vooManager, aeroportoManager);
+                    listarVoos(vooManager);
                     break;
                 case 10:
-                    emitirBilhete(scanner, vooManager, passageiroManager);
+                    listarFuncionarios(funcionarioManager);
                     break;
                 case 11:
-                    alterarAeroporto(scanner, aeroportoManager);
+                    pesquisarVoos(scanner, vooManager, aeroportoManager);
                     break;
                 case 12:
-                    excluirAeroporto(scanner, aeroportoManager);
+                    emitirBilhete(scanner, vooManager, passageiroManager);
                     break;
                 case 13:
-                    alterarCompanhiaAerea(scanner, companhiaAereaManager);
+                    alterarAeroporto(scanner, aeroportoManager);
                     break;
                 case 14:
-                    excluirCompanhiaAerea(scanner, companhiaAereaManager);
+                    excluirAeroporto(scanner, aeroportoManager);
                     break;
                 case 15:
-                    alterarPassageiro(scanner, passageiroManager);
+                    alterarCompanhiaAerea(scanner, companhiaAereaManager);
                     break;
                 case 16:
-                    excluirPassageiro(scanner, passageiroManager);
+                    excluirCompanhiaAerea(scanner, companhiaAereaManager);
                     break;
                 case 17:
-                    alterarVoo(scanner, vooManager, aeroportoManager, companhiaAereaManager);
+                    alterarPassageiro(scanner, passageiroManager);
                     break;
                 case 18:
-                    excluirVoo(scanner, vooManager);
+                    excluirPassageiro(scanner, passageiroManager);
                     break;
                 case 19:
+                    alterarVoo(scanner, vooManager, aeroportoManager, companhiaAereaManager);
+                    break;
+                case 20:
+                    excluirVoo(scanner, vooManager);
+                    break;
+                case 21:
+                    alterarFuncionario(scanner, funcionarioManager);
+                    break;
+                case 22:
+                    excluirFuncionario(scanner, funcionarioManager);
+                    break;
+                case 23:
                     System.out.println("Saindo do sistema...");
                     scanner.close();
                     return;
@@ -103,27 +118,31 @@ public class App {
         System.out.println("2. Cadastrar Companhia Aérea");
         System.out.println("3. Cadastrar Passageiro");
         System.out.println("4. Cadastrar Voo");
-        System.out.println("5. Listar Aeroportos");
-        System.out.println("6. Listar Companhias Aéreas");
-        System.out.println("7. Listar Passageiros");
-        System.out.println("8. Listar Voos");
-        System.out.println("9. Pesquisar Voos");
-        System.out.println("10. Emitir Bilhete");
-        System.out.println("11. Alterar Aeroporto");
-        System.out.println("12. Excluir Aeroporto");
-        System.out.println("13. Alterar Companhia Aérea");
-        System.out.println("14. Excluir Companhia Aérea");
-        System.out.println("15. Alterar Passageiro");
-        System.out.println("16. Excluir Passageiro");
-        System.out.println("17. Alterar Voo");
-        System.out.println("18. Excluir Voo");
-        System.out.println("19. Sair");
+        System.out.println("5. Cadastrar Funcionário");
+        System.out.println("6. Listar Aeroportos");
+        System.out.println("7. Listar Companhias Aéreas");
+        System.out.println("8. Listar Passageiros");
+        System.out.println("9. Listar Voos");
+        System.out.println("10. Listar Funcionários");
+        System.out.println("11. Pesquisar Voos");
+        System.out.println("12. Emitir Bilhete");
+        System.out.println("13. Alterar Aeroporto");
+        System.out.println("14. Excluir Aeroporto");
+        System.out.println("15. Alterar Companhia Aérea");
+        System.out.println("16. Excluir Companhia Aérea");
+        System.out.println("17. Alterar Passageiro");
+        System.out.println("18. Excluir Passageiro");
+        System.out.println("19. Alterar Voo");
+        System.out.println("20. Excluir Voo");
+        System.out.println("21. Alterar Funcionário");
+        System.out.println("22. Excluir Funcionário");
+        System.out.println("23. Sair");
         System.out.print("Escolha uma opção: ");
     }
 
     private static void iniciarDadosIniciais(AeroportoManager aeroportoManager,
             CompanhiaAereaManager companhiaAereaManager,
-            PassageiroManager passageiroManager, VooManager vooManager) {
+            PassageiroManager passageiroManager, VooManager vooManager, FuncionarioManager funcionarioManager) {
         Aeroporto aeroporto1 = new Aeroporto("Aeroporto Internacional de São Paulo", "GRU", "São Paulo", "SP", "Brasil",
                 -23.5505, -46.6333);
         Aeroporto aeroporto2 = new Aeroporto("Aeroporto Internacional do Rio de Janeiro", "GIG", "Rio de Janeiro", "RJ",
@@ -142,6 +161,13 @@ public class App {
                 new Aeronave("Boeing 737", 20000, 180, 30, 850.0),
                 500.0, 1000.0, 1500.0, "BRL");
         vooManager.adicionarVoo(voo);
+
+        Funcionario funcionario1 = new Funcionario("João Silva", "10101010", "joao.silva@email.com", "joaosilva",
+                "senha123");
+        Funcionario funcionario2 = new Funcionario("Maria Oliveira", "1212121212", "maria.oliveira@email.com",
+                "maria123", "senha456");
+        funcionarioManager.adicionarFuncionario(funcionario1);
+        funcionarioManager.adicionarFuncionario(funcionario2);
 
         registrarLog("Dados iniciais carregados com sucesso.");
     }
@@ -492,6 +518,87 @@ public class App {
         }
     }
 
+    private static void cadastrarFuncionario(Scanner scanner, FuncionarioManager funcionarioManager) {
+        System.out.print("Digite o nome do funcionário: ");
+        String nome = scanner.nextLine();
+        System.out.print("Digite o CPF do funcionário: ");
+        String cpf = scanner.nextLine();
+        System.out.print("Digite o email do funcionário: ");
+        String email = scanner.nextLine();
+        System.out.print("Digite o nome de usuário do funcionário: ");
+        String usuario = scanner.nextLine();
+        System.out.print("Digite a senha do funcionário: ");
+        String senha = scanner.nextLine();
+
+        Funcionario funcionario = new Funcionario(nome, cpf, email, usuario, senha);
+
+        if (funcionarioManager.adicionarFuncionario(funcionario)) {
+            registrarLog(String.format("Funcionário cadastrado: Nome=%s, CPF=%s, Email=%s, Usuário=%s", nome, cpf,
+                    email, usuario));
+            System.out.println("Funcionário cadastrado com sucesso!");
+        } else {
+            registrarLog(String.format("Falha ao cadastrar funcionário: CPF já cadastrado (%s).", cpf));
+            System.out.println("Funcionário com o mesmo CPF já cadastrado.");
+        }
+    }
+
+    private static void alterarFuncionario(Scanner scanner, FuncionarioManager funcionarioManager) {
+        System.out.print("Digite o CPF do funcionário que deseja alterar: ");
+        String cpf = scanner.nextLine();
+
+        try {
+            Funcionario antigoFuncionario = funcionarioManager.buscarPorCpf(cpf);
+
+            System.out.println("Funcionário encontrado: " + antigoFuncionario);
+            System.out.print("Digite o novo nome do funcionário: ");
+            String novoNome = scanner.nextLine();
+            System.out.print("Digite o novo email do funcionário: ");
+            String novoEmail = scanner.nextLine();
+            System.out.print("Digite o novo nome de usuário do funcionário: ");
+            String novoUsuario = scanner.nextLine();
+            System.out.print("Digite a nova senha do funcionário: ");
+            String novaSenha = scanner.nextLine();
+
+            boolean alterado = funcionarioManager.alterarFuncionario(cpf, novoNome, novoEmail, novoUsuario, novaSenha);
+
+            if (alterado) {
+                registrarLog(String.format(
+                        "Funcionário alterado: Antes -> Nome=%s, Email=%s, Usuário=%s; Depois -> Nome=%s, Email=%s, Usuário=%s",
+                        antigoFuncionario.getNome(), antigoFuncionario.getEmail(), antigoFuncionario.getUsuario(),
+                        novoNome, novoEmail, novoUsuario));
+                System.out.println("Funcionário alterado com sucesso!");
+            } else {
+                System.out.println("Não foi possível alterar o funcionário.");
+            }
+        } catch (IllegalArgumentException e) {
+            System.out.println("Erro ao alterar funcionário: " + e.getMessage());
+        }
+    }
+
+    private static void excluirFuncionario(Scanner scanner, FuncionarioManager funcionarioManager) {
+        System.out.print("Digite o CPF do funcionário que deseja excluir: ");
+        String cpf = scanner.nextLine();
+
+        try {
+            Funcionario funcionario = funcionarioManager.buscarPorCpf(cpf);
+            if (funcionario == null) {
+                System.out.println("Funcionário não encontrado.");
+                return;
+            }
+
+            boolean excluido = funcionarioManager.excluirFuncionario(cpf);
+
+            if (excluido) {
+                registrarLog("Funcionário excluído: " + funcionario.toString());
+                System.out.println("Funcionário excluído com sucesso.");
+            } else {
+                System.out.println("Falha ao excluir o funcionário.");
+            }
+        } catch (IllegalArgumentException e) {
+            System.out.println("Erro: " + e.getMessage());
+        }
+    }
+
     private static LocalDateTime parseDateTime(String dataHora) {
         DateTimeFormatter[] dateFormats = new DateTimeFormatter[] {
                 DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"),
@@ -542,6 +649,16 @@ public class App {
             System.out.println("Nenhum voo cadastrado.");
         } else {
             voos.forEach(voo -> System.out.println(voo));
+        }
+    }
+
+    private static void listarFuncionarios(FuncionarioManager funcionarioManager) {
+        List<Funcionario> funcionarios = funcionarioManager.listarFuncionarios();
+        if (funcionarios.isEmpty()) {
+            System.out.println("Nenhum funcionário cadastrado.");
+        } else {
+            System.out.println("Lista de Funcionários:");
+            funcionarios.forEach(System.out::println);
         }
     }
 
