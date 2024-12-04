@@ -1,83 +1,104 @@
 package Tests;
 
-import java.time.LocalDateTime;
+import Entidades.Bilhete;
+import Entidades.Passageiro;
+import Entidades.Voo;
+import Entidades.Aeroporto;
+import Entidades.CompanhiaAerea;
+import Entidades.Aeronave;
 
-import Entidades.*;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-public class BilheteTest {
+import java.time.LocalDateTime;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class BilheteTest {
 
     @Test
-    public void testEmitirBilheteNacional() {
-        // Configurar voo nacional
-        Voo vooNacional = new Voo(
-                new Aeroporto("Entidades.Aeroporto de São Paulo", "GRU", "São Paulo", "SP", "Brasil"),
-                new Aeroporto("Entidades.Aeroporto do Rio de Janeiro", "GIG", "Rio de Janeiro", "RJ", "Brasil"),
-                LocalDateTime.of(2024, 10, 1, 15, 30),
-                "XY1234",
-                new CompanhiaAerea("Companhia Aérea XYZ", "XYZ123", "Razão Social XYZ LTDA", "12345678000195", 50.0,
-                        30.0),
-                new Aeronave("Boeing 747", 350, 400, 66),
-                500.0,
-                1000.0,
-                1500.0,
-                "BRL");
-
-        // Configurar passageiro com CPF válido
-        Passageiro passageiroNacional = new Passageiro("João", "Silva", "12345678901", "silvajoao@gmail.com");
-
-        // Emitir bilhete
-        Bilhete bilhete = new Bilhete(passageiroNacional, vooNacional);
-        Assertions.assertTrue(bilhete.emitir(), "Entidades.Bilhete nacional deve ser emitido com sucesso");
+    void testConstrutorValido() {
+        Passageiro passageiro = new Passageiro("João", "Silva", "12345678901", "joao@gmail.com");
+        Voo voo = criarVooNacional();
+        Bilhete bilhete = new Bilhete(passageiro, voo);
+        assertEquals(passageiro, bilhete.getPassageiro());
+        assertEquals(voo, bilhete.getVoo());
     }
 
     @Test
-    public void testEmitirBilheteInternacionalValido() {
-        // Configurar voo internacional
-        Voo vooInternacional = new Voo(
-                new Aeroporto("Entidades.Aeroporto de São Paulo", "GRU", "São Paulo", "SP", "Brasil"),
-                new Aeroporto("Entidades.Aeroporto de Nova York", "JFK", "Nova York", "NY", "EUA"),
-                LocalDateTime.of(2024, 12, 1, 15, 00),
-                "XY9999",
-                new CompanhiaAerea("Companhia Aérea XYZ", "XYZ123", "Razão Social XYZ LTDA", "12345678000195", 50.0,
-                        30.0),
-                new Aeronave("Boeing 747", 350, 400, 66),
-                1200.0,
-                2500.0,
-                3500.0,
-                "USD");
-
-        // Configurar passageiro com passaporte válido
-        Passageiro passageiroInternacional = new Passageiro("Maria", "Pereira", "AA123456", "mariapereira@gmail.com");
-
-        // Emitir bilhete
-        Bilhete bilhete = new Bilhete(passageiroInternacional, vooInternacional);
-        Assertions.assertTrue(bilhete.emitir(), "Entidades.Bilhete internacional com passaporte válido deve ser emitido com sucesso");
+    void testConstrutorInvalido() {
+        Voo voo = criarVooNacional();
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> new Bilhete(null, voo));
+        assertEquals("Passageiro e voo não podem ser nulos.", exception.getMessage());
     }
 
-    @org.junit.Test
     @Test
-    public void testEmitirBilheteInternacionalInvalido() {
-        // Configurar voo internacional
-        Voo vooInternacional = new Voo(
-                new Aeroporto("Entidades.Aeroporto de São Paulo", "GRU", "São Paulo", "SP", "Brasil"),
-                new Aeroporto("Entidades.Aeroporto de Nova York", "JFK", "Nova York", "NY", "EUA"),
-                LocalDateTime.of(2024, 12, 1, 15, 00),
-                "XY9999",
-                new CompanhiaAerea("Companhia Aérea XYZ", "XYZ123", "Razão Social XYZ LTDA", "12345678000195", 50.0,
-                        30.0),
-                new Aeronave("Boeing 747", 350, 400, 66),
-                1200.0,
-                2500.0,
-                3500.0,
-                "USD");
+    void testEmitirBilheteNacionalValido() {
+        Passageiro passageiro = new Passageiro("João", "Silva", "12345678901", "joao@gmail.com");
+        Voo voo = criarVooNacional();
+        Bilhete bilhete = new Bilhete(passageiro, voo);
+        assertTrue(bilhete.emitir());
+    }
 
-        // Configurar passageiro com passaporte inválido
-        Passageiro passageiroInternacional = new Passageiro("Carlos", "Souza", "A1234567", "souzacarlos@gmail.com");
+    @Test
+    void testEmitirBilheteNacionalInvalido() {
+        Passageiro passageiro = new Passageiro("Maria", "Oliveira", "123", "maria@gmail.com");
+        Voo voo = criarVooNacional();
+        Bilhete bilhete = new Bilhete(passageiro, voo);
+        assertFalse(bilhete.emitir());
+    }
 
-        // Emitir bilhete
-        Bilhete bilhete = new Bilhete(passageiroInternacional, vooInternacional);
-        Assertions.assertFalse(bilhete.emitir(), "Entidades.Bilhete internacional com passaporte inválido não deve ser emitido");
+    @Test
+    void testEmitirBilheteInternacionalValido() {
+        Passageiro passageiro = new Passageiro("Ana", "Pereira", "AB123456", "ana@gmail.com");
+        Voo voo = criarVooInternacional();
+        Bilhete bilhete = new Bilhete(passageiro, voo);
+        assertTrue(bilhete.emitir());
+    }
+
+    @Test
+    void testEmitirBilheteInternacionalInvalido() {
+        Passageiro passageiro = new Passageiro("Carlos", "Santos", "A1234567", "carlos@gmail.com");
+        Voo voo = criarVooInternacional();
+        Bilhete bilhete = new Bilhete(passageiro, voo);
+        assertFalse(bilhete.emitir());
+    }
+
+    @Test
+    void testToString() {
+        Passageiro passageiro = new Passageiro("João", "Silva", "12345678901", "joao@gmail.com");
+        Voo voo = criarVooNacional();
+        Bilhete bilhete = new Bilhete(passageiro, voo);
+        assertEquals(String.format("Bilhete [Passageiro: %s, Voo: %s]", passageiro, voo), bilhete.toString());
+    }
+
+    @Test
+    void testEqualsAndHashCode() {
+        Passageiro passageiro = new Passageiro("João", "Silva", "12345678901", "joao@gmail.com");
+        Voo voo = criarVooNacional();
+        Bilhete bilhete1 = new Bilhete(passageiro, voo);
+        Bilhete bilhete2 = new Bilhete(passageiro, voo);
+        assertEquals(bilhete1, bilhete2);
+        assertEquals(bilhete1.hashCode(), bilhete2.hashCode());
+    }
+
+    private Voo criarVooNacional() {
+        Aeroporto origem = new Aeroporto("Aeroporto de São Paulo", "GRU", "São Paulo", "SP", "Brasil");
+        Aeroporto destino = new Aeroporto("Aeroporto do Rio", "GIG", "Rio de Janeiro", "RJ", "Brasil");
+        CompanhiaAerea companhia = new CompanhiaAerea("Companhia Aérea XYZ", "XYZ", "Razão Social XYZ",
+                "12345678000123", 50.0, 30.0);
+        Aeronave aeronave = new Aeronave("Boeing 737", 20000, 180, 30);
+        return new Voo(origem, destino, LocalDateTime.now().plusDays(1), "XY123", companhia, aeronave, 500.0, 1000.0,
+                1500.0, "BRL");
+    }
+
+    private Voo criarVooInternacional() {
+        Aeroporto origem = new Aeroporto("Aeroporto de São Paulo", "GRU", "São Paulo", "SP", "Brasil");
+        Aeroporto destino = new Aeroporto("Aeroporto JFK", "JFK", "Nova York", "NY", "EUA");
+        CompanhiaAerea companhia = new CompanhiaAerea("Companhia Aérea XYZ", "XYZ", "Razão Social XYZ",
+                "12345678000123", 50.0, 30.0);
+        Aeronave aeronave = new Aeronave("Boeing 747", 30000, 400, 50);
+        return new Voo(origem, destino, LocalDateTime.now().plusDays(1), "XY456", companhia, aeronave, 1200.0, 2500.0,
+                3500.0, "USD");
     }
 }

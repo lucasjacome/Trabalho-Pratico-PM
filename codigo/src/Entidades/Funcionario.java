@@ -1,5 +1,7 @@
 package Entidades;
 
+import java.util.Objects;
+
 public class Funcionario {
     private String nome;
     private String cpf;
@@ -8,6 +10,13 @@ public class Funcionario {
     private String senha;
 
     public Funcionario(String nome, String cpf, String email, String usuario, String senha) {
+        if (nome == null || nome.trim().isEmpty() ||
+                cpf == null || cpf.trim().isEmpty() ||
+                email == null || email.trim().isEmpty() ||
+                usuario == null || usuario.trim().isEmpty() ||
+                senha == null || senha.trim().isEmpty()) {
+            throw new IllegalArgumentException("Todos os campos são obrigatórios e devem ser válidos.");
+        }
         this.nome = nome;
         this.cpf = cpf;
         this.email = email;
@@ -29,5 +38,25 @@ public class Funcionario {
 
     public boolean autenticar(String usuario, String senha) {
         return this.usuario.equals(usuario) && this.senha.equals(senha);
+    }
+
+    @Override
+    public String toString() {
+        return String.format("Funcionario: %s, CPF: %s, E-mail: %s", nome, cpf, email);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null || getClass() != obj.getClass())
+            return false;
+        Funcionario that = (Funcionario) obj;
+        return cpf.equals(that.cpf);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(cpf);
     }
 }

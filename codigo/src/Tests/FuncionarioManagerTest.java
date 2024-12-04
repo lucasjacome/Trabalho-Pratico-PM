@@ -1,55 +1,96 @@
 package Tests;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import Entidades.Funcionario;
 import Entidades.FuncionarioManager;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class FuncionarioManagerTest {
-    private FuncionarioManager gerenteFuncionarios;
+import java.util.List;
 
-    @BeforeEach
-    public void setup() {
-        gerenteFuncionarios = new FuncionarioManager();
+import static org.junit.jupiter.api.Assertions.*;
+
+class FuncionarioManagerTest {
+
+    @Test
+    void testAdicionarFuncionarioValido() {
+        FuncionarioManager manager = new FuncionarioManager();
+        Funcionario funcionario = new Funcionario("João Silva", "12345678901", "joao.silva@email.com", "joaosilva",
+                "senha123");
+
+        assertTrue(manager.adicionarFuncionario(funcionario));
+        assertFalse(manager.adicionarFuncionario(funcionario));
     }
 
     @Test
-    public void testAdicionarFuncionario_Sucesso() {
-        Funcionario f1 = new Funcionario("João Silva", "12345678900", "joao@gmail.com", "joaosilva", "senha123");
-        boolean resultado = gerenteFuncionarios.adicionarFuncionario(f1);
-        assertTrue(resultado, "Deve permitir adicionar um novo funcionário.");
+    void testAdicionarFuncionarioNulo() {
+        FuncionarioManager manager = new FuncionarioManager();
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> manager.adicionarFuncionario(null));
+        assertEquals("Funcionario não pode ser nulo.", exception.getMessage());
     }
 
     @Test
-    public void testAdicionarFuncionario_CPFRepetido() {
-        Funcionario f1 = new Funcionario("João Silva", "12345678900", "joao@gmail.com", "joaosilva", "senha123");
-        Funcionario f2 = new Funcionario("Maria Souza", "12345678900", "maria@gmail.com", "mariasouza", "senha456");
+    void testAutenticarFuncionario() {
+        FuncionarioManager manager = new FuncionarioManager();
+        Funcionario funcionario = new Funcionario("João Silva", "12345678901", "joao.silva@email.com", "joaosilva",
+                "senha123");
+        manager.adicionarFuncionario(funcionario);
 
-        gerenteFuncionarios.adicionarFuncionario(f1);
-        boolean resultado = gerenteFuncionarios.adicionarFuncionario(f2);
-        assertFalse(resultado, "Não deve permitir adicionar dois funcionários com o mesmo CPF.");
+        Funcionario autenticado = manager.autenticarFuncionario("joaosilva", "senha123");
+        assertNotNull(autenticado);
+        assertEquals(funcionario, autenticado);
+
+        assertNull(manager.autenticarFuncionario("joaosilva", "senhaerrada"));
+        assertNull(manager.autenticarFuncionario("usuarioerrado", "senha123"));
     }
 
     @Test
-    public void testAutenticarFuncionario_Sucesso() {
-        Funcionario f1 = new Funcionario("João Silva", "12345678900", "joao@gmail.com", "joaosilva", "senha123");
-        gerenteFuncionarios.adicionarFuncionario(f1);
+    void testAutenticarFuncionarioDadosInvalidos() {
+        FuncionarioManager manager = new FuncionarioManager();
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> manager.autenticarFuncionario(null, "senha123"));
+        assertEquals("Usuario e senha não podem ser nulos ou vazios.", exception.getMessage());
 
-        Funcionario autenticado = gerenteFuncionarios.autenticarFuncionario("joaosilva", "senha123");
-        assertNotNull(autenticado, "Deve autenticar o funcionário com sucesso.");
+        exception = assertThrows(IllegalArgumentException.class,
+                () -> manager.autenticarFuncionario("joaosilva", null));
+        assertEquals("Usuario e senha não podem ser nulos ou vazios.", exception.getMessage());
     }
 
     @Test
-    public void testAutenticarFuncionario_Falha() {
-        Funcionario f1 = new Funcionario("João Silva", "12345678900", "joao@gmail.com", "joaosilva", "senha123");
-        gerenteFuncionarios.adicionarFuncionario(f1);
+    void testListarFuncionarios() {
+        FuncionarioManager manager = new FuncionarioManager();
+        Funcionario funcionario1 = new Funcionario("João Silva", "12345678901", "joao.silva@email.com", "joaosilva",
+                "senha123");
+        Funcionario funcionario2 = new Funcionario("Maria Oliveira", "98765432100", "maria.oliveira@email.com",
+                "mariaoliveira", "senha456");
 
-        Funcionario autenticado = gerenteFuncionarios.autenticarFuncionario("joaosilva", "senhaErrada");
-        assertNull(autenticado, "Não deve autenticar com senha errada.");
+        manager.adicionarFuncionario(funcionario1);
+        manager.adicionarFuncionario(funcionario2);
+
+        List<Funcionario> funcionarios = manager.listarFuncionarios();
+        assertEquals(2, funcionarios.size());
+        assertTrue(funcionarios.contains(funcionario1));
+        assertTrue(funcionarios.contains(funcionario2));
+    }
+
+    @Test
+    void testBuscarPorCpf() {
+        FuncionarioManager manager = new FuncionarioManager();
+        Funcionario funcionario = new Funcionario("João Silva", "12345678901", "joao.silva@email.com", "joaosilva",
+                "senha123");
+        manager.adicionarFuncionario(funcionario);
+
+        Funcionario encontrado = manager.buscarPorCpf("12345678901");
+        assertNotNull(encontrado);
+        assertEquals(funcionario, encontrado);
+
+        assertNull(manager.buscarPorCpf("00000000000"));
+    }
+
+    @Test
+    void testBuscarPorCpfInvalido() {
+        FuncionarioManager manager = new FuncionarioManager();
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> manager.buscarPorCpf(""));
+        assertEquals("CPF não pode ser nulo ou vazio.", exception.getMessage());
     }
 }

@@ -15,13 +15,13 @@ public class App {
         PassageiroManager passageiroManager = new PassageiroManager();
         VooManager vooManager = new VooManager();
 
-
+       
         iniciarDadosIniciais(aeroportoManager, companhiaAereaManager, passageiroManager, vooManager);
 
         while (true) {
             exibirMenu();
             int opcao = scanner.nextInt();
-            scanner.nextLine();
+            scanner.nextLine(); 
 
             switch (opcao) {
                 case 1:
@@ -81,8 +81,8 @@ public class App {
     }
 
     private static void iniciarDadosIniciais(AeroportoManager aeroportoManager,
-                                             CompanhiaAereaManager companhiaAereaManager,
-                                             PassageiroManager passageiroManager, VooManager vooManager) {
+            CompanhiaAereaManager companhiaAereaManager,
+            PassageiroManager passageiroManager, VooManager vooManager) {
         Aeroporto aeroporto1 = new Aeroporto("Aeroporto Internacional de São Paulo", "GRU", "São Paulo", "SP",
                 "Brasil");
         Aeroporto aeroporto2 = new Aeroporto("Aeroporto Internacional do Rio de Janeiro", "GIG", "Rio de Janeiro", "RJ",
@@ -166,7 +166,7 @@ public class App {
     }
 
     private static void cadastrarVoo(Scanner scanner, VooManager vooManager, AeroportoManager aeroportoManager,
-                                     CompanhiaAereaManager companhiaAereaManager) {
+            CompanhiaAereaManager companhiaAereaManager) {
         System.out.print("Digite a sigla do aeroporto de origem: ");
         String origemSigla = scanner.nextLine();
         Aeroporto origem = aeroportoManager.buscarAeroportoPorSigla(origemSigla);
@@ -191,7 +191,7 @@ public class App {
         double tarifaBusiness = scanner.nextDouble();
         System.out.print("Digite o valor da tarifa premium: ");
         double tarifaPremium = scanner.nextDouble();
-        scanner.nextLine();
+        scanner.nextLine(); 
 
         Voo voo = new Voo(origem, destino, dataHoraVoo, codigoVoo, companhiaAerea,
                 new Aeronave("Boeing 737", 20000, 180, 30),

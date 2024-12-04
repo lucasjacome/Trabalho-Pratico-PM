@@ -1,8 +1,6 @@
 package Tests;
 
 import Entidades.Assento;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
@@ -13,93 +11,80 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class AssentoTest {
 
-    private Assento assento;
-
-    @BeforeEach
-    void setUp() {
-        assento = new Assento("1A");
+    @Test
+    void testConstrutorValido() {
+        Assento assento = new Assento("1A");
+        assertEquals("1A", assento.getNumeroAssento());
+        assertTrue(assento.isDisponivel());
     }
 
     @Test
-    void testInicializarAssentos() {
-        List<String> identificadores = Arrays.asList("1A", "1B", "1C", "2A", "2B", "2C");
-        List<Assento> assentos = Assento.inicializarAssentos(identificadores);
-        
-        assertEquals(6, assentos.size(), "A lista de assentos deve ter 6 elementos.");
-        Assertions.assertEquals("1A", assentos.get(0).getNumeroAssento());
-        Assertions.assertTrue(assentos.get(0).isDisponivel());
-    }
-
-    @Test
-    void testAssentoDisponivelAoCriar() {
-        Assertions.assertTrue(assento.isDisponivel(), "Novo assento deve estar disponível.");
+    void testConstrutorInvalido() {
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> new Assento(""));
+        assertEquals("O número do assento não pode ser vazio.", exception.getMessage());
     }
 
     @Test
     void testReservarAssento() {
+        Assento assento = new Assento("1A");
         assento.reservar();
-        Assertions.assertFalse(assento.isDisponivel(), "Entidades.Assento deve estar indisponível após a reserva.");
-    }
-
-    @Test
-    void testReservarAssentoJaReservado() {
-        assento.reservar();
-        Assertions.assertThrows(IllegalStateException.class, assento::reservar, "Reservar um assento já reservado deve lançar exceção.");
+        assertFalse(assento.isDisponivel());
+        IllegalStateException exception = assertThrows(IllegalStateException.class, assento::reservar);
+        assertEquals("O assento já está reservado.", exception.getMessage());
     }
 
     @Test
     void testLiberarAssento() {
+        Assento assento = new Assento("1A");
         assento.reservar();
         assento.liberar();
-        Assertions.assertTrue(assento.isDisponivel(), "Entidades.Assento deve estar disponível após ser liberado.");
+        assertTrue(assento.isDisponivel());
     }
 
     @Test
-    void testEncontrarAssentoExistente() {
+    void testInicializarAssentos() {
         List<Assento> assentos = Assento.inicializarAssentos(Arrays.asList("1A", "1B", "1C"));
-        Optional<Assento> encontrado = Assento.encontrarAssento(assentos, "1B");
-
-        assertTrue(encontrado.isPresent(), "Entidades.Assento '1B' deve estar presente na lista.");
-        Assertions.assertEquals("1B", encontrado.get().getNumeroAssento());
+        assertEquals(3, assentos.size());
+        assertEquals("1A", assentos.get(0).getNumeroAssento());
+        assertTrue(assentos.get(0).isDisponivel());
     }
 
     @Test
-    void testEncontrarAssentoNaoExistente() {
+    void testEncontrarAssento() {
         List<Assento> assentos = Assento.inicializarAssentos(Arrays.asList("1A", "1B", "1C"));
-        Optional<Assento> encontrado = Assento.encontrarAssento(assentos, "2A");
-
-        assertFalse(encontrado.isPresent(), "Entidades.Assento '2A' não deve estar presente na lista.");
+        Optional<Assento> assento = Assento.encontrarAssento(assentos, "1B");
+        assertTrue(assento.isPresent());
+        assertEquals("1B", assento.get().getNumeroAssento());
     }
 
     @Test
-    void testVerificarDisponibilidadeAssento() {
+    void testEncontrarAssentoInexistente() {
         List<Assento> assentos = Assento.inicializarAssentos(Arrays.asList("1A", "1B", "1C"));
-        Assertions.assertTrue(Assento.verificarDisponibilidade(assentos, "1A"), "Entidades.Assento '1A' deve estar disponível inicialmente.");
+        Optional<Assento> assento = Assento.encontrarAssento(assentos, "1D");
+        assertFalse(assento.isPresent());
     }
 
     @Test
-    void testVerificarDisponibilidadeAssentoReservado() {
+    void testVerificarDisponibilidade() {
         List<Assento> assentos = Assento.inicializarAssentos(Arrays.asList("1A", "1B", "1C"));
-        Assento.encontrarAssento(assentos, "1A").ifPresent(Assento::reservar);
-
-        Assertions.assertFalse(Assento.verificarDisponibilidade(assentos, "1A"), "Entidades.Assento '1A' não deve estar disponível após reserva.");
+        assertTrue(Assento.verificarDisponibilidade(assentos, "1A"));
+        Assento.reservarAssento(assentos, "1A");
+        assertFalse(Assento.verificarDisponibilidade(assentos, "1A"));
     }
 
     @Test
-    void testReservarAssentoEspecifico() {
+    void testReservarAssentoEstatico() {
         List<Assento> assentos = Assento.inicializarAssentos(Arrays.asList("1A", "1B", "1C"));
-        boolean reservado = Assento.reservarAssento(assentos, "1B");
-
-        assertTrue(reservado, "Reserva de '1B' deve ser bem-sucedida.");
-        Assertions.assertFalse(Assento.verificarDisponibilidade(assentos, "1B"), "Entidades.Assento '1B' não deve estar disponível após reserva.");
+        assertTrue(Assento.reservarAssento(assentos, "1B"));
+        assertFalse(Assento.reservarAssento(assentos, "1B"));
     }
 
     @Test
-    void testFalhaReservaAssentoJaReservado() {
-        List<Assento> assentos = Assento.inicializarAssentos(Arrays.asList("1A", "1B", "1C"));
-        Assento.reservarAssento(assentos, "1B");
-        boolean reservado = Assento.reservarAssento(assentos, "1B");
-
-        assertFalse(reservado, "Reserva de '1B' deve falhar pois o assento já está reservado.");
+    void testToString() {
+        Assento assento = new Assento("1A");
+        assertEquals("Assento 1A [Disponível]", assento.toString());
+        assento.reservar();
+        assertEquals("Assento 1A [Reservado]", assento.toString());
     }
 }

@@ -32,7 +32,7 @@ public class VooManager {
     }
 
     public List<Voo> pesquisarVoosIdaVolta(Aeroporto origem, Aeroporto destino, LocalDateTime dataIda,
-                                           LocalDateTime dataVolta) {
+            LocalDateTime dataVolta) {
         List<Voo> idaVolta = new ArrayList<>();
         idaVolta.addAll(pesquisarVoos(origem, destino, dataIda));
         idaVolta.addAll(pesquisarVoos(destino, origem, dataVolta));
@@ -40,7 +40,7 @@ public class VooManager {
     }
 
     public List<List<Voo>> pesquisarVoosComConexao(Aeroporto origem, Aeroporto destino,
-                                                   LocalDateTime dataHoraPesquisa) {
+            LocalDateTime dataHoraPesquisa) {
         List<List<Voo>> conexoes = new ArrayList<>();
 
         List<Voo> voosIda = voos.stream()

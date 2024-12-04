@@ -1,7 +1,11 @@
 package Tests;
 
-import Entidades.*;
-import org.junit.jupiter.api.BeforeEach;
+import Entidades.Frequencia;
+import Entidades.Voo;
+import Entidades.Aeroporto;
+import Entidades.CompanhiaAerea;
+import Entidades.Aeronave;
+
 import org.junit.jupiter.api.Test;
 
 import java.time.DayOfWeek;
@@ -11,63 +15,86 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class FrequenciaTest {
+class FrequenciaTest {
 
-    private Voo voo;
-    private Frequencia frequencia;
+    @Test
+    void testConstrutorValido() {
+        Voo voo = criarVoo();
+        List<DayOfWeek> dias = Arrays.asList(DayOfWeek.MONDAY, DayOfWeek.WEDNESDAY);
+        Frequencia frequencia = new Frequencia(voo, dias);
 
-    @BeforeEach
-    public void setUp() {
-        voo =
-                new Voo(new Aeroporto("Entidades.Aeroporto de São Paulo", "GRU", "São Paulo", "SP", "Brasil"),
-                        new Aeroporto("Entidades.Aeroporto do Rio de Janeiro", "GIG", "Rio de Janeiro", "RJ", "Brasil"),
-                        LocalDateTime.now(), "AV123",
-                        new CompanhiaAerea("Companhia Aérea XYZ", "XYZ123", "Razão Social XYZ LTDA",
-                        "12345678000195", 50.0, 30.0),
-                        new Aeronave("Boeing 737", 100, 180, 30), 200, 400, 600, "BRL");
+        assertEquals(voo, frequencia.getVoo());
+        assertEquals(dias, frequencia.getDiasDaSemana());
     }
 
     @Test
-    public void testGerarHorariosComDiasFuturos() {
-        // Configura os dias da semana: segunda e quarta
-        List<DayOfWeek> diasDaSemana = Arrays.asList(DayOfWeek.MONDAY, DayOfWeek.WEDNESDAY);
-        frequencia = new Frequencia(voo, diasDaSemana);
+    void testConstrutorInvalido() {
+        Voo voo = criarVoo();
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> new Frequencia(voo, null));
+        assertEquals("Voo e dias da semana não podem ser nulos ou vazios.", exception.getMessage());
+    }
 
-        List<LocalDateTime> horarios = frequencia.gerarHorarios();
+    @Test
+    void testGerarHorariosValido() {
+        Voo voo = criarVoo();
+        List<DayOfWeek> dias = Arrays.asList(DayOfWeek.MONDAY, DayOfWeek.WEDNESDAY);
+        Frequencia frequencia = new Frequencia(voo, dias);
 
-        // Verifica se os horários gerados são para segunda e quarta da mesma semana
+        LocalDateTime inicio = LocalDateTime.of(2024, 12, 1, 0, 0);
+        LocalDateTime fim = LocalDateTime.of(2024, 12, 7, 23, 59);
+
+        List<LocalDateTime> horarios = frequencia.gerarHorarios(inicio, fim);
+
         assertEquals(2, horarios.size());
-
-        for (LocalDateTime horario : horarios) {
-            assertTrue(horario.getDayOfWeek() == DayOfWeek.MONDAY ||
-                    horario.getDayOfWeek() == DayOfWeek.WEDNESDAY);
-            assertTrue(horario.isAfter(voo.getDataHoraVoo())); // Deve ser após o horário do voo
-        }
+        assertEquals(LocalDateTime.of(2024, 12, 2, voo.getDataHoraVoo().getHour(), voo.getDataHoraVoo().getMinute()),
+                horarios.get(0));
+        assertEquals(LocalDateTime.of(2024, 12, 4, voo.getDataHoraVoo().getHour(), voo.getDataHoraVoo().getMinute()),
+                horarios.get(1));
     }
 
     @Test
-    public void testGerarHorariosComDiaPassado() {
-        // Configura os dias da semana: domingo
-        List<DayOfWeek> diasDaSemana = Arrays.asList(DayOfWeek.SUNDAY);
-        frequencia = new Frequencia(voo, diasDaSemana);
+    void testGerarHorariosPeriodoInvalido() {
+        Voo voo = criarVoo();
+        List<DayOfWeek> dias = Arrays.asList(DayOfWeek.MONDAY, DayOfWeek.WEDNESDAY);
+        Frequencia frequencia = new Frequencia(voo, dias);
 
-        List<LocalDateTime> horarios = frequencia.gerarHorarios();
+        LocalDateTime inicio = LocalDateTime.of(2024, 12, 7, 23, 59);
+        LocalDateTime fim = LocalDateTime.of(2024, 12, 1, 0, 0);
 
-        // Verifica que o horário gerado não é para o próximo domingo
-        assertEquals(1, horarios.size());
-        assertEquals(DayOfWeek.SUNDAY, horarios.get(0).getDayOfWeek());
-        assertFalse(horarios.get(0).isAfter(voo.getDataHoraVoo()));
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> frequencia.gerarHorarios(inicio, fim));
+        assertEquals("Período inválido. O fim deve ser posterior ao início.", exception.getMessage());
     }
 
     @Test
-    public void testGerarHorariosComDiasVazios() {
-        // Configura uma Entidades.Frequencia com dias vazios
-        List<DayOfWeek> diasDaSemana = Arrays.asList();
-        frequencia = new Frequencia(voo, diasDaSemana);
+    void testToString() {
+        Voo voo = criarVoo();
+        List<DayOfWeek> dias = Arrays.asList(DayOfWeek.MONDAY, DayOfWeek.WEDNESDAY);
+        Frequencia frequencia = new Frequencia(voo, dias);
 
-        List<LocalDateTime> horarios = frequencia.gerarHorarios();
+        String esperado = "Frequencia do Voo XY123 em dias: [MONDAY, WEDNESDAY]";
+        assertEquals(esperado, frequencia.toString());
+    }
 
-        // Verifica que não há horários gerados
-        assertTrue(horarios.isEmpty());
+    @Test
+    void testEqualsAndHashCode() {
+        Voo voo = criarVoo();
+        List<DayOfWeek> dias = Arrays.asList(DayOfWeek.MONDAY, DayOfWeek.WEDNESDAY);
+        Frequencia frequencia1 = new Frequencia(voo, dias);
+        Frequencia frequencia2 = new Frequencia(voo, dias);
+
+        assertEquals(frequencia1, frequencia2);
+        assertEquals(frequencia1.hashCode(), frequencia2.hashCode());
+    }
+
+    private Voo criarVoo() {
+        Aeroporto origem = new Aeroporto("Aeroporto de São Paulo", "GRU", "São Paulo", "SP", "Brasil");
+        Aeroporto destino = new Aeroporto("Aeroporto do Rio", "GIG", "Rio de Janeiro", "RJ", "Brasil");
+        CompanhiaAerea companhia = new CompanhiaAerea("Companhia Aerea XYZ", "XYZ", "Razao Social XYZ",
+                "12345678000123", 50.0, 30.0);
+        Aeronave aeronave = new Aeronave("Boeing 737", 20000, 180, 30);
+        return new Voo(origem, destino, LocalDateTime.of(2024, 12, 1, 10, 0), "XY123", companhia, aeronave, 500.0,
+                1000.0, 1500.0, "BRL");
     }
 }

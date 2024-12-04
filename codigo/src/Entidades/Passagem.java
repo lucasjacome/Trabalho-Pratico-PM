@@ -3,55 +3,59 @@ package Entidades;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class Passagem {
     private List<Voo> voos;
     private double taxaAgencia;
-    private StatusPassagem status; // Atributo para registrar o status da passagem
+    private StatusPassagem status;
 
     public Passagem(double taxaAgencia) {
+        if (taxaAgencia < 0) {
+            throw new IllegalArgumentException("A taxa da agência não pode ser negativa.");
+        }
         this.voos = new ArrayList<>();
         this.taxaAgencia = taxaAgencia;
-        this.status = StatusPassagem.PASSAGEM_ADQUIRIDA; // Status inicial
+        this.status = StatusPassagem.PASSAGEM_ADQUIRIDA;
     }
 
-    // Adicionar voo à passagem
     public void adicionarVoo(Voo voo) {
+        if (voo == null) {
+            throw new IllegalArgumentException("O voo não pode ser nulo.");
+        }
         voos.add(voo);
     }
 
-    // Alterar o status da passagem
     public void setStatus(StatusPassagem novoStatus) {
+        if (novoStatus == null) {
+            throw new IllegalArgumentException("O status da passagem não pode ser nulo.");
+        }
         this.status = novoStatus;
     }
 
-    // Retornar o status atual da passagem
     public StatusPassagem getStatus() {
         return status;
     }
 
-    public Voo getVoo() {
-        if (!voos.isEmpty()) {
-            return voos.get(0); // Retorna o primeiro voo da lista
+    public Voo getVooPrincipal() {
+        if (voos.isEmpty()) {
+            throw new IllegalStateException("A passagem não possui voos associados.");
         }
-        throw new IllegalStateException("A passagem não possui voos associados.");
+        return voos.get(0);
     }
 
-    // Calcular o preço total levando em conta voos internacionais
     public double calcularPrecoTotal() {
-        double total = 0.0;
-        boolean hasInternacional = false;
+        double total = taxaAgencia;
+        boolean temVooInternacional = false;
 
         for (Voo voo : voos) {
-            total += voo.getTarifaBasica(); // Somando tarifa básica de cada voo
+            total += voo.getTarifaBasica();
             if (voo.isInternacional()) {
-                hasInternacional = true; // Se algum voo for internacional, indicamos isso
+                temVooInternacional = true;
             }
         }
 
-        total += taxaAgencia; // Somando a taxa da agência
-
-        if (hasInternacional) {
+        if (temVooInternacional) {
             System.out.println("Preço total mantido em dólar (USD).");
         } else {
             System.out.println("Preço total em reais (BRL).");
@@ -60,23 +64,26 @@ public class Passagem {
         return total;
     }
 
-    // Calcular o custo total da passagem incluindo bagagens adicionais
-    public double calcularCustoTotalComBagagens(int quantidadeDeBagagensAdicionais) {
-        double custoBagagem = 0.0;
-
-        // Verifica se há voos na passagem
-        if (!voos.isEmpty()) {
-            Voo primeiroVoo = voos.get(0); // Assume que as tarifas de bagagem são iguais em todos os voos
-            custoBagagem += primeiroVoo.getValorPrimeiraBagagem(); // Valor da primeira bagagem
-            custoBagagem += quantidadeDeBagagensAdicionais * primeiroVoo.getValorBagagensAdicionais(); // Valor das
-                                                                                                       // bagagens
-                                                                                                       // adicionais
+    public double calcularCustoTotalComBagagens(int quantidadeDeBagagens) {
+        if (quantidadeDeBagagens < 0) {
+            throw new IllegalArgumentException("A quantidade de bagagens não pode ser negativa.");
         }
 
-        return calcularPrecoTotal() + custoBagagem; // Soma o total do voo com o custo das bagagens
+        double custoBagagem = 0.0;
+
+        if (!voos.isEmpty()) {
+            Voo primeiroVoo = voos.get(0);
+            if (quantidadeDeBagagens > 0) {
+                custoBagagem += primeiroVoo.getValorPrimeiraBagagem();
+            }
+            if (quantidadeDeBagagens > 1) {
+                custoBagagem += (quantidadeDeBagagens - 1) * primeiroVoo.getValorBagagensAdicionais();
+            }
+        }
+
+        return calcularPrecoTotal() + custoBagagem;
     }
 
-    // Realizar check-in para a passagem
     public boolean realizarCheckIn() {
         if (voos.isEmpty()) {
             System.out.println("A passagem não possui voos associados.");
@@ -85,9 +92,8 @@ public class Passagem {
 
         Voo primeiroVoo = voos.get(0);
         LocalDateTime agora = LocalDateTime.now();
-        LocalDateTime horarioVoo = primeiroVoo.getDataHoraVoo();
-        LocalDateTime inicioCheckIn = horarioVoo.minusHours(48);
-        LocalDateTime fimCheckIn = horarioVoo.minusMinutes(30);
+        LocalDateTime inicioCheckIn = primeiroVoo.getDataHoraVoo().minusHours(48);
+        LocalDateTime fimCheckIn = primeiroVoo.getDataHoraVoo().minusMinutes(30);
 
         if (agora.isAfter(inicioCheckIn) && agora.isBefore(fimCheckIn)) {
             this.status = StatusPassagem.CHECK_IN_REALIZADO;
@@ -99,29 +105,42 @@ public class Passagem {
         }
     }
 
-    // Registrar NO SHOW para a passagem
     public void registrarNoShow() {
         if (status != StatusPassagem.CHECK_IN_REALIZADO) {
             this.status = StatusPassagem.NO_SHOW;
-            System.out.println("Entidades.Passagem registrada com status NO SHOW.");
+            System.out.println("Passagem registrada com status NO SHOW.");
         }
     }
 
     @Override
     public String toString() {
-        StringBuilder passagem = new StringBuilder();
-        passagem.append("Entidades.Passagem:\n");
+        StringBuilder sb = new StringBuilder("Passagem:\n");
 
-        // Listar os voos da passagem
         for (Voo voo : voos) {
-            passagem.append(voo).append("\n");
+            sb.append(voo).append("\n");
         }
 
-        passagem.append("Status: ").append(status).append("\n"); // Exibir o status da passagem
-        passagem.append("Taxa da Agência: ").append(String.format("%.2f", taxaAgencia)).append("\n");
-        passagem.append("Total a ser pago (sem bagagens): ").append(String.format("%.2f", calcularPrecoTotal()))
-                .append("\n");
+        sb.append("Status: ").append(status).append("\n");
+        sb.append("Taxa da Agência: ").append(String.format("%.2f", taxaAgencia)).append("\n");
+        sb.append("Total a ser pago (sem bagagens): ").append(String.format("%.2f", calcularPrecoTotal())).append("\n");
 
-        return passagem.toString();
+        return sb.toString();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null || getClass() != obj.getClass())
+            return false;
+        Passagem passagem = (Passagem) obj;
+        return Double.compare(passagem.taxaAgencia, taxaAgencia) == 0 &&
+                Objects.equals(voos, passagem.voos) &&
+                status == passagem.status;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(voos, taxaAgencia, status);
     }
 }

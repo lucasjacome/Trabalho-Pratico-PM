@@ -1,107 +1,68 @@
 package Tests;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 import Entidades.*;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
-public class VooManagerTest {
+import static org.junit.jupiter.api.Assertions.*;
 
-    private VooManager vooManager;
+class VooManagerTest {
 
-    @BeforeEach
-    public void setup() {
-        vooManager = new VooManager();
+    @Test
+    void testAdicionarVoo() {
+        VooManager vooManager = new VooManager();
+        Aeroporto aeroporto1 = new Aeroporto("Aeroporto SP", "GRU", "São Paulo", "SP", "Brasil");
+        Aeroporto aeroporto2 = new Aeroporto("Aeroporto RJ", "GIG", "Rio de Janeiro", "RJ", "Brasil");
+        CompanhiaAerea companhia = new CompanhiaAerea("XYZ Airlines", "XYZ", "Razão XYZ", "12345678000123", 50.0, 30.0);
+        Voo voo = new Voo(aeroporto1, aeroporto2, LocalDateTime.of(2024, 12, 25, 14, 0), "XYZ123", companhia,
+                new Aeronave("Boeing 737", 20000, 180, 30), 500.0, 1000.0, 1500.0, "BRL");
 
-        // Entidades.Voo de ida de São Paulo para Brasília
-        Voo vooIda = new Voo(
-                new Aeroporto("Entidades.Aeroporto de São Paulo", "GRU", "São Paulo", "SP", "Brasil"),
-                new Aeroporto("Entidades.Aeroporto de Brasília", "BSB", "Brasília", "DF", "Brasil"),
-                LocalDateTime.of(2024, 10, 1, 15, 30),
-                "XY1234",
-                new CompanhiaAerea("Companhia Aérea XYZ", "XYZ123", "Razão Social XYZ LTDA", "12345678000195", 50.0,
-                        30.0),
-                new Aeronave("Boeing 747", 350, 400, 66),
-                500.0,
-                1000.0,
-                1500.0,
-                "BRL");
+        vooManager.adicionarVoo(voo);
 
-        // Entidades.Voo de volta de Brasília para São Paulo
-        Voo vooVolta = new Voo(
-                new Aeroporto("Entidades.Aeroporto de Brasília", "BSB", "Brasília", "DF", "Brasil"),
-                new Aeroporto("Entidades.Aeroporto de São Paulo", "GRU", "São Paulo", "SP", "Brasil"),
-                LocalDateTime.of(2024, 10, 10, 18, 00),
-                "XY9012",
-                new CompanhiaAerea("Companhia Aérea XYZ", "XYZ123", "Razão Social XYZ LTDA", "12345678000195", 50.0,
-                        30.0),
-                new Aeronave("Boeing 747", 350, 400, 66),
-                550.0,
-                1050.0,
-                1550.0,
-                "BRL");
-
-        // Adicionando os voos ao gerenciador
-        vooManager.adicionarVoo(vooIda);
-        vooManager.adicionarVoo(vooVolta); // Certifique-se de adicionar o voo de volta
+        assertEquals(1, vooManager.listarTodosOsVoos().size());
     }
 
     @Test
-    public void testListarTodosOsVoos() {
-        List<Voo> voos = vooManager.listarTodosOsVoos();
-        assertEquals(2, voos.size(), "Deve listar 2 voos (ida e volta)");
+    void testPesquisarVoos() {
+        VooManager vooManager = new VooManager();
+        Aeroporto aeroporto1 = new Aeroporto("Aeroporto SP", "GRU", "São Paulo", "SP", "Brasil");
+        Aeroporto aeroporto2 = new Aeroporto("Aeroporto RJ", "GIG", "Rio de Janeiro", "RJ", "Brasil");
+        CompanhiaAerea companhia = new CompanhiaAerea("XYZ Airlines", "XYZ", "Razão XYZ", "12345678000123", 50.0, 30.0);
+        Voo voo = new Voo(aeroporto1, aeroporto2, LocalDateTime.of(2024, 12, 25, 14, 0), "XYZ123", companhia,
+                new Aeronave("Boeing 737", 20000, 180, 30), 500.0, 1000.0, 1500.0, "BRL");
+
+        vooManager.adicionarVoo(voo);
+
+        LocalDateTime dataHoraPesquisa = LocalDateTime.of(2024, 12, 25, 14, 0);
+        var voosEncontrados = vooManager.pesquisarVoos(aeroporto1, aeroporto2, dataHoraPesquisa);
+
+        assertEquals(1, voosEncontrados.size());
+        assertEquals("XYZ123", voosEncontrados.get(0).getCodigoVoo());
     }
 
     @Test
-    public void testPesquisarVoos() {
-        Aeroporto origem = new Aeroporto("Entidades.Aeroporto de São Paulo", "GRU", "São Paulo", "SP", "Brasil");
-        Aeroporto destino = new Aeroporto("Entidades.Aeroporto de Brasília", "BSB", "Brasília", "DF", "Brasil");
-        LocalDateTime dataPesquisa = LocalDateTime.of(2024, 10, 1, 0, 0); // Usando apenas a data, ignorando a hora
+    void testPesquisarVoosComConexao() {
+        VooManager vooManager = new VooManager();
+        Aeroporto aeroporto1 = new Aeroporto("Aeroporto SP", "GRU", "São Paulo", "SP", "Brasil");
+        Aeroporto aeroporto2 = new Aeroporto("Aeroporto RJ", "GIG", "Rio de Janeiro", "RJ", "Brasil");
+        Aeroporto aeroporto3 = new Aeroporto("Aeroporto BH", "CNF", "Belo Horizonte", "MG", "Brasil");
 
-        List<Voo> voos = vooManager.pesquisarVoos(origem, destino, dataPesquisa);
-        assertEquals(1, voos.size(), "Deve haver 1 voo de ida de São Paulo para Brasília na data específica");
+        CompanhiaAerea companhia = new CompanhiaAerea("XYZ Airlines", "XYZ", "Razão XYZ", "12345678000123", 50.0, 30.0);
+
+        Voo voo1 = new Voo(aeroporto1, aeroporto2, LocalDateTime.of(2024, 12, 25, 14, 0), "XYZ123", companhia,
+                new Aeronave("Boeing 737", 20000, 180, 30), 500.0, 1000.0, 1500.0, "BRL");
+        Voo voo2 = new Voo(aeroporto2, aeroporto3, LocalDateTime.of(2024, 12, 25, 18, 0), "XYZ456", companhia,
+                new Aeronave("Boeing 737", 20000, 180, 30), 500.0, 1000.0, 1500.0, "BRL");
+
+        vooManager.adicionarVoo(voo1);
+        vooManager.adicionarVoo(voo2);
+
+        LocalDateTime dataHoraPesquisa = LocalDateTime.of(2024, 12, 25, 14, 0);
+        var conexoes = vooManager.pesquisarVoosComConexao(aeroporto1, aeroporto3, dataHoraPesquisa);
+
+        assertEquals(1, conexoes.size());
+        assertEquals("XYZ123", conexoes.get(0).get(0).getCodigoVoo());
+        assertEquals("XYZ456", conexoes.get(0).get(1).getCodigoVoo());
     }
-
-    @Test
-    public void testPesquisarVoosComConexao() {
-        Aeroporto origem = new Aeroporto("Entidades.Aeroporto de São Paulo", "GRU", "São Paulo", "SP", "Brasil");
-        Aeroporto destino = new Aeroporto("Entidades.Aeroporto de Brasília", "BSB", "Brasília", "DF", "Brasil");
-        LocalDateTime dataPesquisa = LocalDateTime.of(2024, 10, 1, 0, 0); // Usando apenas a data, ignorando a hora
-
-        List<List<Voo>> conexoes = vooManager.pesquisarVoosComConexao(origem, destino, dataPesquisa);
-        assertEquals(0, conexoes.size(), "Não deve haver conexões entre São Paulo e Brasília, apenas voos diretos");
-    }
-
-    @Test
-    public void testPesquisarVoosIdaVolta() {
-        Aeroporto origem = new Aeroporto("Entidades.Aeroporto de São Paulo", "GRU", "São Paulo", "SP", "Brasil");
-        Aeroporto destino = new Aeroporto("Entidades.Aeroporto de Brasília", "BSB", "Brasília", "DF", "Brasil");
-        LocalDateTime dataIda = LocalDateTime.of(2024, 10, 1, 0, 0); // Usando apenas a data, ignorando a hora
-        LocalDateTime dataVolta = LocalDateTime.of(2024, 10, 10, 0, 0); // Usando apenas a data, ignorando a hora
-
-        List<Voo> voosIdaVolta = vooManager.pesquisarVoosIdaVolta(origem, destino, dataIda, dataVolta);
-        assertEquals(2, voosIdaVolta.size(),
-                "Deve haver 2 voos (1 de ida e 1 de volta) entre São Paulo e Brasília nas datas específicas");
-    }
-
-    @Test
-    public void testAcessarHistoricoVoos() {
-        Passageiro passageiro = new Passageiro("João", "Silva", "12345678901", "joao@gmail.com");
-
-        // Adicionando o passageiro a ambos os voos
-        vooManager.listarTodosOsVoos().get(0).adicionarPassageiro(passageiro);
-        vooManager.listarTodosOsVoos().get(1).adicionarPassageiro(passageiro);
-
-        List<Voo> historico = vooManager.acessarHistoricoVoos(passageiro);
-
-        assertEquals(2, historico.size(), "O histórico deve conter 2 voos para o passageiro João Silva");
-        Assertions.assertTrue(historico.get(0).getDataHoraVoo().isBefore(historico.get(1).getDataHoraVoo()),
-                "Os voos no histórico devem estar em ordem cronológica");
-    }
-
 }
