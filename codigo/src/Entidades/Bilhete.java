@@ -50,6 +50,23 @@ public class Bilhete {
         return documento != null && (documento.length() == 11 || documento.length() == 9);
     }
 
+    // Método para gerar o cartão de embarque
+    public String cartaoDeEmbarque() {
+        return String.format("----- Cartão de Embarque -----\n" +
+                "Passageiro: %s %s\n" +
+                "Voo: %s\n" +
+                "Origem: %s\n" +
+                "Destino: %s\n" +
+                "Data: %s\n" +
+                "Tarifa: %.2f %s\n" +
+                "-----------------------------",
+                passageiro.getNome(), passageiro.getSobrenome(),
+                voo.getCodigoVoo(),
+                voo.getOrigem().getSigla(), voo.getDestino().getSigla(),
+                voo.getDataHoraVoo().toLocalDate(),
+                voo.getTarifaBasica(), voo.getMoeda());
+    }
+
     @Override
     public String toString() {
         return String.format("Bilhete [Passageiro: %s, Voo: %s]", passageiro, voo);
