@@ -599,7 +599,10 @@ public class App {
                 String origemSigla = comboBoxOrigem.getSelectedItem().toString();
                 String destinoSigla = comboBoxDestino.getSelectedItem().toString();
                 String codigo = codigoField.getText();
-                LocalDateTime horario = (LocalDateTime) spinnerHorario.getValue();
+                Date date = (Date) spinnerHorario.getValue();
+                LocalDateTime horario = date.toInstant()
+                        .atZone(ZoneId.systemDefault())
+                        .toLocalDateTime();
                 String cnpj = cnpjField.getText();
                 double tarifaBasica = Double.parseDouble(tarifaBasicaField.getText());
                 double tarifaBusiness = Double.parseDouble(tarifaBusinessField.getText());
@@ -843,18 +846,13 @@ public class App {
         panel.setLayout(new GridLayout(8, 2, 10, 10));
         panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
-        String[] nomesAeroportosOrigem = aeroportoManager.listarAeroportos().stream()
+        String[] nomesAeroportos = aeroportoManager.listarAeroportos().stream()
                 .map(Aeroporto::getSigla)
                 .toArray(String[]::new);
         JLabel origemLabel = new JLabel("Sigla Origem:");
-        JComboBox<String> comboBoxOrigem = new JComboBox<>(nomesAeroportosOrigem);
-
-        String[] nomesAeroportosDestino = new String[aeroportoManager.listarAeroportos().size()];
-        for (int i = 0; i < aeroportoManager.listarAeroportos().size(); i++) {
-            nomesAeroportosDestino[i] = aeroportoManager.listarAeroportos().get(i).getSigla();
-        }
+        JComboBox<String> comboBoxOrigem = new JComboBox<>(nomesAeroportos);
         JLabel destinoLabel = new JLabel("Sigla Destino:");
-        JComboBox<String> comboBoxDestino = new JComboBox<>(nomesAeroportosDestino);
+        JComboBox<String> comboBoxDestino = new JComboBox<>(nomesAeroportos);
 
         JLabel horarioLabel = new JLabel("Horário (YYYY-MM-DD):");
         JSpinner spinnerHorario = new JSpinner(new SpinnerDateModel());
@@ -887,6 +885,8 @@ public class App {
                 LocalDateTime dataHoraPesquisa = date.toInstant()
                         .atZone(ZoneId.systemDefault())
                         .toLocalDateTime();
+
+                System.out.println("Data de pesquisa: " + dataHoraPesquisa);
 
                 List<Voo> voos = vooManager.pesquisarVoos(origem, destino, dataHoraPesquisa);
                 if (voos.isEmpty()) {

@@ -31,7 +31,7 @@ public class VooManager {
         return voos.stream()
                 .filter(voo -> voo.getOrigem().equals(origem)
                         && voo.getDestino().equals(destino)
-                        && voo.getDataHoraVoo().equals(dataHoraPesquisa))
+                        && voo.getDataHoraVoo().toLocalDate().equals(dataHoraPesquisa.toLocalDate()))
                 .collect(Collectors.toList());
     }
 
