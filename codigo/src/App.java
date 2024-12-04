@@ -15,13 +15,12 @@ public class App {
         PassageiroManager passageiroManager = new PassageiroManager();
         VooManager vooManager = new VooManager();
 
-       
         iniciarDadosIniciais(aeroportoManager, companhiaAereaManager, passageiroManager, vooManager);
 
         while (true) {
             exibirMenu();
             int opcao = scanner.nextInt();
-            scanner.nextLine(); 
+            scanner.nextLine();
 
             switch (opcao) {
                 case 1:
@@ -83,10 +82,10 @@ public class App {
     private static void iniciarDadosIniciais(AeroportoManager aeroportoManager,
             CompanhiaAereaManager companhiaAereaManager,
             PassageiroManager passageiroManager, VooManager vooManager) {
-        Aeroporto aeroporto1 = new Aeroporto("Aeroporto Internacional de São Paulo", "GRU", "São Paulo", "SP",
-                "Brasil");
+        Aeroporto aeroporto1 = new Aeroporto("Aeroporto Internacional de São Paulo", "GRU", "São Paulo", "SP", "Brasil",
+                -23.5505, -46.6333);
         Aeroporto aeroporto2 = new Aeroporto("Aeroporto Internacional do Rio de Janeiro", "GIG", "Rio de Janeiro", "RJ",
-                "Brasil");
+                "Brasil", -22.9094, -43.1737);
 
         aeroportoManager.adicionarAeroporto(aeroporto1);
         aeroportoManager.adicionarAeroporto(aeroporto2);
@@ -114,8 +113,13 @@ public class App {
         String estado = scanner.nextLine();
         System.out.print("Digite o país do aeroporto: ");
         String pais = scanner.nextLine();
+        System.out.print("Digite a latitude do aeroporto: ");
+        double latitude = scanner.nextDouble();
+        System.out.print("Digite a longitude do aeroporto: ");
+        double longitude = scanner.nextDouble();
+        scanner.nextLine(); // Consumir a linha de quebra de linha
 
-        Aeroporto aeroporto = new Aeroporto(nome, sigla, cidade, estado, pais);
+        Aeroporto aeroporto = new Aeroporto(nome, sigla, cidade, estado, pais, latitude, longitude);
         if (aeroportoManager.adicionarAeroporto(aeroporto)) {
             System.out.println("Aeroporto cadastrado com sucesso!");
         } else {
@@ -136,7 +140,7 @@ public class App {
         double valorPrimeiraBagagem = scanner.nextDouble();
         System.out.print("Digite o valor das bagagens adicionais: ");
         double valorBagagensAdicionais = scanner.nextDouble();
-        scanner.nextLine();
+        scanner.nextLine(); // Consumir o final da linha
 
         CompanhiaAerea companhiaAerea = new CompanhiaAerea(nome, sigla, razaoSocial, cnpj, valorPrimeiraBagagem,
                 valorBagagensAdicionais);
@@ -191,7 +195,7 @@ public class App {
         double tarifaBusiness = scanner.nextDouble();
         System.out.print("Digite o valor da tarifa premium: ");
         double tarifaPremium = scanner.nextDouble();
-        scanner.nextLine(); 
+        scanner.nextLine();
 
         Voo voo = new Voo(origem, destino, dataHoraVoo, codigoVoo, companhiaAerea,
                 new Aeronave("Boeing 737", 20000, 180, 30),
