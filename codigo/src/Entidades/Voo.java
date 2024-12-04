@@ -146,10 +146,13 @@ public class Voo {
         this.cancelado = false;
     }
 
-    @Override
-    public String toString() {
-        return String.format("Voo {codigo: %s, origem: %s, destino: %s, aeronave: %s, tarifa: %.2f %s}",
-                codigoVoo, origem.getSigla(), destino.getSigla(), aeronave.getModelo(), tarifaBasica, moeda);
+    public double calcularDistanciaKm() {
+        double latOrigem = origem.getLatitude();
+        double lonOrigem = origem.getLongitude();
+        double latDestino = destino.getLatitude();
+        double lonDestino = destino.getLongitude();
+
+        return 110.57 * Math.sqrt(Math.pow(latDestino - latOrigem, 2) + Math.pow(lonDestino - lonOrigem, 2));
     }
 
     @Override
