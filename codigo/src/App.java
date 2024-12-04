@@ -2,8 +2,6 @@ import Entidades.*;
 
 import java.awt.*;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.Scanner;
 import javax.swing.*;
@@ -21,7 +19,7 @@ public class App {
         iniciarDadosIniciais(aeroportoManager, companhiaAereaManager, passageiroManager, vooManager);
 
 
-        JFrame frame = new JFrame("--- Sistema de Gestão de Voos ---");
+        JFrame frame = new JFrame("✈\uFE0F \uD83D\uDEEB Sistema de Gestão de Voos ✈\uFE0F \uD83D\uDEEC");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(1000, 400);
         frame.setLayout(new BorderLayout());
@@ -30,7 +28,7 @@ public class App {
         menuPanel.setLayout(new GridLayout(6, 1, 10, 10));
         menuPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
-        JLabel titleLabel = new JLabel("✈\uFE0F \uD83D\uDEEB Sistema de Gestão de Voos ✈\uFE0F \uD83D\uDEEC ");
+        JLabel titleLabel = new JLabel("✈\uFE0F \uD83D\uDEEB Sistema de Gestão de Voos ✈\uFE0F \uD83D\uDEEC");
         menuPanel.add(titleLabel);
 
         JButton cadastrarAeroportoButton = new JButton("1. Cadastrar Aeroporto");
@@ -41,11 +39,9 @@ public class App {
         JButton listarCompanhiaAereaButton = new JButton("6. Listar todas as Companhias Aéreas");
         JButton listarPassageiroButton = new JButton("7. Listar todos os Passageiros");
         JButton listarVoosButton = new JButton("8. Listar todos os voos");
-        JButton pesquisarVoosButton = new JButton("Pesquisar voos diretos");
-        JButton emitirBilheteButton = new JButton("Emitir bilhete");
-        JButton calcularBagagemButton = new JButton("Calcular custo de bagagem");
-        JButton alterarVipButton = new JButton("Alterar status VIP de passageiro");
-        JButton sairButton = new JButton("Sair");
+        JButton pesquisarVoosButton = new JButton("9. Pesquisar voos diretos");
+        JButton emitirBilheteButton = new JButton("10. Emitir bilhete");
+        JButton sairButton = new JButton("Sair ✖\uFE0F");
 
         menuPanel.add(cadastrarAeroportoButton);
         menuPanel.add(cadastrarCompanhiaAereaButton);
@@ -57,19 +53,20 @@ public class App {
         menuPanel.add(listarVoosButton);
         menuPanel.add(pesquisarVoosButton);
         menuPanel.add(emitirBilheteButton);
-        menuPanel.add(calcularBagagemButton);
-        menuPanel.add(alterarVipButton);
         menuPanel.add(sairButton);
 
 
         cadastrarAeroportoButton.addActionListener(e -> cadastrarAeroporto(aeroportoManager));
         cadastrarCompanhiaAereaButton.addActionListener(e -> cadastrarCompanhiaAerea(companhiaAereaManager));
         cadastrarPassageiroButton.addActionListener(e -> cadastrarPassageiro(passageiroManager));
-        cadastrarVoosButton.addActionListener(e -> cadastrarVoo(scanner, vooManager, aeroportoManager, companhiaAereaManager));
+        cadastrarVoosButton.addActionListener(e -> cadastrarVoo(vooManager, aeroportoManager, companhiaAereaManager));
         listarAeroportosButton.addActionListener(e -> listarAeroportos(aeroportoManager));
         listarCompanhiaAereaButton.addActionListener(e -> listarCompanhiasAereas(companhiaAereaManager));
         listarPassageiroButton.addActionListener(e -> listarPassageiros(passageiroManager));
         listarVoosButton.addActionListener(e -> listarVoos(vooManager));
+        pesquisarVoosButton.addActionListener(e -> pesquisarVoos(vooManager, aeroportoManager));
+        emitirBilheteButton.addActionListener(e -> emitirBilhete(vooManager, passageiroManager));
+        sairButton.addActionListener(e -> System.exit(0));
 
         frame.setVisible(true);
         frame.add(menuPanel);
@@ -297,7 +294,7 @@ public class App {
         dialog.setVisible(true);
     }
 
-    private static void cadastrarVoo(Scanner scanner, VooManager vooManager, AeroportoManager aeroportoManager, CompanhiaAereaManager companhiaAereaManager) {
+    private static void cadastrarVoo(VooManager vooManager, AeroportoManager aeroportoManager, CompanhiaAereaManager companhiaAereaManager) {
         JDialog dialog = new JDialog();
         dialog.setTitle("Cadastrar Voo");
         dialog.setSize(500, 400);
@@ -308,20 +305,16 @@ public class App {
         panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
         String[] nomesAeroportosOrigem = new String[aeroportoManager.listarAeroportos().size()];
-
         for (int i = 0; i < aeroportoManager.listarAeroportos().size(); i++) {
             nomesAeroportosOrigem[i] = aeroportoManager.listarAeroportos().get(i).getSigla();
         }
-
         JLabel origemLabel = new JLabel("Sigla Origem:");
         JComboBox<String> comboBoxOrigem = new JComboBox<>(nomesAeroportosOrigem);
 
         String[] nomesAeroportosDestino = new String[aeroportoManager.listarAeroportos().size()];
-
         for (int i = 0; i < aeroportoManager.listarAeroportos().size(); i++) {
             nomesAeroportosDestino[i] = aeroportoManager.listarAeroportos().get(i).getSigla();
         }
-
         JLabel destinoLabel = new JLabel("Sigla Destino:");
         JComboBox<String> comboBoxDestino = new JComboBox<>(nomesAeroportosDestino);
 
@@ -465,74 +458,138 @@ public class App {
         }
     }
 
-    private static void pesquisarVoos(Scanner scanner, VooManager vooManager, AeroportoManager aeroportoManager) {
-        System.out.print("Digite a sigla do aeroporto de origem: ");
-        String origemSigla = scanner.nextLine();
-        Aeroporto origem = aeroportoManager.buscarAeroportoPorSigla(origemSigla);
+    private static void pesquisarVoos(VooManager vooManager, AeroportoManager aeroportoManager) {
+        JDialog dialog = new JDialog();
+        dialog.setTitle("Pesquisar Voos");
+        dialog.setSize(400, 300);
+        dialog.setModal(true);
 
-        System.out.print("Digite a sigla do aeroporto de destino: ");
-        String destinoSigla = scanner.nextLine();
-        Aeroporto destino = aeroportoManager.buscarAeroportoPorSigla(destinoSigla);
+        JPanel panel = new JPanel();
+        panel.setLayout(new GridLayout(8, 2, 10, 10));
+        panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
-        System.out.print("Digite a data e hora para pesquisa (yyyy-MM-dd HH:mm): ");
-        String dataHora = scanner.nextLine();
-        LocalDateTime dataHoraPesquisa = parseDateTime(dataHora);
-
-        List<Voo> voos = vooManager.pesquisarVoos(origem, destino, dataHoraPesquisa);
-        if (voos.isEmpty()) {
-            System.out.println("Nenhum voo encontrado.");
-        } else {
-            voos.forEach(voo -> System.out.println(voo.getCodigoVoo()));
+        String[] nomesAeroportosOrigem = new String[aeroportoManager.listarAeroportos().size()];
+        for (int i = 0; i < aeroportoManager.listarAeroportos().size(); i++) {
+            nomesAeroportosOrigem[i] = aeroportoManager.listarAeroportos().get(i).getSigla();
         }
-    }
+        JLabel origemLabel = new JLabel("Sigla Origem:");
+        JComboBox<String> comboBoxOrigem = new JComboBox<>(nomesAeroportosOrigem);
 
-    private static void emitirBilhete(Scanner scanner, VooManager vooManager, PassageiroManager passageiroManager) {
-        System.out.print("Digite o número do voo para emitir bilhete: ");
-        String codigoVoo = scanner.nextLine();
-        Voo voo = vooManager.listarTodosOsVoos().stream()
-                .filter(v -> v.getCodigoVoo().equals(codigoVoo))
-                .findFirst()
-                .orElse(null);
-
-        if (voo == null) {
-            System.out.println("Voo não encontrado.");
-            return;
+        String[] nomesAeroportosDestino = new String[aeroportoManager.listarAeroportos().size()];
+        for (int i = 0; i < aeroportoManager.listarAeroportos().size(); i++) {
+            nomesAeroportosDestino[i] = aeroportoManager.listarAeroportos().get(i).getSigla();
         }
+        JLabel destinoLabel = new JLabel("Sigla Destino:");
+        JComboBox<String> comboBoxDestino = new JComboBox<>(nomesAeroportosDestino);
 
-        System.out.print("Digite o documento do passageiro: ");
-        String documento = scanner.nextLine();
-        Passageiro passageiro = passageiroManager.listarPassageiros().stream()
-                .filter(p -> p.getDocumento().equals(documento))
-                .findFirst()
-                .orElse(null);
+        JLabel horarioLabel = new JLabel("Horário (YYYY-MM-DD HH:MM):");
+        JSpinner spinnerHorario = new JSpinner(new SpinnerDateModel());
+        JSpinner.DateEditor editor = new JSpinner.DateEditor(spinnerHorario, "dd/MM/yyyy HH:MM");
+        spinnerHorario.setEditor(editor);
 
-        if (passageiro == null) {
-            System.out.println("Passageiro não encontrado.");
-            return;
-        }
+        JButton pesquisarButton = new JButton("Pesquisar");
+        JButton cancelarButton = new JButton("Cancelar");
 
-        Bilhete bilhete = new Bilhete(passageiro, voo);
-        if (bilhete.emitir()) {
-            System.out.println("Bilhete emitido com sucesso!");
-        } else {
-            System.out.println("Erro ao emitir bilhete.");
-        }
-    }
+        panel.add(origemLabel);
+        panel.add(comboBoxOrigem);
+        panel.add(destinoLabel);
+        panel.add(comboBoxDestino);
+        panel.add(horarioLabel);
+        panel.add(spinnerHorario);
+        panel.add(pesquisarButton);
+        panel.add(cancelarButton);
 
-    private static LocalDateTime parseDateTime(String dataHora) {
-        DateTimeFormatter[] dateFormats = new DateTimeFormatter[]{
-                DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"),
-                DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"),
-                DateTimeFormatter.ofPattern("MM/dd/yyyy HH:mm")
-        };
+        dialog.add(panel);
 
-        for (DateTimeFormatter format : dateFormats) {
+        pesquisarButton.addActionListener(e -> {
             try {
-                return LocalDateTime.parse(dataHora, format);
-            } catch (DateTimeParseException e) {
+                String origemSigla = comboBoxOrigem.getSelectedItem().toString();
+                Aeroporto origem = aeroportoManager.buscarAeroportoPorSigla(origemSigla);
+
+                String destinoSigla = comboBoxDestino.getSelectedItem().toString();
+                Aeroporto destino = aeroportoManager.buscarAeroportoPorSigla(destinoSigla);
+
+                LocalDateTime dataHoraPesquisa = (LocalDateTime) spinnerHorario.getValue();
+
+                List<Voo> voos = vooManager.pesquisarVoos(origem, destino, dataHoraPesquisa);
+                if (voos.isEmpty()) {
+                    JOptionPane.showMessageDialog(dialog, "Nenhum voo encontrado.", "Resultado", JOptionPane.INFORMATION_MESSAGE);
+                } else {
+                    StringBuilder resultado = new StringBuilder("Voos encontrados:\n");
+                    voos.forEach(voo -> resultado.append(voo.getCodigoVoo()).append("\n"));
+                    JOptionPane.showMessageDialog(dialog, resultado.toString(), "Resultado", JOptionPane.INFORMATION_MESSAGE);
+                }
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(dialog, "Erro ao pesquisar voos: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
             }
-        }
-        throw new IllegalArgumentException(
-                "Formato de data inválido. Use os formatos: yyyy-MM-dd HH:mm, dd/MM/yyyy HH:mm, MM/dd/yyyy HH:mm.");
+        });
+
+        cancelarButton.addActionListener(e -> dialog.dispose());
+        dialog.setVisible(true);
     }
+
+    private static void emitirBilhete(VooManager vooManager, PassageiroManager passageiroManager) {
+        JDialog dialog = new JDialog();
+        dialog.setTitle("Emitir Bilhete");
+        dialog.setSize(400, 300);
+        dialog.setModal(true);
+
+        JPanel panel = new JPanel();
+        panel.setLayout(new GridLayout(8, 2, 10, 10));
+        panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+
+        JLabel codigoVooLabel = new JLabel("Código do Voo:");
+        JTextField codigoVooField = new JTextField();
+
+        JLabel documentoLabel = new JLabel("Documento do Passageiro:");
+        JTextField documentoField = new JTextField();
+
+        JButton emitirButton = new JButton("Emitir");
+        JButton cancelarButton = new JButton("Cancelar");
+
+        panel.add(codigoVooLabel);
+        panel.add(codigoVooField);
+        panel.add(documentoLabel);
+        panel.add(documentoField);
+        panel.add(emitirButton);
+        panel.add(cancelarButton);
+
+        dialog.add(panel);
+
+        emitirButton.addActionListener(e -> {
+            String codigoVoo = codigoVooField.getText();
+            Voo voo = vooManager.listarTodosOsVoos().stream()
+                    .filter(v -> v.getCodigoVoo().equals(codigoVoo))
+                    .findFirst()
+                    .orElse(null);
+
+            if (voo == null) {
+                JOptionPane.showMessageDialog(dialog, "Voo não encontrado.", "Erro", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            String documento = documentoField.getText();
+            Passageiro passageiro = passageiroManager.listarPassageiros().stream()
+                    .filter(p -> p.getDocumento().equals(documento))
+                    .findFirst()
+                    .orElse(null);
+
+            if (passageiro == null) {
+                JOptionPane.showMessageDialog(dialog, "Passageiro não encontrado.", "Erro", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            Bilhete bilhete = new Bilhete(passageiro, voo);
+            if (bilhete.emitir()) {
+                JOptionPane.showMessageDialog(dialog, "Bilhete emitido com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+                dialog.dispose();
+            } else {
+                JOptionPane.showMessageDialog(dialog, "Erro ao emitir bilhete.", "Erro", JOptionPane.ERROR_MESSAGE);
+            }
+        });
+
+        cancelarButton.addActionListener(e -> dialog.dispose());
+        dialog.setVisible(true);
+    }
+
 }
