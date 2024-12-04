@@ -1,4 +1,8 @@
-package Entidades;
+package Managers;
+
+import Entidades.Aeroporto;
+import Entidades.Passageiro;
+import Entidades.Voo;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;

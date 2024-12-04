@@ -1,4 +1,6 @@
-package Entidades;
+package Managers;
+
+import Entidades.Passageiro;
 
 import java.util.ArrayList;
 import java.util.List;

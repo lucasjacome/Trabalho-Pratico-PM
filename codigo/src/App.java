@@ -1,4 +1,8 @@
 import Entidades.*;
+import Managers.AeroportoManager;
+import Managers.CompanhiaAereaManager;
+import Managers.PassageiroManager;
+import Managers.VooManager;
 import dao.ILog;
 import dao.LogDAOImpl;
 

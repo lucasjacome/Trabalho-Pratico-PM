@@ -1,7 +1,7 @@
 package Tests;
 
 import Entidades.Aeroporto;
-import Entidades.AeroportoManager;
+import Managers.AeroportoManager;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 

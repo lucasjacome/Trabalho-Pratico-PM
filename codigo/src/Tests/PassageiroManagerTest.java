@@ -1,7 +1,7 @@
 package Tests;
 
 import Entidades.Passageiro;
-import Entidades.PassageiroManager;
+import Managers.PassageiroManager;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
