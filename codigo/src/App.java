@@ -1,10 +1,12 @@
 import Entidades.*;
 
+import java.awt.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.Scanner;
+import javax.swing.*;
 
 public class App {
 
@@ -15,129 +17,92 @@ public class App {
         PassageiroManager passageiroManager = new PassageiroManager();
         VooManager vooManager = new VooManager();
 
-       
+
         iniciarDadosIniciais(aeroportoManager, companhiaAereaManager, passageiroManager, vooManager);
 
-        while (true) {
-            exibirMenu();
-            int opcao = scanner.nextInt();
-            scanner.nextLine(); 
+        JFrame frame = new JFrame("Sistema de Gerenciamento de Viagens");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setSize(600, 400);
+        frame.setLayout(new BorderLayout());
 
-            switch (opcao) {
-                case 1:
-                    cadastrarAeroporto(scanner, aeroportoManager);
-                    break;
-                case 2:
-                    cadastrarCompanhiaAerea(scanner, companhiaAereaManager);
-                    break;
-                case 3:
-                    cadastrarPassageiro(scanner, passageiroManager);
-                    break;
-                case 4:
-                    cadastrarVoo(scanner, vooManager, aeroportoManager, companhiaAereaManager);
-                    break;
-                case 5:
-                    listarAeroportos(aeroportoManager);
-                    break;
-                case 6:
-                    listarCompanhiasAereas(companhiaAereaManager);
-                    break;
-                case 7:
-                    listarPassageiros(passageiroManager);
-                    break;
-                case 8:
-                    listarVoos(vooManager);
-                    break;
-                case 9:
-                    pesquisarVoos(scanner, vooManager, aeroportoManager);
-                    break;
-                case 10:
-                    emitirBilhete(scanner, vooManager, passageiroManager);
-                    break;
-                case 11:
-                    System.out.println("Saindo do sistema...");
-                    scanner.close();
-                    return;
-                default:
-                    System.out.println("Opção inválida, tente novamente.");
-            }
-        }
-    }
+        JPanel menuPanel = new JPanel();
+        menuPanel.setLayout(new GridLayout(6, 1, 10, 10));
+        menuPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
-// Inicialização do JFrame (Menu interativo)
-//        JFrame frame = new JFrame("Sistema de Gerenciamento de Viagens");
-//        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//        frame.setSize(600, 400);
-//        frame.setLayout(new BorderLayout());
+        JButton cadastrarCompanhiaAereaButton = new JButton("1. Cadastrar Companhia Aerea");
+        JButton cadastrarVoosButton = new JButton("4. Cadastrar Voo");
+        JButton listarVoosButton = new JButton("Listar todos os voos");
+        JButton pesquisarVoosButton = new JButton("Pesquisar voos diretos");
+        JButton emitirBilheteButton = new JButton("Emitir bilhete");
+        JButton calcularBagagemButton = new JButton("Calcular custo de bagagem");
+        JButton alterarVipButton = new JButton("Alterar status VIP de passageiro");
+        JButton sairButton = new JButton("Sair");
+
+        menuPanel.add(cadastrarCompanhiaAereaButton);
+        menuPanel.add(cadastrarVoosButton);
+        menuPanel.add(listarVoosButton);
+        menuPanel.add(pesquisarVoosButton);
+        menuPanel.add(emitirBilheteButton);
+        menuPanel.add(calcularBagagemButton);
+        menuPanel.add(alterarVipButton);
+        menuPanel.add(sairButton);
+
+
+        cadastrarCompanhiaAereaButton.addActionListener(e -> cadastrarCompanhiaAerea(companhiaAereaManager));
+//        cadastrarVoosButton.addActionListener(e -> cadastrarVoo(scanner, vooManager, aeroportoManager, companhiaAereaManager));
+        listarVoosButton.addActionListener(e -> listarVoos(vooManager));
+
+
+        frame.add(menuPanel);
+
+        frame.setVisible(true);
+
+
+//        while (true) {
+//            exibirMenu();
+//            int opcao = scanner.nextInt();
+//            scanner.nextLine();
 //
-//        // Painel para as opções do menu
-//        JPanel menuPanel = new JPanel();
-//        menuPanel.setLayout(new GridLayout(6, 1, 10, 10));
-//
-//        JButton listarVoosButton = new JButton("Listar todos os voos");
-//        JButton pesquisarVoosButton = new JButton("Pesquisar voos diretos");
-//        JButton emitirBilheteButton = new JButton("Emitir bilhete");
-//        JButton calcularBagagemButton = new JButton("Calcular custo de bagagem");
-//        JButton alterarVipButton = new JButton("Alterar status VIP de passageiro");
-//        JButton sairButton = new JButton("Sair");
-//
-//        menuPanel.add(listarVoosButton);
-//        menuPanel.add(pesquisarVoosButton);
-//        menuPanel.add(emitirBilheteButton);
-//        menuPanel.add(calcularBagagemButton);
-//        menuPanel.add(alterarVipButton);
-//        menuPanel.add(sairButton);
-//
-//        // Adicionando o painel ao frame
-//        frame.add(menuPanel, BorderLayout.CENTER);
-//
-//        // Adicionando ação aos botões
-//        listarVoosButton.addActionListener(e -> {
-//            List<Voo> voos = VooManager.listarTodosOsVoos();
-//            StringBuilder voosTexto = new StringBuilder("Voos disponíveis:\n");
-//            for (Voo voo : voos) {
-//                voosTexto.append(voo).append("\n");
-//            }
-//
-//            // Exibe os voos em uma caixa de diálogo
-//            JOptionPane.showMessageDialog(null, voosTexto.toString(), "Lista de Voos", JOptionPane.INFORMATION_MESSAGE);
-//        });
-//        pesquisarVoosButton.addActionListener(e -> pesquisarVoos());
-////        emitirBilheteButton.addActionListener(e -> emitirBilhete());
-////        calcularBagagemButton.addActionListener(e -> calcularBagagem());
-////        alterarVipButton.addActionListener(e -> alterarVip());
-////        sairButton.addActionListener(e -> System.exit(0));
-//
-//        // Exibindo a interface
-//        frame.setVisible(true);
-//
-//    }
-//
-//    private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
-//
-//    private static void pesquisarVoos() {
-//        // Entrada de dados
-//        JTextField dataField = new JTextField();
-//        Object[] inputFields = {
-//                "Data para pesquisa (dd/MM/yyyy HH:mm):", dataField
-//        };
-//        int option = JOptionPane.showConfirmDialog(null, inputFields, "Pesquisar Voos", JOptionPane.OK_CANCEL_OPTION);
-//
-//        if (option == JOptionPane.OK_OPTION) {
-//            try {
-//                LocalDateTime dataPesquisa = LocalDateTime.parse(dataField.getText(), formatter);
-//                // Pesquisar lógica aqui
-//                // Exemplo fictício
-//                List<Voo> voosDiretos = VooManager.pesquisarVoos(null, null, dataPesquisa);
-//                StringBuilder voosTexto = new StringBuilder("Voos diretos encontrados:\n");
-//                for (Voo voo : voosDiretos) {
-//                    voosTexto.append(voo).append("\n");
-//                }
-//                JOptionPane.showMessageDialog(null, voosTexto.toString(), "Resultado da Pesquisa", JOptionPane.INFORMATION_MESSAGE);
-//            } catch (Exception e) {
-//                JOptionPane.showMessageDialog(null, "Formato de data inválido!", "Erro", JOptionPane.ERROR_MESSAGE);
+//            switch (opcao) {
+//                case 1:
+//                    cadastrarAeroporto(scanner, aeroportoManager);
+//                    break;
+//                case 2:
+//                    cadastrarCompanhiaAerea(scanner, companhiaAereaManager);
+//                    break;
+//                case 3:
+//                    cadastrarPassageiro(scanner, passageiroManager);
+//                    break;
+//                case 4:
+//                    cadastrarVoo(scanner, vooManager, aeroportoManager, companhiaAereaManager);
+//                    break;
+//                case 5:
+//                    listarAeroportos(aeroportoManager);
+//                    break;
+//                case 6:
+//                    listarCompanhiasAereas(companhiaAereaManager);
+//                    break;
+//                case 7:
+//                    listarPassageiros(passageiroManager);
+//                    break;
+//                case 8:
+//                    listarVoos(vooManager);
+//                    break;
+//                case 9:
+//                    pesquisarVoos(scanner, vooManager, aeroportoManager);
+//                    break;
+//                case 10:
+//                    emitirBilhete(scanner, vooManager, passageiroManager);
+//                    break;
+//                case 11:
+//                    System.out.println("Saindo do sistema...");
+//                    scanner.close();
+//                    return;
+//                default:
+//                    System.out.println("Opção inválida, tente novamente.");
 //            }
 //        }
+    }
 
     private static void exibirMenu() {
         System.out.println("\n--- Sistema de Gestão de Voos ---");
@@ -156,8 +121,8 @@ public class App {
     }
 
     private static void iniciarDadosIniciais(AeroportoManager aeroportoManager,
-            CompanhiaAereaManager companhiaAereaManager,
-            PassageiroManager passageiroManager, VooManager vooManager) {
+                                             CompanhiaAereaManager companhiaAereaManager,
+                                             PassageiroManager passageiroManager, VooManager vooManager) {
         Aeroporto aeroporto1 = new Aeroporto("Aeroporto Internacional de São Paulo", "GRU", "São Paulo", "SP",
                 "Brasil");
         Aeroporto aeroporto2 = new Aeroporto("Aeroporto Internacional do Rio de Janeiro", "GIG", "Rio de Janeiro", "RJ",
@@ -198,28 +163,82 @@ public class App {
         }
     }
 
-    private static void cadastrarCompanhiaAerea(Scanner scanner, CompanhiaAereaManager companhiaAereaManager) {
-        System.out.print("Digite o nome da companhia aérea: ");
-        String nome = scanner.nextLine();
-        System.out.print("Digite a sigla da companhia aérea: ");
-        String sigla = scanner.nextLine();
-        System.out.print("Digite a razão social da companhia aérea: ");
-        String razaoSocial = scanner.nextLine();
-        System.out.print("Digite o CNPJ da companhia aérea: ");
-        String cnpj = scanner.nextLine();
-        System.out.print("Digite o valor da primeira bagagem: ");
-        double valorPrimeiraBagagem = scanner.nextDouble();
-        System.out.print("Digite o valor das bagagens adicionais: ");
-        double valorBagagensAdicionais = scanner.nextDouble();
-        scanner.nextLine();
+    private static void cadastrarCompanhiaAerea(CompanhiaAereaManager companhiaAereaManager) {
+        JDialog dialog = new JDialog();
+        dialog.setTitle("Cadastrar Companhia Aérea");
+        dialog.setSize(400, 400);
+        dialog.setModal(true);
 
-        CompanhiaAerea companhiaAerea = new CompanhiaAerea(nome, sigla, razaoSocial, cnpj, valorPrimeiraBagagem,
-                valorBagagensAdicionais);
-        if (companhiaAereaManager.adicionarCompanhia(companhiaAerea)) {
-            System.out.println("Companhia Aérea cadastrada com sucesso!");
-        } else {
-            System.out.println("Companhia Aérea com o mesmo CNPJ já cadastrada.");
-        }
+        JPanel panel = new JPanel();
+        panel.setLayout(new GridLayout(8, 2, 10, 10));
+        panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+
+        JLabel nomeLabel = new JLabel("Nome:");
+        JTextField nomeField = new JTextField();
+
+        JLabel siglaLabel = new JLabel("Sigla:");
+        JTextField siglaField = new JTextField();
+
+        JLabel razaoSocialLabel = new JLabel("Razão Social:");
+        JTextField razaoSocialField = new JTextField();
+
+        JLabel cnpjLabel = new JLabel("CNPJ:");
+        JTextField cnpjField = new JTextField();
+
+        JLabel valorPrimeiraBagagemLabel = new JLabel("Valor Primeira Bagagem:");
+        JTextField valorPrimeiraBagagemField = new JTextField();
+
+        JLabel valorBagagensAdicionaisLabel = new JLabel("Valor Bagagens Adicionais:");
+        JTextField valorBagagensAdicionaisField = new JTextField();
+
+        JButton salvarButton = new JButton("Salvar");
+        JButton cancelarButton = new JButton("Cancelar");
+
+        panel.add(nomeLabel);
+        panel.add(nomeField);
+        panel.add(siglaLabel);
+        panel.add(siglaField);
+        panel.add(razaoSocialLabel);
+        panel.add(razaoSocialField);
+        panel.add(cnpjLabel);
+        panel.add(cnpjField);
+        panel.add(valorPrimeiraBagagemLabel);
+        panel.add(valorPrimeiraBagagemField);
+        panel.add(valorBagagensAdicionaisLabel);
+        panel.add(valorBagagensAdicionaisField);
+        panel.add(salvarButton);
+        panel.add(cancelarButton);
+
+        dialog.add(panel);
+
+        salvarButton.addActionListener(e -> {
+            String nome = nomeField.getText();
+            String sigla = siglaField.getText();
+            String razaoSocial = razaoSocialField.getText();
+            String cnpj = cnpjField.getText();
+            double valorPrimeiraBagagem;
+            double valorBagagensAdicionais;
+
+            try {
+                valorPrimeiraBagagem = Double.parseDouble(valorPrimeiraBagagemField.getText());
+                valorBagagensAdicionais = Double.parseDouble(valorBagagensAdicionaisField.getText());
+            } catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(dialog, "Por favor, insira valores válidos para os preços.", "Erro", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            CompanhiaAerea companhiaAerea = new CompanhiaAerea(nome, sigla, razaoSocial, cnpj, valorPrimeiraBagagem, valorBagagensAdicionais);
+            if (companhiaAereaManager.adicionarCompanhia(companhiaAerea)) {
+                JOptionPane.showMessageDialog(dialog, "Companhia Aérea cadastrada com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+                dialog.dispose();
+            } else {
+                JOptionPane.showMessageDialog(dialog, "Companhia Aérea com o mesmo CNPJ já cadastrada.", "Erro", JOptionPane.ERROR_MESSAGE);
+            }
+        });
+
+        cancelarButton.addActionListener(e -> dialog.dispose());
+
+        dialog.setVisible(true);
     }
 
     private static void cadastrarPassageiro(Scanner scanner, PassageiroManager passageiroManager) {
@@ -240,43 +259,37 @@ public class App {
         }
     }
 
-    private static void cadastrarVoo(Scanner scanner, VooManager vooManager, AeroportoManager aeroportoManager,
-            CompanhiaAereaManager companhiaAereaManager) {
-        System.out.print("Digite a sigla do aeroporto de origem: ");
-        String origemSigla = scanner.nextLine();
-        Aeroporto origem = aeroportoManager.buscarAeroportoPorSigla(origemSigla);
-
-        System.out.print("Digite a sigla do aeroporto de destino: ");
-        String destinoSigla = scanner.nextLine();
-        Aeroporto destino = aeroportoManager.buscarAeroportoPorSigla(destinoSigla);
-
-        System.out.print("Digite o código do voo: ");
-        String codigoVoo = scanner.nextLine();
-        System.out.print("Digite o horário do voo (YYYY-MM-DD HH:MM): ");
-        String dataHora = scanner.nextLine();
-        LocalDateTime dataHoraVoo = parseDateTime(dataHora);
-
-        System.out.print("Digite o CNPJ da companhia aérea: ");
-        String cnpj = scanner.nextLine();
-        CompanhiaAerea companhiaAerea = companhiaAereaManager.buscarCompanhiaPorCnpj(cnpj);
-
-        System.out.print("Digite o valor da tarifa básica: ");
-        double tarifaBasica = scanner.nextDouble();
-        System.out.print("Digite o valor da tarifa business: ");
-        double tarifaBusiness = scanner.nextDouble();
-        System.out.print("Digite o valor da tarifa premium: ");
-        double tarifaPremium = scanner.nextDouble();
-        scanner.nextLine(); 
-
-        Voo voo = new Voo(origem, destino, dataHoraVoo, codigoVoo, companhiaAerea,
-                new Aeronave("Boeing 737", 20000, 180, 30),
-                tarifaBasica, tarifaBusiness, tarifaPremium, "BRL");
-        vooManager.adicionarVoo(voo);
-        System.out.println("Voo cadastrado com sucesso!");
-    }
+//    private static void cadastrarVoo(Scanner scanner, VooManager vooManager, AeroportoManager aeroportoManager,
+//            CompanhiaAereaManager companhiaAereaManager) {
+//        String origemSigla = JOptionPane.showInputDialog("Digite a sigla do aeroporto de origem: ");
+//        Aeroporto origem = aeroportoManager.buscarAeroportoPorSigla(origemSigla);
+//
+//        String destinoSigla = JOptionPane.showInputDialog("Digite a sigla do aeroporto de destino: ");
+//        Aeroporto destino = aeroportoManager.buscarAeroportoPorSigla(destinoSigla);
+//
+//        String codigoVoo = JOptionPane.showInputDialog("Digite o código do voo: ");
+//        String dataHora = JOptionPane.showMessageDialog(JSpinner.DateEditor,"Digite a data de hora: ");
+//                //("Digite o horário do voo (YYYY-MM-DD HH:MM): ");
+//        LocalDateTime dataHoraVoo = parseDateTime(dataHora);
+//
+//        String cnpj = JOptionPane.showInputDialog("Digite o CNPJ da companhia aérea: ");
+//        CompanhiaAerea companhiaAerea = companhiaAereaManager.buscarCompanhiaPorCnpj(cnpj);
+//
+//        double tarifaBasica = Double.parseDouble(JOptionPane.showInputDialog("Digite o valor da tarifa básica: "));
+//        double tarifaBusiness = Double.parseDouble(JOptionPane.showInputDialog("Digite o valor da tarifa business: "));
+//        double tarifaPremium = Double.parseDouble(JOptionPane.showInputDialog("Digite o valor da tarifa premium: "));
+//        scanner.nextLine();
+//
+//        Voo voo = new Voo(origem, destino, dataHoraVoo, codigoVoo, companhiaAerea,
+//                new Aeronave("Boeing 737", 20000, 180, 30),
+//                tarifaBasica, tarifaBusiness, tarifaPremium, "BRL");
+//        vooManager.adicionarVoo(voo);
+//
+//        JOptionPane.showMessageDialog(null, "Voo cadastrado com sucesso!");
+//    }
 
     private static LocalDateTime parseDateTime(String dataHora) {
-        DateTimeFormatter[] dateFormats = new DateTimeFormatter[] {
+        DateTimeFormatter[] dateFormats = new DateTimeFormatter[]{
                 DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"),
                 DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"),
                 DateTimeFormatter.ofPattern("MM/dd/yyyy HH:mm")
@@ -326,6 +339,8 @@ public class App {
         } else {
             voos.forEach(voo -> System.out.println(voo));
         }
+
+        JOptionPane.showMessageDialog(null, voos.toString(), "Lista de Voos", JOptionPane.INFORMATION_MESSAGE);
     }
 
     private static void pesquisarVoos(Scanner scanner, VooManager vooManager, AeroportoManager aeroportoManager) {
@@ -382,5 +397,6 @@ public class App {
         }
     }
 }
+
 
 
