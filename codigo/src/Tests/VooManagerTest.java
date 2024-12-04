@@ -12,8 +12,9 @@ class VooManagerTest {
     @Test
     void testAdicionarVoo() {
         VooManager vooManager = new VooManager();
-        Aeroporto aeroporto1 = new Aeroporto("Aeroporto SP", "GRU", "São Paulo", "SP", "Brasil");
-        Aeroporto aeroporto2 = new Aeroporto("Aeroporto RJ", "GIG", "Rio de Janeiro", "RJ", "Brasil");
+        Aeroporto aeroporto1 = new Aeroporto("Aeroporto SP", "GRU", "São Paulo", "SP", "Brasil", -23.5505, -46.6333);
+        Aeroporto aeroporto2 = new Aeroporto("Aeroporto RJ", "GIG", "Rio de Janeiro", "RJ", "Brasil", -22.9094,
+                -43.1737);
         CompanhiaAerea companhia = new CompanhiaAerea("XYZ Airlines", "XYZ", "Razão XYZ", "12345678000123", 50.0, 30.0);
         Voo voo = new Voo(aeroporto1, aeroporto2, LocalDateTime.of(2024, 12, 25, 14, 0), "XYZ123", companhia,
                 new Aeronave("Boeing 737", 20000, 180, 30), 500.0, 1000.0, 1500.0, "BRL");
@@ -26,8 +27,9 @@ class VooManagerTest {
     @Test
     void testPesquisarVoos() {
         VooManager vooManager = new VooManager();
-        Aeroporto aeroporto1 = new Aeroporto("Aeroporto SP", "GRU", "São Paulo", "SP", "Brasil");
-        Aeroporto aeroporto2 = new Aeroporto("Aeroporto RJ", "GIG", "Rio de Janeiro", "RJ", "Brasil");
+        Aeroporto aeroporto1 = new Aeroporto("Aeroporto SP", "GRU", "São Paulo", "SP", "Brasil", -23.5505, -46.6333);
+        Aeroporto aeroporto2 = new Aeroporto("Aeroporto RJ", "GIG", "Rio de Janeiro", "RJ", "Brasil", -22.9094,
+                -43.1737);
         CompanhiaAerea companhia = new CompanhiaAerea("XYZ Airlines", "XYZ", "Razão XYZ", "12345678000123", 50.0, 30.0);
         Voo voo = new Voo(aeroporto1, aeroporto2, LocalDateTime.of(2024, 12, 25, 14, 0), "XYZ123", companhia,
                 new Aeronave("Boeing 737", 20000, 180, 30), 500.0, 1000.0, 1500.0, "BRL");
@@ -44,9 +46,11 @@ class VooManagerTest {
     @Test
     void testPesquisarVoosComConexao() {
         VooManager vooManager = new VooManager();
-        Aeroporto aeroporto1 = new Aeroporto("Aeroporto SP", "GRU", "São Paulo", "SP", "Brasil");
-        Aeroporto aeroporto2 = new Aeroporto("Aeroporto RJ", "GIG", "Rio de Janeiro", "RJ", "Brasil");
-        Aeroporto aeroporto3 = new Aeroporto("Aeroporto BH", "CNF", "Belo Horizonte", "MG", "Brasil");
+        Aeroporto aeroporto1 = new Aeroporto("Aeroporto SP", "GRU", "São Paulo", "SP", "Brasil", -23.5505, -46.6333);
+        Aeroporto aeroporto2 = new Aeroporto("Aeroporto RJ", "GIG", "Rio de Janeiro", "RJ", "Brasil", -22.9094,
+                -43.1737);
+        Aeroporto aeroporto3 = new Aeroporto("Aeroporto BH", "CNF", "Belo Horizonte", "MG", "Brasil", -19.8522,
+                -43.9714);
 
         CompanhiaAerea companhia = new CompanhiaAerea("XYZ Airlines", "XYZ", "Razão XYZ", "12345678000123", 50.0, 30.0);
 
