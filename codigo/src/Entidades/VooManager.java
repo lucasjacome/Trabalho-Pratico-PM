@@ -75,4 +75,38 @@ public class VooManager {
                 .sorted((v1, v2) -> v1.getDataHoraVoo().compareTo(v2.getDataHoraVoo()))
                 .collect(Collectors.toList());
     }
+
+    public boolean alterarVoo(String codigoVoo, LocalDateTime novoHorario, Aeroporto novaOrigem, Aeroporto novoDestino,
+            double novaTarifaBasica, double novaTarifaBusiness, double novaTarifaPremium) {
+        Voo voo = buscarVooPorCodigo(codigoVoo);
+        if (voo != null) {
+            voo.setDataHoraVoo(novoHorario);
+            voo.setOrigem(novaOrigem);
+            voo.setDestino(novoDestino);
+            voo.setTarifaBasica(novaTarifaBasica);
+            voo.setTarifaBusiness(novaTarifaBusiness);
+            voo.setTarifaPremium(novaTarifaPremium);
+            return true;
+        }
+        return false;
+    }
+
+    public boolean excluirVoo(String codigoVoo) {
+        if (codigoVoo == null || codigoVoo.trim().isEmpty()) {
+            throw new IllegalArgumentException("O código do voo não pode ser nulo ou vazio.");
+        }
+
+        return voos.removeIf(voo -> voo.getCodigoVoo().equals(codigoVoo));
+    }
+
+    public Voo buscarVooPorCodigo(String codigoVoo) {
+        if (codigoVoo == null || codigoVoo.trim().isEmpty()) {
+            throw new IllegalArgumentException("O código do voo não pode ser nulo ou vazio.");
+        }
+        return voos.stream()
+                .filter(voo -> voo.getCodigoVoo().equals(codigoVoo))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("Voo não encontrado com o código: " + codigoVoo));
+    }
+
 }
