@@ -1,336 +1,311 @@
 package Entidades;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
-import java.time.DayOfWeek;
-import java.util.Arrays;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import java.util.List;
 import java.util.Scanner;
 
 public class App {
+
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
-
-        // Criação de aeroportos
-        Aeroporto origem = new Aeroporto("Entidades.Aeroporto de São Paulo", "GRU", "São Paulo", "SP", "Brasil");
-        Aeroporto destino = new Aeroporto("Entidades.Aeroporto do Rio de Janeiro", "GIG", "Rio de Janeiro", "RJ", "Brasil");
-        Aeroporto destinoConexao = new Aeroporto("Entidades.Aeroporto de Brasília", "BSB", "Brasília", "DF", "Brasil");
-        Aeroporto destinoInternacional = new Aeroporto("Entidades.Aeroporto de Nova York", "JFK", "Nova York", "NY", "EUA");
-        Aeronave aeronave = new Aeronave("Boeing 737", 150, 200, 33);
-        Aeronave aeronave2 = new Aeronave("Boeing 747", 300, 400, 66);
-
-        // Criação de companhia aérea
-        CompanhiaAerea companhia = new CompanhiaAerea("Companhia Aérea XYZ", "XYZ123", "Razão Social XYZ LTDA",
-                "12345678000195", 50.0, 30.0);
-
-        // Criação do gerenciador de voos
+        AeroportoManager aeroportoManager = new AeroportoManager();
+        CompanhiaAereaManager companhiaAereaManager = new CompanhiaAereaManager();
+        PassageiroManager passageiroManager = new PassageiroManager();
         VooManager vooManager = new VooManager();
 
-        // Criação dos voos
-        Voo voo1 = new Voo(
-                origem,
-                destino,
-                LocalDateTime.of(2024, 10, 1, 15, 30),
-                "XY1234",
-                companhia,
-                aeronave,
-                500.0,
-                1000.0,
-                1500.0,
-                "BRL");
+        // Criando alguns dados iniciais
+        iniciarDadosIniciais(aeroportoManager, companhiaAereaManager, passageiroManager, vooManager);
 
-        Voo voo2 = new Voo(
-                destino,
-                destinoConexao,
-                LocalDateTime.of(2024, 10, 1, 18, 00),
-                "XY5678",
-                companhia,
-                aeronave,
-                600.0,
-                1100.0,
-                1600.0,
-                "BRL");
-
-        Voo voo3 = new Voo(
-                destinoConexao,
-                origem,
-                LocalDateTime.of(2024, 10, 10, 18, 00),
-                "XY9012",
-                companhia,
-                aeronave,
-                550.0,
-                1050.0,
-                1550.0,
-                "BRL");
-
-        // Entidades.Voo Internacional
-        Voo vooInternacional = new Voo(
-                origem,
-                destinoInternacional,
-                LocalDateTime.of(2024, 12, 1, 15, 00),
-                "XY9999",
-                companhia,
-                aeronave,
-                1200.0,
-                2500.0,
-                3500.0,
-                "USD");
-
-        //vooTeste para testar o status "NO SHOW"
-        Voo vooTeste = new Voo(
-                origem,
-                destino,
-                LocalDateTime.of(2024, 11, 17, 10, 0),
-                "XY1234",
-                companhia,
-                aeronave,
-                500.0,
-                1000.0,
-                1500.0,
-                "BRL");
-                vooTeste.adicionarPassageiro(new Passageiro("Ana", "Silva", "12345678901", "ana@gmail.com"));
-                vooTeste.adicionarPassageiro(new Passageiro("Carlos", "Santos", "98765432100", "carlos@gmail.com"));
-                vooTeste.registrarEmbarque("12345678901");
-                vooTeste.verificarNoShow();
-
-
-        // Definindo a frequência para o voo AD4114 (diariamente às 10:30)
-        List<DayOfWeek> diasDaSemana = Arrays.asList(
-                DayOfWeek.MONDAY, DayOfWeek.TUESDAY, DayOfWeek.WEDNESDAY,
-                DayOfWeek.THURSDAY, DayOfWeek.FRIDAY, DayOfWeek.SATURDAY, DayOfWeek.SUNDAY);
-
-        Frequencia frequenciaVoo = new Frequencia(voo1, diasDaSemana);
-
-
-        // Adicionar os voos ao gerenciador
-        vooManager.adicionarVoo(voo1);
-        vooManager.adicionarVoo(voo2);
-        vooManager.adicionarVoo(voo3);
-        vooManager.adicionarVoo(vooInternacional);
-
-        // Listar todos os voos cadastrados
-        System.out.println("Todos os voos disponíveis:");
-        for (Voo voo : vooManager.listarTodosOsVoos()) {
-            System.out.println(voo);
-            // Verificar se o voo é internacional
-            if (voo.isInternacional()) {
-                System.out.println("Este voo é internacional.");
-            } else {
-                System.out.println("Este voo é nacional.");
-            }
-        }
-
-        // Gerar e exibir os horários do voo com base na frequência
-        List<LocalDateTime> horarios = frequenciaVoo.gerarHorarios();
-        System.out.println("\n Horários para o voo " + voo1.getCodigoVoo() + ":");
-        for (LocalDateTime horario : horarios) {
-            System.out.println(horario + " -- GRU -> GIG -- Duração: 1:30");
-        }
-
-        // Instanciando o programador de viagens e programando os voos
-        ProgramarViagens programador = new ProgramarViagens();
-        List<Voo> voosProgramados = programador.programarVoosPorPeriodo(voo1, frequenciaVoo);
-
-
-        // Exibindo os voos programados
-        System.out.println("\nVoos programados para os próximos 30 dias:");
-        for (Voo voo : voosProgramados) {
-            System.out.println("Código do voo: " + voo.getCodigoVoo());
-            System.out.println("Origem: " + voo.getOrigem().getNome());
-            System.out.println("Destino: " + voo.getDestino().getNome());
-            System.out.println("Data e Hora: " + voo.getDataHoraVoo());
-            System.out.println("Entidades.Aeronave: " + voo.getAeronave().getModelo());
-            System.out.println("Tarifa: " + voo.getTarifaBasica() + " " + voo.getMoeda());
-            System.out.println("----");
-        }
-
-
-        // Pesquisar voos diretos
-        LocalDateTime dataPesquisa = LocalDateTime.of(2024, 10, 1, 0, 0);
-        System.out.println("\nPesquisando voos de " + origem.getNome() + " para " + destino.getNome());
-        for (Voo voo : vooManager.pesquisarVoos(origem, destino, dataPesquisa)) {
-            System.out.println(voo);
-        }
-
-        // Pesquisar voos de ida e volta
-        LocalDateTime dataVolta = LocalDateTime.of(2024, 10, 10, 0, 0);
-        System.out.println("\nPesquisando voos de ida e volta:");
-        for (Voo voo : vooManager.pesquisarVoosIdaVolta(origem, destino, dataPesquisa, dataVolta)) {
-            System.out.println(voo);
-        }
-
-        // Pesquisar voos com conexão
-        System.out.println("\nPesquisando voos com conexão:");
-        for (List<Voo> conexao : vooManager.pesquisarVoosComConexao(origem, destinoConexao, dataPesquisa)) {
-            System.out.println("Conexão:");
-            for (Voo voo : conexao) {
-                System.out.println(voo);
-            }
-        }
-
-
-        // Emissão de bilhetes
-
-        // Entidades.Passageiro com documento válido para voo nacional (CPF)
-        Passageiro passageiroNacionalVip = new Passageiro("João", "Silva", "12345678901", "joao.silva@gmail.com");
-        Passageiro passageiroNacionalRegular = new Passageiro("João", "Pobre", "12345936901", "joao.pobre@gmail.com");
-
-        passageiroNacionalVip.setVipStatus(true);
-
-        // Entidades.Passageiro com passaporte válido (duas letras e seis dígitos)
-        Passageiro passageiroComPassaporteValido = new Passageiro("Maria", "Pereira", "AA123456", "mariapereira@outlook.com");
-
-        // Entidades.Passageiro com passaporte inválido (não segue o padrão de duas letras e seis dígitos)
-        Passageiro passageiroComPassaporteInvalido = new Passageiro("Carlos", "Souza", "A1234567", "souzacarlos@icloud.com");
-
-        // Tentativa de emitir bilhete para voo nacional
-        System.out.println("\nEmitindo bilhete para voo nacional:");
-        Bilhete bilheteNacional = new Bilhete(passageiroNacionalVip, voo1);
-        bilheteNacional.emitir(); // Deve emitir com sucesso (documento CPF)
-
-        System.out.println("\nEmitindo bilhete para voo nacional:");
-        Bilhete bilheteNacional2 = new Bilhete(passageiroNacionalRegular, voo1);
-        bilheteNacional2.emitir(); // Deve emitir com sucesso (documento CPF)
-
-
-        // Testar cancelamento/alteração
-        System.out.println("\nAlteração/Cancelamento de voo:");
-        System.out.print("Pedido de cancelamento de Entidades.Voo para Entidades.Passageiro Regular -- ");
-        passageiroNacionalRegular.cancelarVoo(null);
-        System.out.print("Pedido de cancelamento de Entidades.Voo para Entidades.Passageiro Vip -- ");
-        passageiroNacionalVip.cancelarVoo(null);
-
-        // Testar custo de bagagem
-        System.out.println("\nCusto de bagagem:");
-        System.out.println("Regular, 2 bagagens: " + passageiroNacionalRegular.calcularValorBagagem(companhia, 2) + " BRL");
-        System.out.println("VIP, 2 bagagens: " + passageiroNacionalVip.calcularValorBagagem(companhia, 2) + " BRL");
-        System.out.println("VIP, 1 bagagem: " + passageiroNacionalVip.calcularValorBagagem(companhia, 1) + " BRL");
-
-        // Desativar benefícios VIP
-        companhia.setVipBeneficioAtivo(false);
-        System.out.println("\nBenefícios VIP desativados:");
-        System.out.println("VIP, 2 bagagens: " + passageiroNacionalVip.calcularValorBagagem(companhia, 2) + " BRL");
-
-
-        // Tentativa de emitir bilhete para voo internacional com passaporte válido
-        System.out.println("\nEmitindo bilhete para voo internacional com passaporte válido:");
-        Bilhete bilheteValido = new Bilhete(passageiroComPassaporteValido, vooInternacional);
-        bilheteValido.emitir(); // Deve emitir com sucesso (passaporte válido)
-
-        // Tentativa de emitir bilhete para voo internacional com passaporte inválido
-        System.out.println("\nTentativa de emitir bilhete com passaporte inválido:");
-        Bilhete bilheteInvalido = new Bilhete(passageiroComPassaporteInvalido, vooInternacional);
-        bilheteInvalido.emitir(); // Deve falhar (passaporte inválido)
-
-
-
-
-        // Criando um cartão de embarque
-        LocalDateTime horarioVoo = LocalDateTime.of(2024, 11, 17, 15, 30); // Data e hora do voo
-        CartaoEmbarque cartao = new CartaoEmbarque("João", "Silva", "São Paulo", "Rio de Janeiro", horarioVoo, "12A");
-        
-        // Exibindo o cartão de embarque
-        System.out.println(cartao);
-
-        // Criando outro cartão de embarque
-        LocalDateTime horarioVoo2 = LocalDateTime.of(2024, 11, 18, 9, 45); // Data e hora do voo
-        CartaoEmbarque cartao2 = new CartaoEmbarque("Maria", "Oliveira", "São Paulo", "Salvador", horarioVoo2, "3B");
-        
-        // Exibindo o segundo cartão de embarque
-        System.out.println(cartao2);
-
-
-
-
-        // Menu
         while (true) {
-            System.out.println("\n--- Sistema de Gerenciamento de Viagens ---");
-            System.out.println("1. Listar todos os voos");
-            System.out.println("2. Pesquisar voos diretos");
-            System.out.println("3. Emitir bilhete");
-            System.out.println("4. Calcular custo de bagagem");
-            System.out.println("5. Alterar status VIP de passageiro");
-            System.out.println("6. Sair");
-            System.out.print("Escolha uma opção: ");
+            exibirMenu();
             int opcao = scanner.nextInt();
-            scanner.nextLine(); // Consumir quebra de linha
+            scanner.nextLine(); // Consumir a linha de quebra de linha
 
             switch (opcao) {
                 case 1:
-                    System.out.println("\nTodos os voos disponíveis:");
-                    for (Voo voo : vooManager.listarTodosOsVoos()) {
-                        System.out.println(voo);
-                    }
+                    cadastrarAeroporto(scanner, aeroportoManager);
                     break;
-
                 case 2:
-                    System.out.print("\nDigite a data para a pesquisa (dd/MM/yyyy HH:mm): ");
-                    String dataStr = scanner.nextLine();
-                    LocalDateTime dateTime = LocalDateTime.parse(dataStr, formatter);
-
-                    System.out.println("\nPesquisando voos de " + origem.getNome() + " para " + destino.getNome());
-                    List<Voo> voosDiretos = vooManager.pesquisarVoos(origem, destino, dataPesquisa);
-                    if (voosDiretos.isEmpty()) {
-                        System.out.println("Nenhum voo encontrado.");
-                    } else {
-                        for (Voo voo : voosDiretos) {
-                            System.out.println(voo);
-                        }
-                    }
+                    cadastrarCompanhiaAerea(scanner, companhiaAereaManager);
                     break;
-
                 case 3:
-                    System.out.print("\nDigite o nome do passageiro: ");
-                    String nome = scanner.nextLine();
-                    System.out.print("Digite o documento (CPF ou passaporte): ");
-                    String documento = scanner.nextLine();
-
-                    Passageiro passageiro = new Passageiro(nome, "Sobrenome", documento, nome.toLowerCase() + "@gmail.com");
-
-                    System.out.println("\nSelecione um voo para emitir bilhete:");
-                    List<Voo> todosVoos = vooManager.listarTodosOsVoos();
-                    for (int i = 0; i < todosVoos.size(); i++) {
-                        System.out.println((i + 1) + ". " + todosVoos.get(i));
-                    }
-                    System.out.print("Escolha o número do voo: ");
-                    int vooEscolhido = scanner.nextInt();
-                    scanner.nextLine(); // Consumir quebra de linha
-
-                    Voo vooSelecionado = todosVoos.get(vooEscolhido - 1);
-                    Bilhete bilhete = new Bilhete(passageiro, vooSelecionado);
-                    bilhete.emitir();
+                    cadastrarPassageiro(scanner, passageiroManager);
                     break;
-
                 case 4:
-                    System.out.print("\nDigite o número de bagagens: ");
-                    int qtdBagagens = scanner.nextInt();
-                    scanner.nextLine(); // Consumir quebra de linha
-                    System.out.println("Custo total: " + companhia.getValorPrimeiraBagagem() * qtdBagagens + " BRL");
+                    cadastrarVoo(scanner, vooManager, aeroportoManager, companhiaAereaManager);
                     break;
-
                 case 5:
-                    System.out.print("\nDigite o nome do passageiro: ");
-                    String nomeVip = scanner.nextLine();
-                    System.out.print("Deseja ativar o status VIP? (true/false): ");
-                    boolean ativarVip = scanner.nextBoolean();
-                    scanner.nextLine(); // Consumir quebra de linha
-
-                    Passageiro passageiroVip = new Passageiro(nomeVip, "Sobrenome", "12345678901", nomeVip.toLowerCase() + "@gmail.com");
-                    passageiroVip.setVipStatus(ativarVip);
-                    System.out.println("Status VIP atualizado: " + (passageiroVip.isVip() ? "VIP" : "Regular"));
+                    listarAeroportos(aeroportoManager);
                     break;
-
                 case 6:
-                    System.out.println("Encerrando o sistema...");
+                    listarCompanhiasAereas(companhiaAereaManager);
+                    break;
+                case 7:
+                    listarPassageiros(passageiroManager);
+                    break;
+                case 8:
+                    listarVoos(vooManager);
+                    break;
+                case 9:
+                    pesquisarVoos(scanner, vooManager, aeroportoManager);
+                    break;
+                case 10:
+                    emitirBilhete(scanner, vooManager, passageiroManager);
+                    break;
+                case 11:
+                    System.out.println("Saindo do sistema...");
                     scanner.close();
                     return;
-
                 default:
-                    System.out.println("Opção inválida. Tente novamente.");
+                    System.out.println("Opção inválida, tente novamente.");
             }
         }
+    }
 
+    private static void exibirMenu() {
+        System.out.println("\n--- Sistema de Gestão de Voos ---");
+        System.out.println("1. Cadastrar Aeroporto");
+        System.out.println("2. Cadastrar Companhia Aérea");
+        System.out.println("3. Cadastrar Passageiro");
+        System.out.println("4. Cadastrar Voo");
+        System.out.println("5. Listar Aeroportos");
+        System.out.println("6. Listar Companhias Aéreas");
+        System.out.println("7. Listar Passageiros");
+        System.out.println("8. Listar Voos");
+        System.out.println("9. Pesquisar Voos");
+        System.out.println("10. Emitir Bilhete");
+        System.out.println("11. Sair");
+        System.out.print("Escolha uma opção: ");
+    }
 
+    private static void iniciarDadosIniciais(AeroportoManager aeroportoManager,
+            CompanhiaAereaManager companhiaAereaManager,
+            PassageiroManager passageiroManager, VooManager vooManager) {
+        Aeroporto aeroporto1 = new Aeroporto("Aeroporto Internacional de São Paulo", "GRU", "São Paulo", "SP",
+                "Brasil");
+        Aeroporto aeroporto2 = new Aeroporto("Aeroporto Internacional do Rio de Janeiro", "GIG", "Rio de Janeiro", "RJ",
+                "Brasil");
+
+        aeroportoManager.adicionarAeroporto(aeroporto1);
+        aeroportoManager.adicionarAeroporto(aeroporto2);
+
+        CompanhiaAerea companhia = new CompanhiaAerea("XYZ Airlines", "XYZ", "Razão XYZ", "12345678000123", 50.0, 30.0);
+        companhiaAereaManager.adicionarCompanhia(companhia);
+
+        Passageiro passageiro = new Passageiro("João", "Silva", "12345678901", "joao@gmail.com");
+        passageiroManager.adicionarPassageiro(passageiro);
+
+        Voo voo = new Voo(aeroporto1, aeroporto2, LocalDateTime.of(2024, 12, 1, 10, 0), "XYZ123", companhia,
+                new Aeronave("Boeing 737", 20000, 180, 30),
+                500.0, 1000.0, 1500.0, "BRL");
+        vooManager.adicionarVoo(voo);
+    }
+
+    private static void cadastrarAeroporto(Scanner scanner, AeroportoManager aeroportoManager) {
+        System.out.print("Digite o nome do aeroporto: ");
+        String nome = scanner.nextLine();
+        System.out.print("Digite a sigla do aeroporto: ");
+        String sigla = scanner.nextLine();
+        System.out.print("Digite a cidade do aeroporto: ");
+        String cidade = scanner.nextLine();
+        System.out.print("Digite o estado do aeroporto: ");
+        String estado = scanner.nextLine();
+        System.out.print("Digite o país do aeroporto: ");
+        String pais = scanner.nextLine();
+
+        Aeroporto aeroporto = new Aeroporto(nome, sigla, cidade, estado, pais);
+        if (aeroportoManager.adicionarAeroporto(aeroporto)) {
+            System.out.println("Aeroporto cadastrado com sucesso!");
+        } else {
+            System.out.println("Aeroporto com essa sigla já cadastrado.");
+        }
+    }
+
+    private static void cadastrarCompanhiaAerea(Scanner scanner, CompanhiaAereaManager companhiaAereaManager) {
+        System.out.print("Digite o nome da companhia aérea: ");
+        String nome = scanner.nextLine();
+        System.out.print("Digite a sigla da companhia aérea: ");
+        String sigla = scanner.nextLine();
+        System.out.print("Digite a razão social da companhia aérea: ");
+        String razaoSocial = scanner.nextLine();
+        System.out.print("Digite o CNPJ da companhia aérea: ");
+        String cnpj = scanner.nextLine();
+        System.out.print("Digite o valor da primeira bagagem: ");
+        double valorPrimeiraBagagem = scanner.nextDouble();
+        System.out.print("Digite o valor das bagagens adicionais: ");
+        double valorBagagensAdicionais = scanner.nextDouble();
+        scanner.nextLine(); // Consumir o final da linha
+
+        CompanhiaAerea companhiaAerea = new CompanhiaAerea(nome, sigla, razaoSocial, cnpj, valorPrimeiraBagagem,
+                valorBagagensAdicionais);
+        if (companhiaAereaManager.adicionarCompanhia(companhiaAerea)) {
+            System.out.println("Companhia Aérea cadastrada com sucesso!");
+        } else {
+            System.out.println("Companhia Aérea com o mesmo CNPJ já cadastrada.");
+        }
+    }
+
+    private static void cadastrarPassageiro(Scanner scanner, PassageiroManager passageiroManager) {
+        System.out.print("Digite o nome do passageiro: ");
+        String nome = scanner.nextLine();
+        System.out.print("Digite o sobrenome do passageiro: ");
+        String sobrenome = scanner.nextLine();
+        System.out.print("Digite o número do documento (CPF ou passaporte): ");
+        String documento = scanner.nextLine();
+        System.out.print("Digite o e-mail do passageiro: ");
+        String email = scanner.nextLine();
+
+        Passageiro passageiro = new Passageiro(nome, sobrenome, documento, email);
+        if (passageiroManager.adicionarPassageiro(passageiro)) {
+            System.out.println("Passageiro cadastrado com sucesso!");
+        } else {
+            System.out.println("Passageiro já cadastrado.");
+        }
+    }
+
+    private static void cadastrarVoo(Scanner scanner, VooManager vooManager, AeroportoManager aeroportoManager,
+            CompanhiaAereaManager companhiaAereaManager) {
+        System.out.print("Digite a sigla do aeroporto de origem: ");
+        String origemSigla = scanner.nextLine();
+        Aeroporto origem = aeroportoManager.buscarAeroportoPorSigla(origemSigla);
+
+        System.out.print("Digite a sigla do aeroporto de destino: ");
+        String destinoSigla = scanner.nextLine();
+        Aeroporto destino = aeroportoManager.buscarAeroportoPorSigla(destinoSigla);
+
+        System.out.print("Digite o código do voo: ");
+        String codigoVoo = scanner.nextLine();
+        System.out.print("Digite o horário do voo (YYYY-MM-DD HH:MM): ");
+        String dataHora = scanner.nextLine();
+        LocalDateTime dataHoraVoo = parseDateTime(dataHora);
+
+        System.out.print("Digite o CNPJ da companhia aérea: ");
+        String cnpj = scanner.nextLine();
+        CompanhiaAerea companhiaAerea = companhiaAereaManager.buscarCompanhiaPorCnpj(cnpj);
+
+        System.out.print("Digite o valor da tarifa básica: ");
+        double tarifaBasica = scanner.nextDouble();
+        System.out.print("Digite o valor da tarifa business: ");
+        double tarifaBusiness = scanner.nextDouble();
+        System.out.print("Digite o valor da tarifa premium: ");
+        double tarifaPremium = scanner.nextDouble();
+        scanner.nextLine(); // Consumir a linha restante
+
+        Voo voo = new Voo(origem, destino, dataHoraVoo, codigoVoo, companhiaAerea,
+                new Aeronave("Boeing 737", 20000, 180, 30),
+                tarifaBasica, tarifaBusiness, tarifaPremium, "BRL");
+        vooManager.adicionarVoo(voo);
+        System.out.println("Voo cadastrado com sucesso!");
+    }
+
+    private static LocalDateTime parseDateTime(String dataHora) {
+        DateTimeFormatter[] dateFormats = new DateTimeFormatter[] {
+                DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"),
+                DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"),
+                DateTimeFormatter.ofPattern("MM/dd/yyyy HH:mm")
+        };
+
+        for (DateTimeFormatter format : dateFormats) {
+            try {
+                return LocalDateTime.parse(dataHora, format);
+            } catch (DateTimeParseException e) {
+                // Ignorar e tentar o próximo formato
+            }
+        }
+        throw new IllegalArgumentException(
+                "Formato de data inválido. Use os formatos: yyyy-MM-dd HH:mm, dd/MM/yyyy HH:mm, MM/dd/yyyy HH:mm.");
+    }
+
+    private static void listarAeroportos(AeroportoManager aeroportoManager) {
+        List<Aeroporto> aeroportos = aeroportoManager.listarAeroportos();
+        if (aeroportos.isEmpty()) {
+            System.out.println("Nenhum aeroporto cadastrado.");
+        } else {
+            aeroportos.forEach(aeroporto -> System.out.println(aeroporto));
+        }
+    }
+
+    private static void listarCompanhiasAereas(CompanhiaAereaManager companhiaAereaManager) {
+        List<CompanhiaAerea> companhiasAereas = companhiaAereaManager.listarCompanhias();
+        if (companhiasAereas.isEmpty()) {
+            System.out.println("Nenhuma companhia aérea cadastrada.");
+        } else {
+            companhiasAereas.forEach(companhia -> System.out.println(companhia));
+        }
+    }
+
+    private static void listarPassageiros(PassageiroManager passageiroManager) {
+        List<Passageiro> passageiros = passageiroManager.listarPassageiros();
+        if (passageiros.isEmpty()) {
+            System.out.println("Nenhum passageiro cadastrado.");
+        } else {
+            passageiros.forEach(passageiro -> System.out.println(passageiro));
+        }
+    }
+
+    private static void listarVoos(VooManager vooManager) {
+        List<Voo> voos = vooManager.listarTodosOsVoos();
+        if (voos.isEmpty()) {
+            System.out.println("Nenhum voo cadastrado.");
+        } else {
+            voos.forEach(voo -> System.out.println(voo));
+        }
+    }
+
+    private static void pesquisarVoos(Scanner scanner, VooManager vooManager, AeroportoManager aeroportoManager) {
+        System.out.print("Digite a sigla do aeroporto de origem: ");
+        String origemSigla = scanner.nextLine();
+        Aeroporto origem = aeroportoManager.buscarAeroportoPorSigla(origemSigla);
+
+        System.out.print("Digite a sigla do aeroporto de destino: ");
+        String destinoSigla = scanner.nextLine();
+        Aeroporto destino = aeroportoManager.buscarAeroportoPorSigla(destinoSigla);
+
+        System.out.print("Digite a data e hora para pesquisa (yyyy-MM-dd HH:mm): ");
+        String dataHora = scanner.nextLine();
+        LocalDateTime dataHoraPesquisa = parseDateTime(dataHora);
+
+        List<Voo> voos = vooManager.pesquisarVoos(origem, destino, dataHoraPesquisa);
+        if (voos.isEmpty()) {
+            System.out.println("Nenhum voo encontrado.");
+        } else {
+            voos.forEach(voo -> System.out.println(voo.getCodigoVoo()));
+        }
+    }
+
+    private static void emitirBilhete(Scanner scanner, VooManager vooManager, PassageiroManager passageiroManager) {
+        System.out.print("Digite o número do voo para emitir bilhete: ");
+        String codigoVoo = scanner.nextLine();
+        Voo voo = vooManager.listarTodosOsVoos().stream()
+                .filter(v -> v.getCodigoVoo().equals(codigoVoo))
+                .findFirst()
+                .orElse(null);
+
+        if (voo == null) {
+            System.out.println("Voo não encontrado.");
+            return;
+        }
+
+        System.out.print("Digite o documento do passageiro: ");
+        String documento = scanner.nextLine();
+        Passageiro passageiro = passageiroManager.listarPassageiros().stream()
+                .filter(p -> p.getDocumento().equals(documento))
+                .findFirst()
+                .orElse(null);
+
+        if (passageiro == null) {
+            System.out.println("Passageiro não encontrado.");
+            return;
+        }
+
+        Bilhete bilhete = new Bilhete(passageiro, voo);
+        if (bilhete.emitir()) {
+            System.out.println("Bilhete emitido com sucesso!");
+        } else {
+            System.out.println("Erro ao emitir bilhete.");
+        }
     }
 }
