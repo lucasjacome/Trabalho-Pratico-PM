@@ -40,4 +40,36 @@ class PassageiroManagerTest {
 
         assertThrows(IllegalArgumentException.class, () -> manager.buscarPassageiroPorDocumento("00000000000"));
     }
+
+    @Test
+    void testAlterarPassageiro() {
+        PassageiroManager manager = new PassageiroManager();
+        Passageiro passageiro = new Passageiro("João", "Silva", "12345678901", "joao@gmail.com");
+        manager.adicionarPassageiro(passageiro);
+
+        boolean alterado = manager.alterarPassageiro(
+                "12345678901",
+                "João Atualizado",
+                "Silva Atualizado",
+                "joao.atualizado@gmail.com");
+
+        assertTrue(alterado);
+
+        Passageiro passageiroAlterado = manager.buscarPassageiroPorDocumento("12345678901");
+        assertEquals("João Atualizado", passageiroAlterado.getNome());
+        assertEquals("Silva Atualizado", passageiroAlterado.getSobrenome());
+        assertEquals("joao.atualizado@gmail.com", passageiroAlterado.getEmail());
+    }
+
+    @Test
+    void testExcluirPassageiro() {
+        PassageiroManager manager = new PassageiroManager();
+        Passageiro passageiro = new Passageiro("João", "Silva", "12345678901", "joao@gmail.com");
+        manager.adicionarPassageiro(passageiro);
+
+        boolean excluido = manager.excluirPassageiro("12345678901");
+        assertTrue(excluido);
+
+        assertThrows(IllegalArgumentException.class, () -> manager.buscarPassageiroPorDocumento("12345678901"));
+    }
 }
