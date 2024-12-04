@@ -100,7 +100,7 @@ class CancelamentoVooTest {
                 -43.1737);
         CompanhiaAerea companhia = new CompanhiaAerea("Companhia Aérea XYZ", "XYZ", "Razão Social XYZ",
                 "12345678000123", 50.0, 30.0);
-        Aeronave aeronave = new Aeronave("Boeing 737", 20000, 180, 30);
+        Aeronave aeronave = new Aeronave("Boeing 737", 20000, 180, 30, 850.0);
         return new Voo(origem, destino, LocalDateTime.now().plusDays(1), codigoVoo, companhia, aeronave, 500.0, 1000.0,
                 1500.0, "BRL");
     }
