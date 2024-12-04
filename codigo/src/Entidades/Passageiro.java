@@ -29,8 +29,22 @@ public class Passageiro {
         return nome;
     }
 
+    public void setNome(String nome) {
+        if (nome == null || nome.trim().isEmpty()) {
+            throw new IllegalArgumentException("O nome não pode ser nulo ou vazio.");
+        }
+        this.nome = nome;
+    }
+
     public String getSobrenome() {
         return sobrenome;
+    }
+
+    public void setSobrenome(String sobrenome) {
+        if (sobrenome == null || sobrenome.trim().isEmpty()) {
+            throw new IllegalArgumentException("O sobrenome não pode ser nulo ou vazio.");
+        }
+        this.sobrenome = sobrenome;
     }
 
     public String getDocumento() {
@@ -39,6 +53,13 @@ public class Passageiro {
 
     public String getEmail() {
         return email;
+    }
+
+    public void setEmail(String email) {
+        if (email == null || email.trim().isEmpty()) {
+            throw new IllegalArgumentException("O email não pode ser nulo ou vazio.");
+        }
+        this.email = email;
     }
 
     public boolean isVip() {
