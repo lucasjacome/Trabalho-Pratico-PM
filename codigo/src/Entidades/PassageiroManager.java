@@ -39,4 +39,19 @@ public class PassageiroManager {
                 .orElseThrow(
                         () -> new IllegalArgumentException("Passageiro não encontrado com o documento: " + documento));
     }
+
+    public boolean alterarPassageiro(String documento, String novoNome, String novoSobrenome, String novoEmail) {
+        Passageiro passageiro = buscarPassageiroPorDocumento(documento);
+        if (passageiro != null) {
+            passageiro.setNome(novoNome);
+            passageiro.setSobrenome(novoSobrenome);
+            passageiro.setEmail(novoEmail);
+            return true;
+        }
+        return false;
+    }
+
+    public boolean excluirPassageiro(String documento) {
+        return passageiros.removeIf(p -> p.getDocumento().equals(documento));
+    }
 }

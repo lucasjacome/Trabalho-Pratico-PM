@@ -167,6 +167,52 @@ public class Voo {
         return dataHoraVoo.plusMinutes((long) (tempoViagemHoras * 60));
     }
 
+    public void setOrigem(Aeroporto origem) {
+        if (origem == null) {
+            throw new IllegalArgumentException("A origem não pode ser nula.");
+        }
+        this.origem = origem;
+    }
+
+    public void setDestino(Aeroporto destino) {
+        if (destino == null) {
+            throw new IllegalArgumentException("O destino não pode ser nulo.");
+        }
+        this.destino = destino;
+    }
+
+    public void setDataHoraVoo(LocalDateTime dataHoraVoo) {
+        if (dataHoraVoo == null) {
+            throw new IllegalArgumentException("A data e hora do voo não podem ser nulas.");
+        }
+        this.dataHoraVoo = dataHoraVoo;
+    }
+
+    public void setTarifaBasica(double tarifaBasica) {
+        if (tarifaBasica <= 0) {
+            throw new IllegalArgumentException("A tarifa básica deve ser maior que zero.");
+        }
+        this.tarifaBasica = tarifaBasica;
+    }
+
+    public void setTarifaBusiness(double tarifaBusiness) {
+        if (tarifaBusiness <= 0) {
+            throw new IllegalArgumentException("A tarifa business deve ser maior que zero.");
+        }
+        this.tarifaBusiness = tarifaBusiness;
+    }
+
+    public void setTarifaPremium(double tarifaPremium) {
+        if (tarifaPremium <= 0) {
+            throw new IllegalArgumentException("A tarifa premium deve ser maior que zero.");
+        }
+        this.tarifaPremium = tarifaPremium;
+    }
+
+    public void setCancelado(boolean cancelado) {
+        this.cancelado = cancelado;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj)

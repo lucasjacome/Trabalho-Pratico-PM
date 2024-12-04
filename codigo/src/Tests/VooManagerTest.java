@@ -75,4 +75,52 @@ class VooManagerTest {
                 assertEquals("XYZ123", conexoes.get(0).get(0).getCodigoVoo());
                 assertEquals("XYZ456", conexoes.get(0).get(1).getCodigoVoo());
         }
+
+        @Test
+        void testAlterarVoo() {
+                VooManager vooManager = new VooManager();
+                Aeroporto origem = new Aeroporto("Aeroporto SP", "GRU", "São Paulo", "SP", "Brasil", -23.5505,
+                                -46.6333);
+                Aeroporto destino = new Aeroporto("Aeroporto RJ", "GIG", "Rio de Janeiro", "RJ", "Brasil", -22.9094,
+                                -43.1737);
+                CompanhiaAerea companhia = new CompanhiaAerea("XYZ Airlines", "XYZ", "Razão XYZ", "12345678000123",
+                                50.0, 30.0);
+
+                Voo voo = new Voo(origem, destino, LocalDateTime.of(2024, 12, 25, 14, 0), "XYZ123", companhia,
+                                new Aeronave("Boeing 737", 20000, 180, 30, 850.0), 500.0, 1000.0, 1500.0, "BRL");
+                vooManager.adicionarVoo(voo);
+
+                boolean alterado = vooManager.alterarVoo("XYZ123", LocalDateTime.of(2024, 12, 26, 10, 0), origem,
+                                destino,
+                                600.0, 1100.0, 1600.0);
+
+                assertTrue(alterado);
+
+                Voo vooAlterado = vooManager.buscarVooPorCodigo("XYZ123");
+                assertEquals(600.0, vooAlterado.getTarifaBasica());
+                assertEquals(1100.0, vooAlterado.getTarifaBusiness());
+                assertEquals(1600.0, vooAlterado.getTarifaPremium());
+                assertEquals(LocalDateTime.of(2024, 12, 26, 10, 0), vooAlterado.getDataHoraVoo());
+        }
+
+        @Test
+        void testExcluirVoo() {
+                VooManager vooManager = new VooManager();
+                Aeroporto origem = new Aeroporto("Aeroporto SP", "GRU", "São Paulo", "SP", "Brasil", -23.5505,
+                                -46.6333);
+                Aeroporto destino = new Aeroporto("Aeroporto RJ", "GIG", "Rio de Janeiro", "RJ", "Brasil", -22.9094,
+                                -43.1737);
+                CompanhiaAerea companhia = new CompanhiaAerea("XYZ Airlines", "XYZ", "Razão XYZ", "12345678000123",
+                                50.0, 30.0);
+
+                Voo voo = new Voo(origem, destino, LocalDateTime.of(2024, 12, 25, 14, 0), "XYZ123", companhia,
+                                new Aeronave("Boeing 737", 20000, 180, 30, 850.0), 500.0, 1000.0, 1500.0, "BRL");
+                vooManager.adicionarVoo(voo);
+
+                boolean excluido = vooManager.excluirVoo("XYZ123");
+                assertTrue(excluido);
+
+                assertThrows(IllegalArgumentException.class, () -> vooManager.buscarVooPorCodigo("XYZ123"));
+        }
+
 }
