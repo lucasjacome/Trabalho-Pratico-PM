@@ -1,6 +1,7 @@
 package Entidades;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -155,6 +156,17 @@ public class Voo {
         return 110.57 * Math.sqrt(Math.pow(latDestino - latOrigem, 2) + Math.pow(lonDestino - lonOrigem, 2));
     }
 
+    public double calcularTempoDeViagem() {
+        double distanciaKm = calcularDistanciaKm();
+        double velocidadeMedia = aeronave.getVelocidadeMedia();
+        return distanciaKm / velocidadeMedia;
+    }
+
+    public LocalDateTime calcularHorarioChegada() {
+        double tempoViagemHoras = calcularTempoDeViagem();
+        return dataHoraVoo.plusMinutes((long) (tempoViagemHoras * 60));
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj)
@@ -169,4 +181,16 @@ public class Voo {
     public int hashCode() {
         return codigoVoo.hashCode();
     }
+
+    @Override
+    public String toString() {
+        return String.format("Voo [%s -> %s, Código: %s, Data/Hora: %s, Companhia: %s, Aeronave: %s]",
+                origem.getSigla(),
+                destino.getSigla(),
+                codigoVoo,
+                dataHoraVoo.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")),
+                companhia.getNome(),
+                aeronave.getModelo());
+    }
+
 }
