@@ -1,54 +1,59 @@
 package Tests;
 
 import Entidades.Aeronave;
-import Enums.LetraAssento;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+class AeronaveTest {
 
-public class AeronaveTest {
-
-    private Aeronave aeronave;
-
-    @BeforeEach
-    public void setUp() {
-        aeronave = new Aeronave("Boeing 737", 10000, 180, 30);
+    @Test
+    void testAeronaveConstrutorValido() {
+        Aeronave aeronave = new Aeronave("Boeing 737", 20000, 180, 30);
+        assertEquals("Boeing 737", aeronave.getModelo());
+        assertEquals(20000, aeronave.getCapacidadeCarga());
+        assertEquals(180, aeronave.getCapacidadePassageiros());
+        assertEquals(30, aeronave.getNumeroFileiras());
     }
 
     @Test
-    public void testGetModelo() {
-        Assertions.assertEquals("Boeing 737", aeronave.getModelo());
+    void testAeronaveConstrutorInvalido() {
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> new Aeronave("", 20000, 180, 30));
+        assertEquals("O modelo da aeronave não pode ser vazio.", exception.getMessage());
+
+        exception = assertThrows(IllegalArgumentException.class,
+                () -> new Aeronave("Boeing 737", -100, 180, 30));
+        assertEquals("Capacidades e número de fileiras devem ser maiores que zero.", exception.getMessage());
     }
 
     @Test
-    public void testGetNumeroFileiras() {
-        Assertions.assertEquals(30, aeronave.getNumeroFileiras());
-    }
-
-    @Test
-    public void testGetCapacidadeCarga() {
-        Assertions.assertEquals(10000, aeronave.getCapacidadeCarga());
-    }
-
-    @Test
-    public void testGetCapacidadePassageiros() {
-        Assertions.assertEquals(180, aeronave.getCapacidadePassageiros());
-    }
-
-    @Test
-    public void testGerarAssentos() {
+    void testGerarAssentos() {
+        Aeronave aeronave = new Aeronave("Boeing 737", 20000, 30, 5);
         List<String> assentos = aeronave.gerarAssentos();
-        Assertions.assertEquals(30 * LetraAssento.values().length, assentos.size()); // Verifica a quantidade total de assentos
+        assertEquals(30, assentos.size());
+        assertTrue(assentos.contains("1A"));
+        assertTrue(assentos.contains("5F"));
+        assertFalse(assentos.contains("6A"));
+    }
 
-        // Verifica se os assentos estão no formato correto
-        for (int i = 1; i <= 30; i++) {
-            for (LetraAssento letra : LetraAssento.values()) {
-                assertTrue(assentos.contains(i + String.valueOf(letra)));
-            }
-        }
+    @Test
+    void testEqualsAndHashCode() {
+        Aeronave aeronave1 = new Aeronave("Boeing 737", 20000, 180, 30);
+        Aeronave aeronave2 = new Aeronave("Boeing 737", 30000, 200, 40);
+        Aeronave aeronave3 = new Aeronave("Airbus A320", 20000, 180, 30);
+
+        assertEquals(aeronave1, aeronave2);
+        assertNotEquals(aeronave1, aeronave3);
+        assertEquals(aeronave1.hashCode(), aeronave2.hashCode());
+        assertNotEquals(aeronave1.hashCode(), aeronave3.hashCode());
+    }
+
+    @Test
+    void testToString() {
+        Aeronave aeronave = new Aeronave("Boeing 737", 20000, 180, 30);
+        assertEquals("Modelo: Boeing 737, Capacidade de Passageiros: 180, Capacidade de Carga: 20000kg, Fileiras: 30",
+                aeronave.toString());
     }
 }
