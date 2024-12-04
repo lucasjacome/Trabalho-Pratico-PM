@@ -50,4 +50,21 @@ public class FuncionarioManager {
                 .findFirst()
                 .orElse(null);
     }
+
+    public boolean alterarFuncionario(String cpf, String novoNome, String novoEmail, String novoUsuario,
+                                      String novaSenha) {
+        Funcionario funcionario = buscarPorCpf(cpf);
+        if (funcionario != null) {
+            funcionario.setNome(novoNome);
+            funcionario.setEmail(novoEmail);
+            funcionario.setUsuario(novoUsuario);
+            funcionario.setSenha(novaSenha);
+            return true;
+        }
+        return false;
+    }
+
+    public boolean excluirFuncionario(String cpf) {
+        return funcionarios.removeIf(f -> f.getCpf().equals(cpf));
+    }
 }

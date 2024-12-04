@@ -1,8 +1,5 @@
 import Entidades.*;
-import Managers.AeroportoManager;
-import Managers.CompanhiaAereaManager;
-import Managers.PassageiroManager;
-import Managers.VooManager;
+import Managers.*;
 import dao.ILog;
 import dao.LogDAOImpl;
 
@@ -26,13 +23,14 @@ public class App {
         CompanhiaAereaManager companhiaAereaManager = new CompanhiaAereaManager();
         PassageiroManager passageiroManager = new PassageiroManager();
         VooManager vooManager = new VooManager();
+        FuncionarioManager funcionarioManager = new FuncionarioManager();
 
         registrarLog("Sistema iniciado.");
-        iniciarDadosIniciais(aeroportoManager, companhiaAereaManager, passageiroManager, vooManager);
+        iniciarDadosIniciais(aeroportoManager, companhiaAereaManager, passageiroManager, vooManager, funcionarioManager);
 
         JFrame frame = new JFrame("✈\uFE0F \uD83D\uDEEB Sistema de Gestão de Voos ✈\uFE0F \uD83D\uDEEC");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(1000, 400);
+        frame.setSize(1200, 400);
         frame.setLayout(new BorderLayout());
 
         JPanel menuPanel = new JPanel();
@@ -58,9 +56,13 @@ public class App {
         JButton alterarVooButton = new JButton("14. Alterar Voo");
         JButton excluirVooButton = new JButton("15. Excluir Voo");
         JButton listarVoosButton = new JButton("16. Listar Voos");
-        JButton pesquisarVoosButton = new JButton("17. Pesquisar Voos");
-        JButton emitirBilheteButton = new JButton("18. Emitir bilhete");
-        JButton sairButton = new JButton("19. Sair ✖\uFE0F");
+        JButton cadastrarFuncionarioButton = new JButton("17. Cadastrar Funcionario");
+        JButton alterarFuncionarioButton = new JButton("18. Alterar Funcionario");
+        JButton excluirFuncionarioButton = new JButton("19. Excluir Funcionario");
+        JButton listarFuncionarioButton = new JButton("20. Listar Funcionarios");
+        JButton emitirBilheteButton = new JButton("21. Emitir bilhete");
+        JButton pesquisarVoosButton = new JButton("22. Pesquisar Voos");
+        JButton sairButton = new JButton("23. Sair ✖\uFE0F");
 
         menuPanel.add(cadastrarAeroportoButton);
         menuPanel.add(alterarAeroportoButton);
@@ -78,8 +80,12 @@ public class App {
         menuPanel.add(alterarVooButton);
         menuPanel.add(excluirVooButton);
         menuPanel.add(listarVoosButton);
-        menuPanel.add(pesquisarVoosButton);
+        menuPanel.add(cadastrarFuncionarioButton);
+        menuPanel.add(alterarFuncionarioButton);
+        menuPanel.add(excluirFuncionarioButton);
+        menuPanel.add(listarFuncionarioButton);
         menuPanel.add(emitirBilheteButton);
+        menuPanel.add(pesquisarVoosButton);
         menuPanel.add(sairButton);
 
 
@@ -99,6 +105,10 @@ public class App {
         alterarVooButton.addActionListener(e -> alterarVoo(vooManager, aeroportoManager));
         excluirVooButton.addActionListener(e -> excluirVoo(vooManager));
         listarVoosButton.addActionListener(e -> listarVoos(vooManager));
+        cadastrarFuncionarioButton.addActionListener(e -> cadastrarFuncionario(funcionarioManager));
+        alterarFuncionarioButton.addActionListener(e -> alterarFuncionario(funcionarioManager));
+        excluirFuncionarioButton.addActionListener(e -> excluirFuncionario(funcionarioManager));
+        listarFuncionarioButton.addActionListener(e -> listarFuncionarios(funcionarioManager));
         pesquisarVoosButton.addActionListener(e -> pesquisarVoos(vooManager, aeroportoManager));
         emitirBilheteButton.addActionListener(e -> emitirBilhete(vooManager, passageiroManager));
         sairButton.addActionListener(e -> System.exit(0));
@@ -107,9 +117,8 @@ public class App {
         frame.add(menuPanel);
     }
 
-    private static void iniciarDadosIniciais(AeroportoManager aeroportoManager,
-                                             CompanhiaAereaManager companhiaAereaManager,
-                                             PassageiroManager passageiroManager, VooManager vooManager) {
+    private static void iniciarDadosIniciais(AeroportoManager aeroportoManager, CompanhiaAereaManager companhiaAereaManager,
+                                             PassageiroManager passageiroManager, VooManager vooManager, FuncionarioManager funcionarioManager) {
         Aeroporto aeroporto1 = new Aeroporto("Aeroporto Internacional de São Paulo", "GRU", "São Paulo", "SP", "Brasil",
                 -23.5505, -46.6333);
         Aeroporto aeroporto2 = new Aeroporto("Aeroporto Internacional do Rio de Janeiro", "GIG", "Rio de Janeiro", "RJ",
@@ -128,6 +137,13 @@ public class App {
                 new Aeronave("Boeing 737", 20000, 180, 30, 850.0),
                 500.0, 1000.0, 1500.0, "BRL");
         vooManager.adicionarVoo(voo);
+
+        Funcionario funcionario1 = new Funcionario("João Silva", "10101010", "joao.silva@email.com", "joaosilva",
+                "senha123");
+        Funcionario funcionario2 = new Funcionario("Maria Oliveira", "1212121212", "maria.oliveira@email.com",
+                "maria123", "senha456");
+        funcionarioManager.adicionarFuncionario(funcionario1);
+        funcionarioManager.adicionarFuncionario(funcionario2);
 
         registrarLog("Dados iniciais carregados com sucesso.");
     }
@@ -834,6 +850,218 @@ public class App {
             }
             JOptionPane.showMessageDialog(null, sb.toString(), "Lista de Voos", JOptionPane.INFORMATION_MESSAGE);
         }
+    }
+
+    private static void cadastrarFuncionario(FuncionarioManager funcionarioManager) {
+        JDialog dialog = new JDialog();
+        dialog.setTitle("Cadastrar Funcionário");
+        dialog.setSize(400, 300);
+        dialog.setModal(true);
+
+        JPanel panel = new JPanel();
+        panel.setLayout(new GridLayout(6, 2, 10, 10));
+        panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+
+        JLabel nomeLabel = new JLabel("Nome:");
+        JTextField nomeField = new JTextField();
+        JLabel cpfLabel = new JLabel("CPF:");
+        JTextField cpfField = new JTextField();
+        JLabel emailLabel = new JLabel("Email:");
+        JTextField emailField = new JTextField();
+        JLabel usuarioLabel = new JLabel("Usuário:");
+        JTextField usuarioField = new JTextField();
+        JLabel senhaLabel = new JLabel("Senha:");
+        JPasswordField senhaField = new JPasswordField();
+
+        JButton cadastrarButton = new JButton("Cadastrar");
+        JButton cancelarButton = new JButton("Cancelar");
+
+        panel.add(nomeLabel);
+        panel.add(nomeField);
+        panel.add(cpfLabel);
+        panel.add(cpfField);
+        panel.add(emailLabel);
+        panel.add(emailField);
+        panel.add(usuarioLabel);
+        panel.add(usuarioField);
+        panel.add(senhaLabel);
+        panel.add(senhaField);
+        panel.add(cadastrarButton);
+        panel.add(cancelarButton);
+
+        dialog.add(panel);
+
+        cadastrarButton.addActionListener(e -> {
+            String nome = nomeField.getText();
+            String cpf = cpfField.getText();
+            String email = emailField.getText();
+            String usuario = usuarioField.getText();
+            String senha = new String(senhaField.getPassword());
+
+            Funcionario funcionario = new Funcionario(nome, cpf, email, usuario, senha);
+
+            if (funcionarioManager.adicionarFuncionario(funcionario)) {
+                registrarLog(String.format("Funcionário cadastrado: Nome=%s, CPF=%s, Email=%s, Usuário=%s", nome, cpf, email, usuario));
+                JOptionPane.showMessageDialog(dialog, "Funcionário cadastrado com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                registrarLog(String.format("Falha ao cadastrar funcionário: CPF já cadastrado (%s).", cpf));
+                JOptionPane.showMessageDialog(dialog, "Funcionário com o mesmo CPF já cadastrado.", "Erro", JOptionPane.ERROR_MESSAGE);
+            }
+        });
+
+        cancelarButton.addActionListener(e -> dialog.dispose());
+        dialog.setVisible(true);
+    }
+
+    private static void alterarFuncionario(FuncionarioManager funcionarioManager) {
+        JDialog dialog = new JDialog();
+        dialog.setTitle("Alterar Funcionário");
+        dialog.setSize(400, 300);
+        dialog.setModal(true);
+
+        JPanel panel = new JPanel();
+        panel.setLayout(new GridLayout(6, 2, 10, 10));
+        panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+
+        JLabel cpfLabel = new JLabel("CPF do Funcionário:");
+        JTextField cpfField = new JTextField();
+        JLabel nomeLabel = new JLabel("Novo Nome:");
+        JTextField nomeField = new JTextField();
+        JLabel emailLabel = new JLabel("Novo Email:");
+        JTextField emailField = new JTextField();
+        JLabel usuarioLabel = new JLabel("Novo Usuário:");
+        JTextField usuarioField = new JTextField();
+        JLabel senhaLabel = new JLabel("Nova Senha:");
+        JPasswordField senhaField = new JPasswordField();
+
+        JButton alterarButton = new JButton("Alterar");
+        JButton cancelarButton = new JButton("Cancelar");
+
+        panel.add(cpfLabel);
+        panel.add(cpfField);
+        panel.add(nomeLabel);
+        panel.add(nomeField);
+        panel.add(emailLabel);
+        panel.add(emailField);
+        panel.add(usuarioLabel);
+        panel.add(usuarioField);
+        panel.add(senhaLabel);
+        panel.add(senhaField);
+        panel.add(alterarButton);
+        panel.add(cancelarButton);
+
+        dialog.add(panel);
+
+        alterarButton.addActionListener(e -> {
+            String cpf = cpfField.getText();
+            try {
+                Funcionario antigoFuncionario = funcionarioManager.buscarPorCpf(cpf);
+
+                String novoNome = nomeField.getText();
+                String novoEmail = emailField.getText();
+                String novoUsuario = usuarioField.getText();
+                String novaSenha = new String(senhaField.getPassword());
+
+                boolean alterado = funcionarioManager.alterarFuncionario(cpf, novoNome, novoEmail, novoUsuario, novaSenha);
+
+                if (alterado) {
+                    registrarLog(String.format(
+                            "Funcionário alterado: Antes -> Nome=%s, Email=%s, Usuário=%s; Depois -> Nome=%s, Email=%s, Usuário=%s",
+                            antigoFuncionario.getNome(), antigoFuncionario.getEmail(), antigoFuncionario.getUsuario(),
+                            novoNome, novoEmail, novoUsuario));
+                    JOptionPane.showMessageDialog(dialog, "Funcionário alterado com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+                } else {
+                    JOptionPane.showMessageDialog(dialog, "Não foi possível alterar o funcionário.", "Erro", JOptionPane.ERROR_MESSAGE);
+                }
+            } catch (IllegalArgumentException ex) {
+                JOptionPane.showMessageDialog(dialog, "Erro ao alterar funcionário: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+            }
+        });
+
+        cancelarButton.addActionListener(e -> dialog.dispose());
+        dialog.setVisible(true);
+    }
+
+    private static void excluirFuncionario(FuncionarioManager funcionarioManager) {
+        JDialog dialog = new JDialog();
+        dialog.setTitle("Excluir Funcionário");
+        dialog.setSize(400, 200);
+        dialog.setModal(true);
+
+        JPanel panel = new JPanel();
+        panel.setLayout(new GridLayout(3, 2, 10, 10));
+        panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+
+        JLabel cpfLabel = new JLabel("CPF do Funcionário:");
+        JTextField cpfField = new JTextField();
+
+        JButton excluirButton = new JButton("Excluir");
+        JButton cancelarButton = new JButton("Cancelar");
+
+        panel.add(cpfLabel);
+        panel.add(cpfField);
+        panel.add(excluirButton);
+        panel.add(cancelarButton);
+
+        dialog.add(panel);
+
+        excluirButton.addActionListener(e -> {
+            String cpf = cpfField.getText();
+            try {
+                Funcionario funcionario = funcionarioManager.buscarPorCpf(cpf);
+                if (funcionario == null) {
+                    JOptionPane.showMessageDialog(dialog, "Funcionário não encontrado.", "Erro", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
+                boolean excluido = funcionarioManager.excluirFuncionario(cpf);
+
+                if (excluido) {
+                    registrarLog("Funcionário excluído: " + funcionario.toString());
+                    JOptionPane.showMessageDialog(dialog, "Funcionário excluído com sucesso.", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+                } else {
+                    JOptionPane.showMessageDialog(dialog, "Falha ao excluir o funcionário.", "Erro", JOptionPane.ERROR_MESSAGE);
+                }
+            } catch (IllegalArgumentException ex) {
+                JOptionPane.showMessageDialog(dialog, "Erro: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+            }
+        });
+
+        cancelarButton.addActionListener(e -> dialog.dispose());
+        dialog.setVisible(true);
+    }
+
+    private static void listarFuncionarios(FuncionarioManager funcionarioManager) {
+        JDialog dialog = new JDialog();
+        dialog.setTitle("Lista de Funcionários");
+        dialog.setSize(400, 300);
+        dialog.setModal(true);
+
+        JPanel panel = new JPanel();
+        panel.setLayout(new BorderLayout());
+        panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+
+        JTextArea textArea = new JTextArea();
+        textArea.setEditable(false);
+        JScrollPane scrollPane = new JScrollPane(textArea);
+
+        List<Funcionario> funcionarios = funcionarioManager.listarFuncionarios();
+        if (funcionarios.isEmpty()) {
+            textArea.setText("Nenhum funcionário cadastrado.");
+        } else {
+            StringBuilder sb = new StringBuilder("Lista de Funcionários:\n");
+            funcionarios.forEach(funcionario -> sb.append(funcionario.toString()).append("\n"));
+            textArea.setText(sb.toString());
+        }
+
+        panel.add(scrollPane, BorderLayout.CENTER);
+
+        JButton fecharButton = new JButton("Fechar");
+        fecharButton.addActionListener(e -> dialog.dispose());
+        panel.add(fecharButton, BorderLayout.SOUTH);
+
+        dialog.add(panel);
+        dialog.setVisible(true);
     }
 
     private static void pesquisarVoos(VooManager vooManager, AeroportoManager aeroportoManager) {
