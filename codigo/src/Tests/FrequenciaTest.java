@@ -89,9 +89,11 @@ class FrequenciaTest {
     }
 
     private Voo criarVoo() {
-        Aeroporto origem = new Aeroporto("Aeroporto de São Paulo", "GRU", "São Paulo", "SP", "Brasil");
-        Aeroporto destino = new Aeroporto("Aeroporto do Rio", "GIG", "Rio de Janeiro", "RJ", "Brasil");
-        CompanhiaAerea companhia = new CompanhiaAerea("Companhia Aerea XYZ", "XYZ", "Razao Social XYZ",
+        Aeroporto origem = new Aeroporto("Aeroporto de São Paulo", "GRU", "São Paulo", "SP", "Brasil", -23.5505,
+                -46.6333);
+        Aeroporto destino = new Aeroporto("Aeroporto do Rio", "GIG", "Rio de Janeiro", "RJ", "Brasil", -22.9094,
+                -43.1737);
+        CompanhiaAerea companhia = new CompanhiaAerea("Companhia Aérea XYZ", "XYZ", "Razão Social XYZ",
                 "12345678000123", 50.0, 30.0);
         Aeronave aeronave = new Aeronave("Boeing 737", 20000, 180, 30);
         return new Voo(origem, destino, LocalDateTime.of(2024, 12, 1, 10, 0), "XY123", companhia, aeronave, 500.0,
