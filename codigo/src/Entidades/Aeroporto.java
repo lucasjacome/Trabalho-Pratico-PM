@@ -71,7 +71,37 @@ public class Aeroporto {
 
     @Override
     public String toString() {
-        return String.format(Locale.US, "%s (%s), %s, %s, %s - Latitude: %.6f, Longitude: %.6f", nome, sigla, cidade, estado, pais,
+        return String.format(Locale.US, "%s (%s), %s, %s, %s - Latitude: %.6f, Longitude: %.6f", nome, sigla, cidade,
+                estado, pais,
                 latitude, longitude);
     }
+
+    public void setNome(String nome) {
+        if (nome == null || nome.trim().isEmpty()) {
+            throw new IllegalArgumentException("O nome não pode ser nulo ou vazio.");
+        }
+        this.nome = nome;
+    }
+
+    public void setCidade(String cidade) {
+        if (cidade == null || cidade.trim().isEmpty()) {
+            throw new IllegalArgumentException("A cidade não pode ser nula ou vazia.");
+        }
+        this.cidade = cidade;
+    }
+
+    public void setEstado(String estado) {
+        if (estado == null || estado.trim().isEmpty()) {
+            throw new IllegalArgumentException("O estado não pode ser nulo ou vazio.");
+        }
+        this.estado = estado;
+    }
+
+    public void setPais(String pais) {
+        if (pais == null || pais.trim().isEmpty()) {
+            throw new IllegalArgumentException("O país não pode ser nulo ou vazio.");
+        }
+        this.pais = pais;
+    }
+
 }

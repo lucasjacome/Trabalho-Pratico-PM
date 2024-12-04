@@ -1,7 +1,7 @@
 package Tests;
 
 import Entidades.Funcionario;
-import Entidades.FuncionarioManager;
+import Managers.FuncionarioManager;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;

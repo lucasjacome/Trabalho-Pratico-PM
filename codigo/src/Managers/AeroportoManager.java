@@ -1,4 +1,6 @@
-package Entidades;
+package Managers;
+
+import Entidades.Aeroporto;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,5 +39,29 @@ public class AeroportoManager {
                 .filter(a -> a.getSigla().equals(sigla))
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException("Aeroporto não encontrado com a sigla: " + sigla));
+    }
+
+    public boolean alterarAeroporto(String sigla, String novoNome, String novaCidade, String novoEstado,
+            String novoPais) {
+        if (sigla == null || sigla.trim().isEmpty()) {
+            throw new IllegalArgumentException("A sigla não pode ser nula ou vazia.");
+        }
+        Aeroporto aeroporto = buscarAeroportoPorSigla(sigla);
+        if (aeroporto != null) {
+            aeroporto.setNome(novoNome);
+            aeroporto.setCidade(novaCidade);
+            aeroporto.setEstado(novoEstado);
+            aeroporto.setPais(novoPais);
+            return true;
+        }
+        return false;
+    }
+
+    public boolean removerAeroporto(String sigla) {
+        if (sigla == null || sigla.trim().isEmpty()) {
+            throw new IllegalArgumentException("A sigla não pode ser nula ou vazia.");
+        }
+        Aeroporto aeroporto = buscarAeroportoPorSigla(sigla);
+        return aeroportos.remove(aeroporto);
     }
 }

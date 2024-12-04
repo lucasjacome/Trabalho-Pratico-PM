@@ -83,4 +83,47 @@ public class CompanhiaAerea {
     public int hashCode() {
         return Objects.hash(cnpj);
     }
+
+    public void setNome(String nome) {
+        if (nome == null || nome.trim().isEmpty()) {
+            throw new IllegalArgumentException("O nome da companhia aérea não pode ser vazio.");
+        }
+        this.nome = nome;
+    }
+
+    public void setCodigo(String codigo) {
+        if (codigo == null || codigo.trim().isEmpty()) {
+            throw new IllegalArgumentException("O código da companhia aérea não pode ser vazio.");
+        }
+        this.codigo = codigo;
+    }
+
+    public void setRazaoSocial(String razaoSocial) {
+        if (razaoSocial == null || razaoSocial.trim().isEmpty()) {
+            throw new IllegalArgumentException("A razão social da companhia aérea não pode ser vazia.");
+        }
+        this.razaoSocial = razaoSocial;
+    }
+
+    public void setCnpj(String cnpj) {
+        if (cnpj == null || cnpj.trim().isEmpty()) {
+            throw new IllegalArgumentException("O CNPJ da companhia aérea não pode ser vazio.");
+        }
+        this.cnpj = cnpj;
+    }
+
+    public void setValorPrimeiraBagagem(double valorPrimeiraBagagem) {
+        if (valorPrimeiraBagagem < 0) {
+            throw new IllegalArgumentException("O valor da primeira bagagem não pode ser negativo.");
+        }
+        this.valorPrimeiraBagagem = valorPrimeiraBagagem;
+    }
+
+    public void setValorBagagensAdicionais(double valorBagagensAdicionais) {
+        if (valorBagagensAdicionais < 0) {
+            throw new IllegalArgumentException("O valor das bagagens adicionais não pode ser negativo.");
+        }
+        this.valorBagagensAdicionais = valorBagagensAdicionais;
+    }
+
 }

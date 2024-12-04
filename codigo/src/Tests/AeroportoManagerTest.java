@@ -1,7 +1,7 @@
 package Tests;
 
 import Entidades.Aeroporto;
-import Entidades.AeroportoManager;
+import Managers.AeroportoManager;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -39,5 +39,34 @@ class AeroportoManagerTest {
         assertEquals(aeroporto, manager.buscarAeroportoPorSigla("GRU"));
 
         assertThrows(IllegalArgumentException.class, () -> manager.buscarAeroportoPorSigla("XXX"));
+    }
+
+    @Test
+    void testAlterarAeroporto() {
+        AeroportoManager manager = new AeroportoManager();
+        Aeroporto aeroporto = new Aeroporto("Aeroporto SP", "GRU", "São Paulo", "SP", "Brasil", -23.5505, -46.6333);
+        manager.adicionarAeroporto(aeroporto);
+
+        boolean alterado = manager.alterarAeroporto("GRU", "Aeroporto Alterado", "Cidade Alterada", "Estado Alterado",
+                "País Alterado");
+        assertTrue(alterado);
+
+        Aeroporto aeroportoAlterado = manager.buscarAeroportoPorSigla("GRU");
+        assertEquals("Aeroporto Alterado", aeroportoAlterado.getNome());
+        assertEquals("Cidade Alterada", aeroportoAlterado.getCidade());
+        assertEquals("Estado Alterado", aeroportoAlterado.getEstado());
+        assertEquals("País Alterado", aeroportoAlterado.getPais());
+    }
+
+    @Test
+    void testExcluirAeroporto() {
+        AeroportoManager manager = new AeroportoManager();
+        Aeroporto aeroporto = new Aeroporto("Aeroporto SP", "GRU", "São Paulo", "SP", "Brasil", -23.5505, -46.6333);
+        manager.adicionarAeroporto(aeroporto);
+
+        boolean excluido = manager.removerAeroporto("GRU");
+        assertTrue(excluido);
+
+        assertThrows(IllegalArgumentException.class, () -> manager.buscarAeroportoPorSigla("GRU"));
     }
 }
