@@ -79,8 +79,8 @@ class VooTest {
         Aeroporto origem = new Aeroporto("Aeroporto SP", "GRU", "São Paulo", "SP", "Brasil", -23.5505, -46.6333);
         Aeroporto destino = new Aeroporto("Aeroporto RJ", "GIG", "Rio de Janeiro", "RJ", "Brasil", -22.9094, -43.1737);
         CompanhiaAerea companhia = new CompanhiaAerea("XYZ Airlines", "XYZ", "Razão XYZ", "12345678000123", 50.0, 30.0);
-        Aeronave aeronave = new Aeronave("Boeing 737", 20000, 180, 30, 850.0); // Adicionado o parâmetro de velocidade
-                                                                               // média
+        Aeronave aeronave = new Aeronave("Boeing 737", 20000, 180, 30, 850.0);
+
         return new Voo(origem, destino, LocalDateTime.of(2024, 12, 25, 14, 0), "XYZ123", companhia, aeronave, 500.0,
                 1000.0, 1500.0, "BRL");
     }
