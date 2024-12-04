@@ -1,0 +1,6 @@
+Dados iniciais configurados com sucesso.
+Busca por voos diretos realizada: 0 resultados.
+Busca por voos com conexão realizada: 0 combinações encontradas.
+Dados iniciais configurados com sucesso.
+Busca por voos diretos realizada: 0 resultados.
+Busca por voos com conexão realizada: 0 combinações encontradas.

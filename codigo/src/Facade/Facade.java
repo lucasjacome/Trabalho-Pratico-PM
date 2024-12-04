@@ -1,77 +1,117 @@
 package Facade;
 
 import Entidades.*;
+import Managers.*;
+import dao.*;
+
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
+import java.util.ArrayList;
 import java.util.List;
 
 public class Facade {
-
-    private AeroportoManager aeroportoManager;
-    private CompanhiaAereaManager companhiaAereaManager;
     private VooManager vooManager;
     private PassageiroManager passageiroManager;
-    private FuncionarioManager funcionarioManager;
+    private AeroportoManager aeroportoManager;
+    private LogDAOImpl logDAO;
+    private CompanhiaAereaManager companhiaAereaManager;
+    private List<Aeronave> aeronaves;  // Lista de aeronaves
 
     public Facade() {
-        this.aeroportoManager = new AeroportoManager();
-        this.companhiaAereaManager = new CompanhiaAereaManager();
-        this.vooManager = new VooManager();
-        this.passageiroManager = new PassageiroManager();
-        this.funcionarioManager = new FuncionarioManager();
+        vooManager = new VooManager();
+        passageiroManager = new PassageiroManager();
+        aeroportoManager = new AeroportoManager();
+        companhiaAereaManager = new CompanhiaAereaManager();
+        aeronaves = new ArrayList<>();  // Inicializando a lista de aeronaves
     }
 
-    public boolean registrarAeroporto(String nome, String sigla, String cidade, String estado, String pais, double latitude, double longitude) {
+    public VooManager getVooManager() {
+        return vooManager;
+    }
+
+    public PassageiroManager getPassageiroManager() {
+        return passageiroManager;
+    }
+
+    public void adicionarAeronave(Aeronave aeronave) {
+        if (!aeronaves.contains(aeronave)) {
+            aeronaves.add(aeronave);
+        }
+    }
+
+    // Método para adicionar uma aeronave
+    public void adicionarAeronave(String modelo, int capacidadeCarga, int capacidadePassageiros,
+                                  int numeroFileiras, double velocidadeMedia) {
+        Aeronave aeronave = new Aeronave(modelo, capacidadeCarga, capacidadePassageiros, numeroFileiras, velocidadeMedia);
+        aeronaves.add(aeronave);
+        logDAO.salvarLog("Aeronave adicionada: " + modelo);
+    }
+
+    // Método para listar todas as aeronaves
+    public List<Aeronave> listarAeronaves() {
+        return new ArrayList<>(aeronaves); // Retorna uma cópia da lista
+    }
+
+    // Método para buscar uma aeronave pelo modelo
+    public Aeronave buscarAeronavePorModelo(String modelo) {
+        for (Aeronave aeronave : aeronaves) {
+            if (aeronave.getModelo().equalsIgnoreCase(modelo)) {
+                return aeronave;
+            }
+        }
+        throw new IllegalArgumentException("Aeronave com modelo " + modelo + " não encontrada.");
+    }
+
+    // Adicionar Aeroporto
+    public void adicionarAeroporto(String nome, String sigla, String cidade, String estado, String pais,
+                                    double latitude, double longitude) {
         Aeroporto aeroporto = new Aeroporto(nome, sigla, cidade, estado, pais, latitude, longitude);
-        return aeroportoManager.adicionarAeroporto(aeroporto);
+        aeroportoManager.adicionarAeroporto(aeroporto);
+        logDAO.salvarLog("Aeroporto adicionado: " + nome);
     }
 
-    public boolean registrarCompanhia(String nome, String codigo, String razaoSocial, String cnpj, double valorPrimeiraBagagem, double valorBagagensAdicionais) {
+    // Adicionar Companhia Aérea
+    public void adicionarCompanhiaAerea(String nome, String codigo, String razaoSocial, String cnpj,
+                                        double valorPrimeiraBagagem, double valorBagagensAdicionais) {
         CompanhiaAerea companhia = new CompanhiaAerea(nome, codigo, razaoSocial, cnpj, valorPrimeiraBagagem, valorBagagensAdicionais);
-        return companhiaAereaManager.adicionarCompanhia(companhia);
+        companhiaAereaManager.adicionarCompanhia(companhia);
+        logDAO.salvarLog("Companhia Aérea adicionada: " + nome);
     }
 
-    public void adicionarVoo(String codigoVoo, Aeroporto origem, Aeroporto destino, LocalDateTime dataHoraVoo, 
-                             CompanhiaAerea companhia, Aeronave aeronave, double tarifaBasica, double tarifaBusiness, 
+    // Adicionar Passageiro
+    public void adicionarPassageiro(String nome, String sobrenome, String documento, String email, boolean vipStatus) {
+        Passageiro passageiro = new Passageiro(nome, sobrenome, documento, email);
+        passageiro.setVipStatus(vipStatus); // Definir o status VIP
+        passageiroManager.adicionarPassageiro(passageiro);
+        logDAO.salvarLog("Passageiro adicionado: " + nome + " " + sobrenome);
+    }
+
+    // Adicionar Voo
+    public void adicionarVoo(Aeroporto origem, Aeroporto destino, String codigoVoo, LocalDateTime dataHoraVoo, 
+                             CompanhiaAerea companhia, Aeronave aeronave, double tarifaBasica, double tarifaBusiness,
                              double tarifaPremium, String moeda) {
         Voo voo = new Voo(origem, destino, dataHoraVoo, codigoVoo, companhia, aeronave, tarifaBasica, tarifaBusiness, tarifaPremium, moeda);
         vooManager.adicionarVoo(voo);
+        logDAO.salvarLog("Voo adicionado: " + codigoVoo);
     }
 
-    public boolean registrarPassageiro(String nome, String sobrenome, String documento, String email) {
-        Passageiro passageiro = new Passageiro(nome, sobrenome, documento, email);
-        return passageiroManager.adicionarPassageiro(passageiro);
+    // Verificar e simular Voo
+    public void simularVoo(String modeloAeronave, String codigoVoo, String documentoPassageiro) {
+        try {
+            Aeronave aeronave = buscarAeronavePorModelo(modeloAeronave);
+            Voo voo = vooManager.buscarVooPorCodigo(codigoVoo);
+            Passageiro passageiro = passageiroManager.buscarPassageiroPorDocumento(documentoPassageiro);
+
+            if (voo != null && aeronave != null) {
+                System.out.println("Simulando voo: " + voo.getCodigoVoo());
+                // Implementar a lógica da simulação do voo, incluindo embarque, reserva de assentos, etc.
+            }
+        } catch (Exception e) {
+            System.err.println("Erro ao simular voo: " + e.getMessage());
+        }
     }
 
-    public boolean registrarFuncionario(String nome, String cpf, String email, String usuario, String senha) {
-        Funcionario funcionario = new Funcionario(nome, cpf, email, usuario, senha);
-        return funcionarioManager.adicionarFuncionario(funcionario);
-    }
-
-    public List<Aeroporto> listarAeroportos() {
-        return aeroportoManager.listarAeroportos();
-    }
-
-    public List<CompanhiaAerea> listarCompanhias() {
-        return companhiaAereaManager.listarCompanhias();
-    }
-
-    public List<Voo> listarVoos() {
-        return vooManager.listarTodosOsVoos();
-    }
-
-    public List<Passageiro> listarPassageiros() {
-        return passageiroManager.listarPassageiros();
-    }
-
-    public List<Funcionario> listarFuncionarios() {
-        return funcionarioManager.listarFuncionarios();
-    }
-
-    public Voo pesquisarVoo(String origemSigla, String destinoSigla, LocalDateTime dataHora) {
-        Aeroporto origem = aeroportoManager.buscarAeroportoPorSigla(origemSigla);
-        Aeroporto destino = aeroportoManager.buscarAeroportoPorSigla(destinoSigla);
-        return vooManager.pesquisarVoos(origem, destino, dataHora).stream().findFirst().orElse(null);
-    }
-
-    
+    // Outros métodos necessários para gerenciar voos, passageiros, aeroportos, etc.
 }
