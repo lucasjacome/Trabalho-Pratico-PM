@@ -1,6 +1,6 @@
 package Tests;
 
-import Entidades.StatusPassageiro;
+import Enums.StatusPassageiro;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;

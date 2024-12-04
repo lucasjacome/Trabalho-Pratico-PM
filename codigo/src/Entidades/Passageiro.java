@@ -1,5 +1,7 @@
 package Entidades;
 
+import Enums.StatusPassageiro;
+
 import java.util.Objects;
 
 public class Passageiro {

@@ -1,4 +1,4 @@
-package Entidades;
+package Enums;
 
 public enum StatusPassagem {
     PASSAGEM_ADQUIRIDA("Passagem adquirida"),

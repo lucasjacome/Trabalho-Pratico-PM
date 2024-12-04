@@ -1,7 +1,7 @@
 package Tests;
 
 import Entidades.Passagem;
-import Entidades.StatusPassagem;
+import Enums.StatusPassagem;
 import Entidades.Voo;
 import Entidades.Aeroporto;
 import Entidades.CompanhiaAerea;

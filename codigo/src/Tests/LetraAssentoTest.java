@@ -1,6 +1,6 @@
 package Tests;
 
-import Entidades.LetraAssento;
+import Enums.LetraAssento;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
