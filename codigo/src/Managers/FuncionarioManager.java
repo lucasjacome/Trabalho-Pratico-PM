@@ -1,4 +1,6 @@
-package Entidades;
+package Managers;
+
+import Entidades.Funcionario;
 
 import java.util.ArrayList;
 import java.util.List;
