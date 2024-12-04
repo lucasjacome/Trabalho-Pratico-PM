@@ -9,18 +9,22 @@ public class Aeronave {
     private int capacidadePassageiros;
     private int capacidadeCarga;
     private int numeroFileiras;
+    private double velocidadeMedia;
 
-    public Aeronave(String modelo, int capacidadeCarga, int capacidadePassageiros, int numeroFileiras) {
+    public Aeronave(String modelo, int capacidadeCarga, int capacidadePassageiros, int numeroFileiras,
+            double velocidadeMedia) {
         if (modelo == null || modelo.trim().isEmpty()) {
             throw new IllegalArgumentException("O modelo da aeronave não pode ser vazio.");
         }
-        if (capacidadeCarga <= 0 || capacidadePassageiros <= 0 || numeroFileiras <= 0) {
-            throw new IllegalArgumentException("Capacidades e número de fileiras devem ser maiores que zero.");
+        if (capacidadeCarga <= 0 || capacidadePassageiros <= 0 || numeroFileiras <= 0 || velocidadeMedia <= 0) {
+            throw new IllegalArgumentException(
+                    "Capacidades, número de fileiras e velocidade média devem ser maiores que zero.");
         }
         this.modelo = modelo;
         this.capacidadeCarga = capacidadeCarga;
         this.capacidadePassageiros = capacidadePassageiros;
         this.numeroFileiras = numeroFileiras;
+        this.velocidadeMedia = velocidadeMedia;
     }
 
     public String getModelo() {
@@ -39,9 +43,13 @@ public class Aeronave {
         return capacidadePassageiros;
     }
 
+    public double getVelocidadeMedia() {
+        return velocidadeMedia;
+    }
+
     public List<String> gerarAssentos() {
         List<String> assentos = new ArrayList<>();
-        int assentosPorFileira = 6; // A, B, C, D, E, F
+        int assentosPorFileira = 6;
         int totalAssentos = Math.min(capacidadePassageiros, numeroFileiras * assentosPorFileira);
 
         for (int i = 1; i <= numeroFileiras; i++) {
@@ -73,7 +81,8 @@ public class Aeronave {
 
     @Override
     public String toString() {
-        return String.format("Modelo: %s, Capacidade de Passageiros: %d, Capacidade de Carga: %dkg, Fileiras: %d",
-                modelo, capacidadePassageiros, capacidadeCarga, numeroFileiras);
+        return String.format(
+                "Modelo: %s, Capacidade de Passageiros: %d, Capacidade de Carga: %dkg, Fileiras: %d, Velocidade Média: %.2f km/h",
+                modelo, capacidadePassageiros, capacidadeCarga, numeroFileiras, velocidadeMedia);
     }
 }
